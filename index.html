@@ -3,153 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MANJII iOS - Premium Cheats</title>
+    <title>MANJII iOS - Official Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #00f2ff; --s: #7000ff; --bg: #05070a; --card: rgba(13, 17, 23, 0.95); }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 90px; overflow-x: hidden; }
+        :root { --p: #00f2ff; --bg: #05070a; --card: rgba(13, 17, 23, 0.95); --green: #00ffcc; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 90px; }
 
-        /* Header (Cheatio Style) */
+        /* Header */
         .navbar { background: #0d1117; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1c2128; position: sticky; top:0; z-index:100; }
-        .nav-brand { display: flex; align-items: center; gap: 10px; }
-        .logo-img { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--p); }
-        .brand-text b { display: block; font-size: 1rem; color: #fff; }
-        .brand-text span { font-size: 0.6rem; color: var(--p); letter-spacing: 1px; }
+        .logo-img { width: 35px; border-radius: 50%; border: 1px solid var(--p); }
 
-        /* Stats Box (Thong Ke) */
-        .stats-box { background: var(--card); margin: 15px; padding: 15px; border-radius: 15px; border: 1px solid #1c2128; position: relative; }
-        .stats-title { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; color: #7986ff; font-weight: bold; font-size: 0.9rem; }
-        .stats-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; color: #8b949e; }
+        /* Statistik Section */
+        .stats-box { background: var(--card); margin: 15px; padding: 15px; border-radius: 12px; border: 1px solid #1c2128; }
+        .stats-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; color: #8b949e; }
         .stats-value { color: var(--p); font-weight: bold; }
 
-        /* Content Sections */
-        .page { display: none; padding-top: 5px; }
+        /* Content Pages */
+        .page { display: none; padding: 10px; }
         .active { display: block; }
 
-        /* Card Menu (Shop) */
-        .card { background: var(--card); margin: 15px; border-radius: 15px; overflow: hidden; border: 1px solid #1c2128; transition: 0.3s; }
-        .card-img { width: 100%; height: 160px; object-fit: cover; }
-        .card-body { padding: 15px; text-align: center; }
-        .btn-buy { width: 100%; padding: 10px; border-radius: 8px; background: #21262d; color: white; border: 1px solid #30363d; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        /* Product Cards */
+        .card { background: var(--card); margin-bottom: 15px; border-radius: 15px; overflow: hidden; border: 1px solid #1c2128; }
+        .card-img { width: 100%; height: 150px; object-fit: cover; }
+        .card-body { padding: 15px; }
+        .btn-buy { width: 100%; padding: 10px; border-radius: 8px; background: #21262d; color: white; border: 1px solid #30363d; font-weight: bold; cursor: pointer; }
+        
+        /* Fitur List for Manjii V2 */
+        .feature-list { font-size: 0.8rem; color: #8b949e; margin: 10px 0; padding-left: 20px; }
+        .feature-list li { margin-bottom: 5px; color: var(--green); }
 
-        /* Bottom Navigation Bar */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #0d1117; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1c2128; z-index: 1000; }
-        .nav-item { color: #8b949e; text-align: center; font-size: 0.7rem; text-decoration: none; cursor: pointer; }
-        .nav-item i { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+        /* Navigation */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #0d1117; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1c2128; }
+        .nav-item { color: #8b949e; text-align: center; font-size: 0.7rem; cursor: pointer; }
         .nav-item.active { color: var(--p); }
+        .nav-item i { font-size: 1.2rem; display: block; margin-bottom: 4px; }
 
-        /* Modal Payment */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-body { background: #0d1117; width: 85%; max-width: 400px; padding: 20px; border-radius: 20px; border: 1px solid var(--p); text-align: center; }
-        .qris-frame { background: white; padding: 10px; border-radius: 15px; margin: 15px 0; display: inline-block; width: 90%; }
-        .qris-img { width: 100%; height: auto; display: block; }
-
-        .btn-confirm { width: 100%; padding: 15px; background: linear-gradient(to right, #7000ff, #00f2ff); border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; }
+        /* Modal Payment (QRIS Center-Right) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-body { background: #0d1117; width: 90%; max-width: 400px; padding: 20px; border-radius: 20px; border: 1px solid var(--p); }
+        
+        .qris-container { background: white; padding: 15px; border-radius: 15px; margin: 15px 0; text-align: center; }
+        .qris-img { width: 100%; max-width: 260px; height: auto; }
+        
+        .price-tag { background: #1c2128; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--p); color: var(--p); font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <div class="nav-brand">
+        <div style="display:flex; align-items:center; gap:10px;">
             <img src="https://i.ibb.co/m0vL6XF/avatar.png" class="logo-img">
-            <div class="brand-text"><b>MANJII iOS</b><span>CHEATS IPHONE</span></div>
+            <div style="line-height:1.1"><b>MANJII iOS</b><br><span style="font-size:0.6rem; color:var(--p)">PREMIUM STORE</span></div>
         </div>
-        <i class="fas fa-bell" style="color:#8b949e;"></i>
+        <i class="fas fa-headset" onclick="showPage('contact')"></i>
     </div>
 
     <div id="shop" class="page active">
         <div class="stats-box">
-            <div class="stats-title"><i class="fas fa-chart-line"></i> THONG KE</div>
+            <div style="color:#7986ff; font-weight:bold; margin-bottom:10px; font-size:0.9rem;">THONG KE</div>
             <div class="stats-item"><span>Anggota</span> <span class="stats-value">2.655</span></div>
             <div class="stats-item"><span>Transaksi</span> <span class="stats-value">1.067</span></div>
-            <div class="stats-item"><span>Kunci tersisa</span> <span class="stats-value">712</span></div>
+            <div class="stats-item"><span>Kunci Tersisa</span> <span class="stats-value">712</span></div>
             <div class="stats-item"><span>Hari Operasi</span> <span class="stats-value">182</span></div>
+        </div>
+
+        <div class="card">
+            <div style="background: linear-gradient(45deg, #001a1a, #004d4d); padding: 20px; text-align: center;">
+                <h2 style="color:var(--p); margin:0;">MANJII V2</h2>
+                <small style="color:var(--green)">SYSTEM OPTIMIZER</small>
+            </div>
+            <div class="card-body">
+                <ul class="feature-list">
+                    <li>Competitive Mode</li>
+                    <li>Easy Drag iOS</li>
+                    <li>Stabilizer & System Tools</li>
+                </ul>
+                <button class="btn-buy" onclick="openPay('MANJII V2 OPTIMIZER', '50.000')">MULAI DARI 50K</button>
+            </div>
         </div>
 
         <div class="card">
             <img src="https://r2.community.battlebear.io/2024/02/free-fire-banner.jpg" class="card-img">
             <div class="card-body">
-                <h3>FREE FIRE CHEAT V1</h3>
-                <button class="btn-buy" onclick="openPay('FREE FIRE CHEAT V1')">
-                    <i class="fas fa-shopping-cart"></i> SEWA SEKARANG
-                </button>
+                <h3>PERETASAN FREE FIRE</h3>
+                <p style="font-size:0.8rem; color:grey;">Retas FreeFire iOS - Android</p>
+                <button class="btn-buy" onclick="openPay('FREE FIRE CHEAT V1', '35.000')">MULAI DARI 35K</button>
             </div>
         </div>
     </div>
 
     <div id="contact" class="page">
-        <div class="stats-box" style="text-align:center; padding: 40px 20px;">
-            <i class="fab fa-whatsapp" style="font-size: 3rem; color: #25d366; margin-bottom: 20px;"></i>
-            <h3>Hubungi Layanan Pelanggan</h3>
-            <p style="color:#8b949e; font-size:0.9rem;">Punya kendala? Kami siap membantu 24/7.</p>
-            <br>
-            <button class="btn-confirm" onclick="window.location.href='https://wa.me/6283845203074'">CHAT SEKARANG</button>
-        </div>
-    </div>
-
-    <div id="account" class="page">
-        <div class="stats-box">
-            <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
-                <img src="https://i.ibb.co/m0vL6XF/avatar.png" style="width:60px; border-radius:50%;">
-                <div>
-                    <h3 style="margin:0;">User_7721</h3>
-                    <span style="color:var(--p); font-size:0.8rem;">Member Gold</span>
-                </div>
-            </div>
-            <div class="stats-item" style="border-top: 1px solid #1c2128; padding-top:15px;">
-                <span>Total Pembelian</span> <span class="stats-value">5 Item</span>
-            </div>
-            <div class="stats-item">
-                <span>Saldo Wallet</span> <span class="stats-value">Rp 0</span>
-            </div>
+        <div class="stats-box" style="text-align:center; padding: 30px;">
+            <i class="fab fa-whatsapp" style="font-size:3rem; color:#25d366; margin-bottom:15px;"></i>
+            <h3>Admin Manji</h3>
+            <p style="color:#8b949e">083845203074</p>
+            <button class="btn-buy" onclick="window.location.href='https://wa.me/6283845203074'">HUBUNGI SEKARANG</button>
         </div>
     </div>
 
     <div id="payModal" class="modal">
         <div class="modal-body">
-            <h3 id="itemName" style="color:var(--p); margin:0;"></h3>
-            <select id="priceSelect" style="width:100%; padding:10px; margin:15px 0; border-radius:8px;">
-                <option value="35.000">Rp 35.000 / 1 Hari</option>
-                <option value="70.000">Rp 70.000 / 7 Hari</option>
-                <option value="150.000">Rp 150.000 / 30 Hari</option>
-            </select>
-
-            <div class="qris-frame">
-                <img src="https://i.ibb.co/v3m9fJ8/manz-qris.jpg" class="qris-img" id="qrisImage">
-            </div>
-            <p style="color:white; font-size:0.7rem; margin-bottom:15px;">NMID: ID2024329981979</p>
+            <div style="text-align:right; color:grey; cursor:pointer;" onclick="closeModal()">Tutup [X]</div>
+            <h3 id="pName" style="color:var(--p); margin:5px 0;"></h3>
+            <div class="price-tag" id="pPrice"></div>
             
-            <button class="btn-confirm" onclick="sendWA()">KONFIRMASI PEMBAYARAN</button>
-            <p onclick="closeModal()" style="color:grey; font-size:0.8rem; margin-top:15px; cursor:pointer;">Batal</p>
+            <div class="qris-container">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=00020101021126670016COM.NOBUBANK.WWW01189360050300000182570215ID20243299819790303A0151440014ID.CO.QRIS.WWW0215ID20243299819790303A015204000053033605802ID5914MANZ SUPERBOYY6013KAB. TANGERAN61051511162070703A016304E313" class="qris-img" alt="QRIS MANZ SUPERBOYY">
+                <p style="color:black; font-weight:bold; font-size:0.7rem; margin-top:8px;">MANZ SUPERBOYY | NMID: ID2024329981979</p>
+            </div>
+
+            <button class="btn-buy" style="background:var(--p); color:black;" onclick="confirmPay()">KONFIRMASI VIA WA</button>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="showPage('shop', this)"><i class="fas fa-shopping-bag"></i>Shop</div>
-        <div class="nav-item" onclick="showPage('contact', this)"><i class="fas fa-headset"></i>Support</div>
-        <div class="nav-item" onclick="showPage('account', this)"><i class="fas fa-user-circle"></i>Account</div>
+        <div class="nav-item active" onclick="showPage('shop', this)"><i class="fas fa-store"></i>Shop</div>
+        <div class="nav-item" onclick="showPage('contact', this)"><i class="fas fa-comments"></i>CS</div>
+        <div class="nav-item" onclick="alert('Menu Akun Segera Hadir')"><i class="fas fa-user"></i>Akun</div>
     </div>
 
     <script>
+        let currentItem = "";
         function showPage(id, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            el.classList.add('active');
+            if(el) el.classList.add('active');
         }
 
-        let currentProduct = "";
-        function openPay(name) {
-            currentProduct = name;
-            document.getElementById('itemName').innerText = name;
+        function openPay(name, price) {
+            currentItem = name;
+            document.getElementById('pName').innerText = name;
+            document.getElementById('pPrice').innerText = "Total: Rp " + price;
             document.getElementById('payModal').style.display = 'flex';
         }
+
         function closeModal() { document.getElementById('payModal').style.display = 'none'; }
 
-        function sendWA() {
-            let p = document.getElementById('priceSelect').value;
-            let text = `Halo MANJII iOS, saya sudah bayar via QRIS\nProduk: ${currentProduct}\nPaket: Rp ${p}`;
-            window.location.href = `https://wa.me/6283845203074?text=${encodeURIComponent(text)}`;
+        function confirmPay() {
+            let msg = `Halo Admin MANJII iOS\nSaya ingin membeli: ${currentItem}\nSudah saya scan QRIS nya. Mohon diproses.`;
+            window.location.href = "https://wa.me/6283845203074?text=" + encodeURIComponent(msg);
         }
     </script>
 </body>
