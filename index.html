@@ -15,7 +15,7 @@
         
         /* Neon Animation */
         @keyframes neon-pulse {
-            0%, 100% { box-shadow: 0 0 5px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.2); }
+            0%, 100% { box-shadow: 0 0 5px rgba(0, 242, 254, 0.1); border-color: rgba(0, 242, 254, 0.2); }
             50% { box-shadow: 0 0 15px var(--neon-cyan); border-color: var(--neon-cyan); }
         }
         .neon-border { animation: neon-pulse 2s infinite; }
@@ -25,61 +25,75 @@
             background: var(--neon-cyan); 
             color: black; font-weight: 800; 
             width: 100%; height: 55px; 
-            border-radius: 4px; /* Kotak */
+            border-radius: 4px;
             text-transform: uppercase; letter-spacing: 2px;
             transition: 0.3s;
         }
 
-        /* Testimoni Floating */
+        /* Testimoni Floating - Orang Asli Style */
         #testi-popup {
-            position: fixed; bottom: 100px; left: 20px;
-            background: rgba(10, 10, 10, 0.9);
-            border-left: 4px solid var(--neon-cyan);
-            padding: 12px 20px; border-radius: 8px;
-            font-size: 10px; z-index: 9999;
-            display: none; animation: slideRight 0.5s ease;
+            position: fixed; bottom: 100px; left: 15px; right: 15px;
+            max-width: 320px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-left: 4px solid #22c55e; /* Green for success */
+            padding: 15px; border-radius: 12px;
+            font-size: 11px; z-index: 9999;
+            display: none; animation: slideUpFade 0.6s ease;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
         }
-        @keyframes slideRight { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .page { display: none; }
         .active-page { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px; color: white; width: 100%; outline: none; }
     </style>
 </head>
 <body class="p-4 pb-32">
 
     <div id="testi-popup">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-cyan-500/20 rounded-full flex items-center justify-center">
-                <i class="fas fa-shopping-cart text-cyan-400"></i>
+        <div class="flex items-start gap-4">
+            <div class="relative">
+                <div class="w-10 h-10 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full flex items-center justify-center border border-white/10">
+                    <i class="fas fa-user text-gray-400 text-sm"></i>
+                </div>
+                <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-black rounded-full"></div>
             </div>
-            <div>
-                <p id="testi-user" class="font-bold text-white">User_82x1</p>
-                <p id="testi-msg" class="text-gray-400">Baru saja membeli Panel iOS 30 Day</p>
+            <div class="flex-1">
+                <div class="flex justify-between items-start mb-1">
+                    <p id="testi-user" class="font-black text-white uppercase tracking-tighter">PEMBELI_ASLI</p>
+                    <span class="text-[8px] text-gray-500 font-bold uppercase">Baru saja</span>
+                </div>
+                <p id="testi-msg" class="text-gray-400 leading-snug">Berhasil order XIT iOS (Lifetime). Transfer sukses!</p>
+                <div class="mt-2 flex items-center gap-1">
+                    <i class="fas fa-check-circle text-green-500 text-[9px]"></i>
+                    <span class="text-[9px] text-green-500 font-bold uppercase tracking-widest">Verified Payment</span>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="login-screen" class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
         <h1 class="text-5xl font-black italic mb-2 tracking-tighter text-cyan-400">MANJII iOS</h1>
-        <p class="text-gray-600 text-[9px] uppercase tracking-[8px] mb-12 font-bold">Encrypted Connection</p>
+        <p class="text-gray-600 text-[9px] uppercase tracking-[8px] mb-12 font-bold">Secure Access System</p>
         
         <div class="w-full max-w-xs space-y-4">
-            <input type="text" id="username" placeholder="Username" class="bg-white/5 border border-white/10 p-4 rounded-lg w-full outline-none focus:border-cyan-500">
-            <input type="password" id="password" placeholder="Access Key" class="bg-white/5 border border-white/10 p-4 rounded-lg w-full outline-none focus:border-cyan-500">
-            <button onclick="handleLogin()" class="btn-square">Login Access</button>
+            <input type="text" id="username" placeholder="USERNAME">
+            <input type="password" id="password" placeholder="ACCESS KEY">
+            <button onclick="handleLogin()" class="btn-square">MASUK SEKARANG</button>
         </div>
         
-        <div class="mt-12 flex gap-8">
+        <div class="mt-12 flex gap-10">
             <div class="text-center">
-                <p class="text-xl font-bold text-white">2.4k+</p>
-                <p class="text-[8px] text-gray-500 uppercase">Users Active</p>
+                <p class="text-2xl font-black text-white">4,812</p>
+                <p class="text-[8px] text-gray-500 uppercase tracking-widest">Users Online</p>
             </div>
             <div class="text-center">
-                <p class="text-xl font-bold text-cyan-400">12.8k+</p>
-                <p class="text-[8px] text-gray-500 uppercase">Orders Done</p>
+                <p class="text-2xl font-black text-cyan-400">29.4K</p>
+                <p class="text-[8px] text-gray-500 uppercase tracking-widest">Sold Items</p>
             </div>
         </div>
 
@@ -87,7 +101,6 @@
     </div>
 
     <div id="main-dashboard" class="hidden">
-        
         <div id="home-page" class="page active-page">
             <div class="mb-10 pt-6 px-2">
                 <h1 class="text-3xl font-black italic tracking-tighter uppercase">Marketplace</h1>
@@ -95,8 +108,9 @@
             </div>
 
             <div class="glass p-6 mb-8 border-l-4 border-cyan-400">
-                <p class="text-[11px] text-gray-400 leading-relaxed font-medium">
-                    **MANJII iOS** adalah platform terpercaya untuk optimasi sistem iOS Anda. Bergabunglah dengan 12.000+ pengguna lainnya yang telah merasakan performa maksimal tanpa hambatan.
+                <h4 class="text-[10px] font-black uppercase text-cyan-400 mb-2">Website Deskripsi</h4>
+                <p class="text-[11px] text-gray-400 leading-relaxed">
+                    Platform eksklusif penyedia **iOS System Optimization** & **Game Mods**. Kami menjamin keamanan 100% dengan dukungan teknis dari **MANJII iOS Developer**. Bergabunglah dengan komunitas premium kami.
                 </p>
             </div>
 
@@ -116,45 +130,38 @@
             </div>
 
             <div id="sub-menu" class="hidden">
-                <button onclick="backToHome()" class="text-[10px] font-bold text-gray-600 uppercase mb-8"><i class="fas fa-arrow-left mr-2"></i> Back</button>
-                <h2 id="menu-title" class="text-3xl font-black italic uppercase mb-8 text-white">MENU</h2>
+                <button onclick="backToHome()" class="text-[10px] font-bold text-gray-600 uppercase mb-8"><i class="fas fa-arrow-left mr-2"></i> BACK</button>
+                <h2 id="menu-title" class="text-3xl font-black italic uppercase mb-8">MENU</h2>
                 <div id="menu-list" class="space-y-3"></div>
             </div>
         </div>
 
         <div id="cs-page" class="page pt-12 text-center px-8">
-            <h2 class="text-2xl font-black italic uppercase mb-10 tracking-tighter">Connect with Us</h2>
+            <h2 class="text-2xl font-black italic uppercase mb-10 tracking-tighter">Social Media</h2>
             <div class="space-y-4">
                 <a href="https://wa.me/6283845203074" class="glass p-6 flex items-center justify-between border-green-500/20">
                     <div class="flex items-center gap-4">
                         <i class="fab fa-whatsapp text-2xl text-green-500"></i>
                         <span class="font-bold text-xs uppercase tracking-widest">WhatsApp Admin</span>
                     </div>
-                    <i class="fas fa-external-link-alt text-[10px] text-gray-700"></i>
                 </a>
                 <a href="https://tiktok.com/@manjiixit" class="glass p-6 flex items-center justify-between border-white/10">
                     <div class="flex items-center gap-4">
                         <i class="fab fa-tiktok text-2xl text-white"></i>
                         <span class="font-bold text-xs uppercase tracking-widest">TikTok @manjiixit</span>
                     </div>
-                    <i class="fas fa-external-link-alt text-[10px] text-gray-700"></i>
                 </a>
             </div>
         </div>
 
-        <div id="account-page" class="page pt-12 px-6">
-            <h2 class="text-2xl font-black italic uppercase mb-8 tracking-tighter">User Status</h2>
-            <div class="glass p-8">
-                <div class="flex justify-between items-center border-b border-white/5 pb-4 mb-4">
-                    <span class="text-gray-500 text-[10px] font-bold uppercase">Rank</span>
-                    <span class="text-cyan-400 text-[10px] font-bold uppercase">Authorized User</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-500 text-[10px] font-bold uppercase">Member ID</span>
-                    <span class="text-white text-[10px] font-mono">MJ-0838-X</span>
-                </div>
+        <div id="account-page" class="page pt-12 px-6 text-center">
+            <h2 class="text-2xl font-black italic uppercase mb-8">User Profile</h2>
+            <div class="glass p-8 inline-block w-full">
+                <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Status</p>
+                <p class="text-cyan-400 font-black mb-6 uppercase italic">Registered Member</p>
+                <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Developer</p>
+                <p class="text-white font-black uppercase tracking-widest">MANJII iOS</p>
             </div>
-            <p class="text-center mt-20 text-[9px] text-gray-800 font-bold uppercase tracking-[4px]">© 2026 MANJII iOS</p>
         </div>
 
         <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[85%] glass p-4 flex justify-around items-center border border-white/10 shadow-2xl z-50">
@@ -164,55 +171,43 @@
         </div>
     </div>
 
-    <div id="paymentModal" class="modal">
-        <div class="glass w-full max-w-sm p-8 text-center">
-            <h3 id="pay-product" class="text-xl font-black uppercase mb-8 italic">CHECKOUT</h3>
-            <div class="space-y-3">
-                <button onclick="showFinal('DANA')" class="w-full p-5 glass flex justify-between"><span class="font-black italic text-xs">DANA</span><i class="fas fa-wallet text-blue-400"></i></button>
-                <button onclick="showFinal('GOPAY')" class="w-full p-5 glass flex justify-between"><span class="font-black italic text-xs text-green-400">GOPAY</span><i class="fas fa-mobile-alt"></i></button>
-                <button onclick="handleQRIS()" class="w-full p-5 glass flex justify-between border-cyan-500/20"><span class="font-black italic text-xs text-cyan-400">QRIS (KATALOG)</span><i class="fas fa-qrcode"></i></button>
-                <button onclick="closeModal()" class="mt-8 text-[9px] font-bold text-gray-600 uppercase">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="finalModal" class="modal">
-        <div class="glass w-full max-w-sm p-10 text-center">
-            <div class="py-10 bg-white/5 rounded-[30px] mb-8 border border-white/5">
-                <p id="final-method" class="text-[9px] text-gray-500 font-black mb-3 italic">Payment Target</p>
-                <p id="final-target" class="text-2xl font-black tracking-[4px] text-white">083845203074</p>
-                <p id="final-an" class="text-[10px] text-cyan-400 mt-4 font-bold uppercase tracking-widest">A/N MANJII iOS</p>
-            </div>
-            <button onclick="confirmToWA()" class="w-full py-5 bg-cyan-500 rounded-lg text-black font-black uppercase text-[11px] tracking-widest mb-4 italic italic">Confirm (Done)</button>
-            <button onclick="document.getElementById('finalModal').style.display='none'" class="text-[9px] text-gray-600 font-bold uppercase">Cancel</button>
-        </div>
-    </div>
+    <div id="paymentModal" class="modal"><div class="glass w-full max-w-sm p-8 text-center"><h3 id="pay-product" class="text-xl font-black uppercase mb-8 italic">CHECKOUT</h3><div class="space-y-3"><button onclick="showFinal('DANA')" class="w-full p-5 glass flex justify-between"><span class="font-black italic text-xs">DANA</span><i class="fas fa-wallet text-blue-400"></i></button><button onclick="showFinal('GOPAY')" class="w-full p-5 glass flex justify-between"><span class="font-black italic text-xs text-green-400">GOPAY</span><i class="fas fa-mobile-alt"></i></button><button onclick="handleQRIS()" class="w-full p-5 glass flex justify-between border-cyan-500/20"><span class="font-black italic text-xs text-cyan-400">QRIS (KATALOG)</span><i class="fas fa-qrcode"></i></button><button onclick="closeModal()" class="mt-8 text-[9px] font-bold text-gray-600 uppercase">CANCEL</button></div></div></div>
+    <div id="finalModal" class="modal"><div class="glass w-full max-w-sm p-10 text-center"><div class="py-10 bg-white/5 rounded-[20px] mb-8 border border-white/5"><p id="final-method" class="text-[9px] text-gray-500 font-black mb-3 italic">TARGET TRANSFER</p><p id="final-target" class="text-2xl font-black tracking-[4px] text-white">083845203074</p><p class="text-[10px] text-cyan-400 mt-4 font-bold uppercase tracking-widest italic">A/N MANJII iOS</p></div><button onclick="confirmToWA()" class="w-full py-5 bg-cyan-500 rounded-sm text-black font-black uppercase text-[11px] tracking-widest mb-4 italic">KONFIRMASI SEKARANG</button><button onclick="document.getElementById('finalModal').style.display='none'" class="text-[9px] text-gray-600 font-bold uppercase">CANCEL</button></div></div>
 
     <script>
         let sessionData = { cat: "", item: "", price: "", method: "" };
 
-        // FAKE TESTIMONI GENERATOR
-        const fakeUsers = ["Andi_99", "Daffa_X", "Rian_Pro", "VIP_User88", "User_Iphone15", "Man_Xit", "Bagas_Store"];
-        const fakeItems = ["Panel iOS 1 Day", "Panel iOS 30 Day", "Xit Aimbody", "Tools Pack Permanent", "Xit Magic Bullet"];
+        // REALISTIC TESTIMONI DATA
+        const names = ["BAGAS_SETIAWAN", "DAFFA_ADRIAN", "RIZKY_RAMADHAN", "RAFLI_MAULANA", "ADIT_XYZ", "BIMA_PUTRA", "ERIK_GANTENG", "USER_IPHONE13", "SULTAN_ML", "FERRY_MANJII"];
+        const actions = [
+            "Baru saja beli Panel iOS (30 Day). Gila lanjay banget!",
+            "Tf aman via Dana, XIT Aimbody langsung aktif.",
+            "Mantap min, Tools iOS nya bikin HP gak panas lagi.",
+            "Panel 1 Day sukses, mau langganan bulanan aja.",
+            "Transfer sukses via QRIS. Respon admin cepet!",
+            "Gak nyesel beli di MANJII, Magic Bullet nya ngeri.",
+            "Order ke-3 kali selalu lancar jaya bosku!",
+            "Testimoni asli, aim jadi nempel banget parah."
+        ];
         
         function showTesti() {
             const popup = document.getElementById('testi-popup');
-            const user = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
-            const item = fakeItems[Math.floor(Math.random() * fakeItems.length)];
+            const name = names[Math.floor(Math.random() * names.length)];
+            const action = actions[Math.floor(Math.random() * actions.length)];
             
-            document.getElementById('testi-user').innerText = user + " " + (Math.floor(Math.random() * 90) + 10);
-            document.getElementById('testi-msg').innerText = "Baru saja membeli " + item;
+            document.getElementById('testi-user').innerText = name;
+            document.getElementById('testi-msg').innerText = action;
             
             popup.style.display = 'block';
-            setTimeout(() => { popup.style.display = 'none'; }, 4000);
+            setTimeout(() => { popup.style.display = 'none'; }, 5000);
         }
-        setInterval(showTesti, 8000); // Muncul setiap 8 detik
+        setInterval(showTesti, 9000); // Muncul setiap 9 detik
 
         function handleLogin() {
             if(document.getElementById('username').value && document.getElementById('password').value) {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-dashboard').classList.remove('hidden');
-            } else { alert("Error: Access Key Required"); }
+            } else { alert("MASUKKAN DATA DENGAN BENAR!"); }
         }
 
         function changePage(pageId) {
@@ -246,11 +241,11 @@
             } else if(cat === 'TOOLS iOS') {
                 list.innerHTML = `
                     <div class="glass p-6 mb-6 text-[11px] text-gray-400 leading-relaxed uppercase font-bold tracking-tighter">
-                        <i class="fas fa-check text-cyan-400 mr-2"></i> Fix Delay Touch & FPS<br>
-                        <i class="fas fa-check text-cyan-400 mr-2"></i> Optimasi RAM Permanent<br>
-                        <i class="fas fa-check text-cyan-400 mr-2"></i> 100% Aman & Tanpa Reset
+                        <i class="fas fa-check text-cyan-400 mr-2"></i> STABILIZER FPS & PING<br>
+                        <i class="fas fa-check text-cyan-400 mr-2"></i> OPTIMASI RAM PERMANENT<br>
+                        <i class="fas fa-check text-cyan-400 mr-2"></i> BYPASS THERMAL THROTTLING
                     </div>
-                    <button onclick="openPay('Full Tools Pack', '200.000')" class="w-full py-5 bg-purple-600 rounded-lg font-black italic uppercase text-xs tracking-widest shadow-lg shadow-purple-500/20">Beli Sekarang - 200K</button>
+                    <button onclick="openPay('Full Tools Pack', '200.000')" class="w-full py-5 bg-purple-600 rounded-sm font-black italic uppercase text-xs tracking-widest">ORDER NOW - 200K</button>
                 `;
             }
         }
@@ -273,7 +268,7 @@
         }
 
         function confirmToWA() {
-            const msg = `Halo Admin MANJII iOS,%0A%0ASaya sudah membayar via *${sessionData.method}*.%0A%0A*Order:*%0A- Kategori: *${sessionData.cat}*%0A- Produk: *${sessionData.item}*%0A- Harga: *IDR ${sessionData.price}*%0A%0AMohon verifikasi admin. Terimakasih!`;
+            const msg = `Halo Admin MANJII iOS,%0A%0ASaya sudah membayar via *${sessionData.method}*.%0A%0A*DETAIL ORDER:*%0A- Produk: *${sessionData.item}*%0A- Harga: *IDR ${sessionData.price}*%0A%0AMohon diproses admin. Terimakasih!`;
             window.location.href = `https://wa.me/6283845203074?text=${msg}`;
         }
 
