@@ -48,6 +48,8 @@
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
         input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 16px; color: white; width: 100%; outline: none; font-weight: bold; }
+        
+        .nav-active { color: var(--neon-cyan) !important; text-shadow: 0 0 10px var(--neon-cyan); }
     </style>
 </head>
 <body class="p-4 pb-32">
@@ -85,17 +87,25 @@
     </div>
 
     <div id="main-dashboard" class="hidden">
+        
         <div id="home-page" class="page active-page">
-            <div class="mb-10 pt-6 px-2">
-                <h1 class="text-3xl font-black italic tracking-tighter uppercase font-logo text-white">Marketplace</h1>
-                <p class="text-cyan-400 text-[9px] font-bold uppercase tracking-[4px]">Elite Private Store</p>
+            <div class="mb-6 pt-6 px-2">
+                <h1 class="text-3xl font-black italic tracking-tighter uppercase font-logo text-white">Official Store</h1>
+                <p class="text-cyan-400 text-[9px] font-bold uppercase tracking-[4px]">Elite System Optimization</p>
+            </div>
+
+            <div class="glass p-5 mb-8 border-l-4 border-cyan-400">
+                <h4 class="text-[10px] font-black text-cyan-400 uppercase italic mb-2 tracking-widest">Global Provider Info</h4>
+                <p class="text-[11px] text-gray-300 leading-relaxed font-medium">
+                    **MANJII iOS Store** adalah platform resmi penyedia solusi optimasi perangkat Apple tercanggih di Indonesia. Kami berfokus pada penyediaan **Panel System**, **Xiter Modules**, dan **Performance Tools** yang dirancang khusus untuk stabilitas tinggi dan keamanan maksimal (Anti-Ban). Dengan dukungan pengembang berpengalaman, kami menjamin setiap produk yang Anda beli adalah teknologi terbaru yang kompetitif di pasar global.
+                </p>
             </div>
 
             <div id="category-section" class="space-y-6">
                 <div onclick="selectCategory('PANEL iOS')" class="glass p-6 flex justify-between items-center cursor-pointer neon-btn-cyan active:scale-95 transition-all">
                     <div>
                         <h3 class="font-black text-xl italic uppercase tracking-tighter">Panel iOS</h3>
-                        <p class="text-[9px] text-cyan-400 font-bold uppercase italic">Advanced Features</p>
+                        <p class="text-[9px] text-cyan-400 font-bold uppercase italic">Vectored System</p>
                     </div>
                     <i class="fas fa-bolt text-2xl text-cyan-400"></i>
                 </div>
@@ -124,8 +134,49 @@
             </div>
         </div>
 
+        <div id="cs-page" class="page pt-12 text-center px-8">
+            <h1 class="text-3xl font-logo italic mb-2">Support</h1>
+            <p class="text-cyan-400 text-[10px] uppercase font-bold mb-10 tracking-widest italic">Hubungi Admin Kami</p>
+            <div class="space-y-4">
+                <a href="https://wa.me/6283845203074" target="_blank" class="glass p-6 flex items-center justify-between neon-btn-cyan">
+                    <div class="flex items-center gap-4 text-green-500">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                        <span class="font-black text-xs uppercase italic">WhatsApp Admin</span>
+                    </div>
+                    <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
+                </a>
+                <a href="https://tiktok.com/@manjiixit" target="_blank" class="glass p-6 flex items-center justify-between neon-btn-purple">
+                    <div class="flex items-center gap-4 text-white">
+                        <i class="fab fa-tiktok text-2xl"></i>
+                        <span class="font-black text-xs uppercase italic">TikTok @manjiixit</span>
+                    </div>
+                    <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
+                </a>
+            </div>
+        </div>
+
+        <div id="account-page" class="page pt-12 px-6">
+            <h1 class="text-3xl font-logo italic mb-2 text-center">User info</h1>
+            <p class="text-cyan-400 text-[10px] uppercase font-bold mb-10 tracking-widest text-center italic">Data Identitas Anda</p>
+            <div class="glass p-8 space-y-6 neon-btn-cyan">
+                <div class="flex justify-between items-center border-b border-white/5 pb-4">
+                    <span class="text-gray-500 text-[10px] font-bold uppercase">Client ID</span>
+                    <span id="display-user" class="text-white text-[10px] font-black uppercase italic tracking-widest">USER_NAME</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-white/5 pb-4">
+                    <span class="text-gray-500 text-[10px] font-bold uppercase">Status</span>
+                    <span class="text-cyan-400 text-[10px] font-black uppercase italic">Registered Member</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-500 text-[10px] font-bold uppercase">Provider</span>
+                    <span class="text-white text-[10px] font-black uppercase italic">MANJII iOS Official</span>
+                </div>
+            </div>
+            <button onclick="location.reload()" class="mt-12 w-full text-red-500 font-black uppercase italic text-[10px] tracking-widest">Logout System</button>
+        </div>
+
         <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[85%] glass p-4 flex justify-around items-center border border-white/10 shadow-2xl z-50">
-            <button onclick="changePage('home')" id="nav-home" class="text-cyan-400"><i class="fas fa-store text-lg"></i></button>
+            <button onclick="changePage('home')" id="nav-home" class="nav-active"><i class="fas fa-store text-lg"></i></button>
             <button onclick="changePage('cs')" id="nav-cs" class="text-gray-700"><i class="fas fa-headset text-lg"></i></button>
             <button onclick="changePage('account')" id="nav-account" class="text-gray-700"><i class="fas fa-user text-lg"></i></button>
         </div>
@@ -137,8 +188,9 @@
     <script>
         let sessionData = { cat: "", item: "", price: "", method: "" };
 
-        const names = ["ADAM_RESA", "KEVIN_99", "DIKA_PRO", "REVAN_XYZ", "SULTAN_ID"];
-        const actions = ["Order Panel Done!", "Tf Dana Aman!", "Aimbody Aktif!", "HP Jadi Dingin!", "Verified Member!"];
+        // EXTENDED TESTIMONI (HURUF BESAR SEMUA & TANPA MANJII)
+        const names = ["RAFLI_MAULANA", "DIMAS_PRATAMA", "RIZKY_ADITYA", "ANDRE_PUTRA", "DAFFA_ADRIAN", "KEVIN_SANJAYA", "SYAHRUL_RAMADHAN", "BAMBANG_82", "FAJAR_SETIAWAN", "IKHSAN_OFFICIAL"];
+        const actions = ["Order Panel Done!", "Tf Dana Berhasil!", "Aimbody Gila Parah!", "HP Jadi Dingin!", "Magic Bullet Ngeri!", "Repeat Order Lagi Min!", "Prosesnya Kilat!", "Udah Masuk Panelnya!", "Verified Pembeli!", "Gak Nyesel Beli Sini!"];
         
         function showTesti() {
             const popup = document.getElementById('testi-popup');
@@ -150,10 +202,27 @@
         setInterval(showTesti, 9000);
 
         function handleLogin() {
-            if(document.getElementById('username').value && document.getElementById('password').value) {
+            const user = document.getElementById('username').value;
+            if(user && document.getElementById('password').value) {
+                document.getElementById('display-user').innerText = user.toUpperCase();
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-dashboard').classList.remove('hidden');
             } else { alert("ERROR: INVALID KEY!"); }
+        }
+
+        // PERBAIKAN NAVIGASI PAGE
+        function changePage(pageId) {
+            // Sembunyikan semua page
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            // Tampilkan page tujuan
+            document.getElementById(pageId + '-page').classList.add('active-page');
+            
+            // Update warna nav button
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('nav-active'));
+            document.getElementById('nav-' + pageId).classList.add('nav-active');
+            
+            // Reset ke menu utama jika kembali ke home
+            if(pageId === 'home') backToHome();
         }
 
         function selectCategory(cat) {
@@ -178,16 +247,16 @@
                 `;
                 const plans = {'1 Day': '70K', '7 Day': '200K', '30 Day': '350K'};
                 for (let [d, pr] of Object.entries(plans)) {
-                    list.innerHTML += `<div onclick="openPay('Panel ${d}', '${pr}')" class="glass p-6 neon-btn-cyan flex justify-between items-center cursor-pointer uppercase italic font-black text-xs"><span>${d}</span><span class="text-cyan-400">${pr}</span></div>`;
+                    list.innerHTML += `<div onclick="openPay('Panel ${d}', '${pr}')" class="glass p-6 neon-btn-cyan flex justify-between items-center cursor-pointer uppercase italic font-black text-xs"><span>${d}</span><span class="text-cyan-400 font-bold">${pr}</span></div>`;
                 }
             } else if(cat === 'XIT iOS') {
                 const f = ['Aimbody (Badan)', 'Aimneck (Leher)', 'Aimdrag (Drag)', 'Magic Bullet (Angin)'];
                 f.forEach(item => {
-                    list.innerHTML += `<div onclick="openPay('${item}', '250K')" class="glass p-6 neon-btn-red flex justify-between items-center cursor-pointer uppercase italic font-black text-xs"><span>${item}</span><span class="text-red-500">250K</span></div>`;
+                    list.innerHTML += `<div onclick="openPay('${item}', '250K')" class="glass p-6 neon-btn-red flex justify-between items-center cursor-pointer uppercase italic font-black text-xs"><span>${item}</span><span class="text-red-500 font-bold">250K</span></div>`;
                 });
             } else if(cat === 'TOOLS iOS') {
                 list.innerHTML = `
-                    <div class="glass p-6 mb-6 neon-btn-purple text-[10px] text-gray-400 leading-relaxed font-bold uppercase italic">
+                    <div class="glass p-6 mb-6 neon-btn-purple text-[10px] text-gray-400 leading-relaxed font-bold uppercase italic border-l-4 border-purple-500">
                         - Fix FPS Drop & Lag<br>- Optimize RAM Management<br>- Bypass Thermal Guard
                     </div>
                     <button onclick="openPay('Full Optimizer', '200K')" class="btn-square" style="background:var(--neon-purple); box-shadow:0 0 20px var(--neon-purple)">ORDER NOW - 200K</button>
@@ -213,7 +282,7 @@
         }
 
         function confirmToWA() {
-            const msg = `Halo Admin MANJII iOS,%0A%0ASaya sudah transfer via *${sessionData.method}*.%0A%0A*ORDER DETAIL:*%0A- Item: *${sessionData.item}*%0A- Harga: *${sessionData.price}*%0A%0AMohon diproses.`;
+            const msg = `Halo Admin MANJII iOS,%0A%0ASaya sudah transfer via *${sessionData.method}*.%0A%0A*ORDER DETAIL:*%0A- Item: *${sessionData.item}*%0A- Harga: *${sessionData.price}*%0A%0AMohon diproses admin.`;
             window.location.href = `https://wa.me/6283845203074?text=${msg}`;
         }
 
@@ -223,7 +292,6 @@
         }
 
         function closeModal() { document.getElementById('paymentModal').style.display = 'none'; }
-        function changePage(p) { if(p === 'home') backToHome(); }
     </script>
 </body>
 </html>
