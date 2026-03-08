@@ -132,7 +132,7 @@
                 <div onclick="selectCategory('TOOLS iOS V2')" class="glass p-6 flex justify-between items-center cursor-pointer neon-btn-green active:scale-95 transition-all">
                     <div>
                         <h3 class="font-black text-xl italic uppercase tracking-tighter text-green-400">Tools iOS V2</h3>
-                        <p class="text-[9px] text-green-400 font-bold uppercase italic">Advanced Optimizer</p>
+                        <p class="text-[9px] text-green-400 font-bold uppercase italic">Premium System Optimizer</p>
                     </div>
                     <i class="fas fa-rocket text-2xl text-green-400"></i>
                 </div>
@@ -265,17 +265,17 @@
                     <button onclick="openPay('Full Optimizer', '150K')" class="btn-square" style="background:var(--neon-purple); box-shadow:0 0 20px var(--neon-purple)">ORDER NOW - 150K</button>
                 `;
             }
-            // LOGIKA TAMBAHAN TOOLS V2
+            // TOOLS V2 - SESUAI POSTER KE-3
             else if(cat === 'TOOLS iOS V2') {
                 list.innerHTML = `
                     <div class="glass p-6 mb-6 neon-btn-green text-[10px] text-gray-300 leading-relaxed font-bold uppercase italic">
-                        <span class="text-green-400">●</span> Next-Gen Performance Boost<br>
-                        <span class="text-green-400">●</span> 120 FPS Stabilization<br>
-                        <span class="text-green-400">●</span> Touch Response Optimizer<br>
-                        <span class="text-green-400">●</span> Battery Thermal Control
+                        <span class="text-green-400">●</span> Competitive Mode<br>
+                        <span class="text-green-400">●</span> Easy Drag iOS<br>
+                        <span class="text-green-400">●</span> Stabilizer System<br>
+                        <span class="text-green-400">●</span> Clear RAM & Cache
                     </div>
                 `;
-                const plans = {'1 Day': '50K', '7 Day': '150K', '30 Day': '250K'};
+                const plans = {'1 Day': '50K', '7 Day': '100K', '30 Day': '150K'};
                 for (let [d, pr] of Object.entries(plans)) {
                     list.innerHTML += `<div onclick="openPay('Tools V2 ${d}', '${pr}')" class="glass p-6 neon-btn-green flex justify-between items-center cursor-pointer uppercase italic font-black text-xs"><span>${d}</span><span class="text-green-400 font-bold">${pr}</span></div>`;
                 }
