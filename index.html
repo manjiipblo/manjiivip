@@ -9,274 +9,209 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { background-color: #05070a; color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
-        .glass { background: rgba(15, 20, 28, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 28px; }
+        .glass { background: rgba(15, 20, 28, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 24px; }
         .btn-glow { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); color: #000; font-weight: 800; transition: 0.4s; }
-        .btn-glow:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0, 242, 254, 0.3); }
+        .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 242, 254, 0.3); }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
         .page { display: none; }
-        .active-page { display: block; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .active-page { display: block; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .nav-active { color: #00f2fe !important; }
-        input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; color: white; width: 100%; }
-        .logo-container { filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.5)); }
+        input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; color: white; width: 100%; outline: none; }
     </style>
 </head>
 <body class="p-4 pb-28">
 
     <div id="login-screen" class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-        <div class="w-32 h-32 mb-8 logo-container">
-            <img src="https://i.ibb.co/v4m0Y3p/IMG-2878.jpg" alt="Logo" class="rounded-3xl border-2 border-cyan-500">
-        </div>
-        <h1 class="text-3xl font-extrabold italic mb-2 tracking-tighter">MANJII iOS</h1>
-        <p class="text-cyan-400 text-[10px] uppercase tracking-[6px] mb-10 font-bold">Best Cheats All Game</p>
+        <h1 class="text-4xl font-extrabold italic mb-1 tracking-tighter">MANJII iOS</h1>
+        <p class="text-cyan-400 text-[10px] uppercase tracking-[6px] mb-12 font-bold font-mono">Premium Access Only</p>
         
-        <div class="w-full max-w-sm space-y-4">
+        <div class="w-full max-w-xs space-y-4">
             <input type="text" id="username" placeholder="Username">
             <input type="password" id="password" placeholder="Access Key">
-            <button onclick="handleLogin()" class="w-full py-5 btn-glow rounded-2xl uppercase text-[11px] tracking-widest mt-4 italic">Sign In Access</button>
+            <button onclick="handleLogin()" class="w-full py-4 btn-glow rounded-xl uppercase text-[11px] tracking-widest italic">Initialize</button>
         </div>
-        <p class="mt-12 text-gray-600 text-[10px] font-bold uppercase tracking-widest">© 2026 Developer MANJII iOS</p>
+        <p class="mt-16 text-gray-700 text-[9px] font-bold uppercase tracking-widest">© 2026 Developer MANJII iOS</p>
     </div>
 
     <div id="main-dashboard" class="hidden">
         
         <div id="home-page" class="page active-page">
-            <div class="flex items-center justify-between mb-8 pt-4 px-2">
-                <div>
-                    <h1 class="text-2xl font-extrabold italic tracking-tighter uppercase">Marketplace</h1>
-                    <p class="text-cyan-400 text-[9px] font-bold uppercase tracking-[3px]">Official Store</p>
-                </div>
-                <div class="w-12 h-12 glass flex items-center justify-center border-white/10">
-                    <i class="fas fa-shopping-bag text-cyan-400"></i>
-                </div>
-            </div>
-
-            <div class="glass p-6 mb-8 border-cyan-500/10">
-                <p class="text-[11px] text-gray-400 leading-relaxed font-medium">
-                    **MANJII iOS** adalah penyedia tools optimasi dan modifikasi game profesional. Kami menjamin performa maksimal (No FPS Drop) dan keamanan akun (100% Anti-Ban) untuk seluruh produk kami.
-                </p>
+            <div class="mb-10 pt-6 px-2">
+                <h1 class="text-2xl font-black italic tracking-tighter uppercase">Marketplace</h1>
+                <p class="text-cyan-400 text-[9px] font-bold uppercase tracking-[4px]">MANJII Official Store</p>
             </div>
 
             <div id="category-section" class="space-y-4">
-                <div onclick="selectCategory('PANEL iOS')" class="glass p-6 flex justify-between items-center border-l-4 border-cyan-500 cursor-pointer">
+                <div onclick="selectCategory('PANEL iOS')" class="glass p-6 flex justify-between items-center border-l-4 border-cyan-500 cursor-pointer hover:bg-white/5">
                     <div>
                         <h3 class="font-black text-lg italic uppercase">Panel iOS</h3>
-                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest italic">Duration Based</p>
+                        <p class="text-[9px] text-gray-500 font-bold uppercase italic tracking-widest">Select Duration Plan</p>
                     </div>
-                    <i class="fas fa-bolt text-cyan-500"></i>
+                    <i class="fas fa-clock text-cyan-500"></i>
                 </div>
-                <div onclick="selectCategory('XIT iOS')" class="glass p-6 flex justify-between items-center border-l-4 border-red-500 cursor-pointer">
+
+                <div onclick="selectCategory('XIT iOS')" class="glass p-6 flex justify-between items-center border-l-4 border-red-500 cursor-pointer hover:bg-white/5">
                     <div>
                         <h3 class="font-black text-lg italic uppercase">Xit iOS</h3>
-                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest italic">Life Time Access</p>
+                        <p class="text-[9px] text-gray-500 font-bold uppercase italic tracking-widest">All Feature 250K</p>
                     </div>
                     <i class="fas fa-crosshairs text-red-500"></i>
                 </div>
-                <div onclick="selectCategory('TOOLS iOS')" class="glass p-6 flex justify-between items-center border-l-4 border-purple-500 cursor-pointer">
+
+                <div onclick="selectCategory('TOOLS iOS')" class="glass p-6 flex justify-between items-center border-l-4 border-purple-500 cursor-pointer hover:bg-white/5">
                     <div>
                         <h3 class="font-black text-lg italic uppercase">Tools iOS</h3>
-                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest italic">Life Time Access</p>
+                        <p class="text-[9px] text-gray-500 font-bold uppercase italic tracking-widest">Stabilizer 200K</p>
                     </div>
                     <i class="fas fa-microchip text-purple-500"></i>
                 </div>
             </div>
 
-            <div id="variant-section" class="hidden">
-                <button onclick="backToCategory()" class="text-[10px] font-bold text-gray-500 uppercase mb-6 px-2"><i class="fas fa-chevron-left mr-2"></i> Back</button>
-                <h2 id="category-title" class="text-2xl font-black italic uppercase mb-6 px-2">CATEGORY</h2>
-                <div id="variant-list" class="space-y-3"></div>
-            </div>
-
-            <div id="duration-section" class="hidden">
-                <button onclick="backToVariant()" class="text-[10px] font-bold text-gray-500 uppercase mb-6 px-2"><i class="fas fa-chevron-left mr-2"></i> Back</button>
-                <h2 id="variant-title" class="text-2xl font-black italic uppercase mb-1 px-2">FEATURE</h2>
-                <div id="duration-list" class="space-y-4 mt-6"></div>
+            <div id="sub-menu" class="hidden">
+                <button onclick="backToHome()" class="text-[10px] font-bold text-gray-500 uppercase mb-8 px-2"><i class="fas fa-arrow-left mr-2"></i> Back to Catalog</button>
+                <h2 id="menu-title" class="text-2xl font-black italic uppercase mb-2 px-2 italic">MENU</h2>
+                <p id="menu-desc" class="text-[10px] text-gray-500 uppercase tracking-widest mb-8 px-2">Description</p>
+                <div id="menu-list" class="space-y-3"></div>
             </div>
         </div>
 
-        <div id="cs-page" class="page pt-10 text-center px-6">
-            <div class="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i class="fab fa-whatsapp text-4xl text-green-500"></i>
-            </div>
-            <h2 class="text-2xl font-black italic uppercase mb-2">CS Support</h2>
-            <p class="text-gray-500 text-xs mb-10">Ada kendala atau pertanyaan? Hubungi admin resmi kami untuk bantuan cepat.</p>
-            <a href="https://wa.me/6283845203074" class="glass p-6 flex items-center justify-center gap-4 hover:border-green-500 transition-all">
-                <span class="font-bold tracking-widest uppercase text-sm italic">Direct WhatsApp Admin</span>
+        <div id="cs-page" class="page pt-12 text-center px-8">
+            <h2 class="text-3xl font-black italic uppercase mb-4 tracking-tighter text-cyan-400">CS Admin</h2>
+            <p class="text-gray-500 text-xs mb-10 leading-relaxed font-medium">Klik tombol di bawah untuk diarahkan ke kontak Admin resmi kami.</p>
+            <a href="https://wa.me/6283845203074" class="glass p-6 flex items-center justify-center gap-4 border-dashed border-cyan-500/30">
+                <i class="fab fa-whatsapp text-2xl text-green-500"></i>
+                <span class="font-bold tracking-widest uppercase text-xs italic">WhatsApp Support</span>
             </a>
         </div>
 
-        <div id="account-page" class="page pt-10 px-4">
-            <div class="flex flex-col items-center mb-10">
-                <div class="w-24 h-24 rounded-full border-2 border-cyan-500 p-1 mb-4 shadow-xl shadow-cyan-500/20">
-                    <img src="https://i.ibb.co/v4m0Y3p/IMG-2878.jpg" class="rounded-full">
-                </div>
-                <h2 class="text-xl font-black italic uppercase">Account Info</h2>
-                <p class="text-cyan-400 text-[10px] font-bold tracking-[5px] uppercase">Registered User</p>
-            </div>
+        <div id="account-page" class="page pt-12 px-6">
+            <h2 class="text-2xl font-black italic uppercase mb-8 tracking-tighter">My Account</h2>
             <div class="glass p-6 space-y-6">
-                <div class="flex justify-between items-center border-b border-white/5 pb-4">
-                    <span class="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Access Status</span>
-                    <span class="text-white text-[10px] font-bold uppercase bg-white/5 px-3 py-1 rounded-full border border-white/10">Authorized</span>
+                <div class="flex justify-between border-b border-white/5 pb-4">
+                    <span class="text-gray-500 text-[10px] font-bold uppercase">Rank</span>
+                    <span class="text-white text-[10px] font-bold uppercase">Registered User</span>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Member ID</span>
-                    <span class="text-white text-[10px] font-mono">#MJ-2026-X8</span>
+                <div class="flex justify-between">
+                    <span class="text-gray-500 text-[10px] font-bold uppercase">Access ID</span>
+                    <span class="text-white text-[10px] font-mono">MJ-0838-X</span>
                 </div>
             </div>
-            <p class="text-center mt-12 text-[9px] text-gray-700 font-bold uppercase tracking-[4px]">Developer MANJII iOS</p>
+            <button onclick="location.reload()" class="w-full py-4 text-red-500 text-[10px] font-bold uppercase tracking-[4px] mt-10">Sign Out</button>
         </div>
 
-        <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[90%] glass p-4 flex justify-around items-center border border-white/10 shadow-2xl z-50">
-            <button onclick="changePage('home')" id="nav-home" class="flex flex-col items-center gap-1 nav-active">
-                <i class="fas fa-store text-lg"></i>
-                <span class="text-[8px] font-black uppercase tracking-tighter">Shop</span>
-            </button>
-            <button onclick="changePage('cs')" id="nav-cs" class="flex flex-col items-center gap-1 text-gray-600">
-                <i class="fas fa-headset text-lg"></i>
-                <span class="text-[8px] font-black uppercase tracking-tighter">Support</span>
-            </button>
-            <button onclick="changePage('account')" id="nav-account" class="flex flex-col items-center gap-1 text-gray-600">
-                <i class="fas fa-user-circle text-lg"></i>
-                <span class="text-[8px] font-black uppercase tracking-tighter">Account</span>
-            </button>
+        <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[85%] glass p-4 flex justify-around items-center border border-white/10 shadow-2xl z-50">
+            <button onclick="changePage('home')" id="nav-home" class="flex flex-col items-center gap-1 nav-active"><i class="fas fa-store text-lg"></i></button>
+            <button onclick="changePage('cs')" id="nav-cs" class="flex flex-col items-center gap-1 text-gray-700"><i class="fas fa-headset text-lg"></i></button>
+            <button onclick="changePage('account')" id="nav-account" class="flex flex-col items-center gap-1 text-gray-700"><i class="fas fa-user text-lg"></i></button>
         </div>
     </div>
 
     <div id="paymentModal" class="modal">
         <div class="glass w-full max-w-sm p-8 text-center">
-            <p class="text-[10px] text-cyan-400 font-bold uppercase tracking-widest mb-2 italic">Checkout Menu</p>
-            <h3 id="pay-product" class="text-xl font-black uppercase mb-8 italic">NAME</h3>
+            <h3 id="pay-product" class="text-xl font-black uppercase mb-8 italic">CHECKOUT</h3>
             <div class="space-y-3">
-                <button onclick="showFinal('DANA')" class="w-full p-5 glass flex justify-between items-center border-blue-500/20">
-                    <span class="font-black italic text-xs">DANA</span>
-                    <i class="fas fa-wallet text-blue-400"></i>
-                </button>
-                <button onclick="showFinal('GOPAY')" class="w-full p-5 glass flex justify-between items-center border-green-500/20">
-                    <span class="font-black italic text-xs text-green-400">GOPAY</span>
-                    <i class="fas fa-mobile-alt"></i>
-                </button>
-                <button onclick="handleQRIS()" class="w-full p-5 glass flex justify-between items-center border-cyan-500/20">
-                    <span class="font-black italic text-xs text-cyan-400">QRIS (ALL PAYMENT)</span>
-                    <i class="fas fa-qrcode"></i>
-                </button>
-                <button onclick="closeModal()" class="mt-6 text-[9px] font-black text-gray-600 uppercase tracking-widest">Cancel</button>
+                <button onclick="showFinal('DANA')" class="w-full p-5 glass flex justify-between border-blue-500/20"><span class="font-black italic text-xs">DANA</span><i class="fas fa-wallet text-blue-400"></i></button>
+                <button onclick="showFinal('GOPAY')" class="w-full p-5 glass flex justify-between border-green-500/20"><span class="font-black italic text-xs text-green-400">GOPAY</span><i class="fas fa-mobile-alt"></i></button>
+                <button onclick="handleQRIS()" class="w-full p-5 glass flex justify-between border-cyan-500/20"><span class="font-black italic text-xs text-cyan-400">QRIS (KATALOG)</span><i class="fas fa-qrcode"></i></button>
+                <button onclick="closeModal()" class="mt-8 text-[9px] font-bold text-gray-600 uppercase tracking-widest">Back</button>
             </div>
         </div>
     </div>
 
     <div id="finalModal" class="modal">
         <div class="glass w-full max-w-sm p-10 text-center">
-            <div class="py-10 bg-white/5 rounded-[32px] mb-8 border border-white/5">
-                <p id="final-method" class="text-[9px] text-gray-500 uppercase font-black mb-3 italic tracking-widest">Detail Payment</p>
+            <div class="py-10 bg-white/5 rounded-[30px] mb-8 border border-white/5">
+                <p id="final-method" class="text-[9px] text-gray-500 font-black mb-3 italic">Payment Target</p>
                 <p id="final-target" class="text-2xl font-black tracking-[4px] text-white">083845203074</p>
                 <p id="final-an" class="text-[10px] text-cyan-400 mt-4 font-bold uppercase tracking-widest">A/N MANJII iOS</p>
             </div>
-            <button onclick="confirmToWA()" class="w-full py-5 btn-glow rounded-2xl text-[11px] uppercase tracking-widest mb-4 italic">Confirm (Done)</button>
-            <button onclick="document.getElementById('finalModal').style.display='none'" class="text-[9px] text-gray-600 font-bold uppercase tracking-widest">Back</button>
+            <button onclick="confirmToWA()" class="w-full py-5 btn-glow rounded-2xl text-[11px] uppercase tracking-widest mb-4 italic italic">Confirm (Done)</button>
+            <button onclick="document.getElementById('finalModal').style.display='none'" class="text-[9px] text-gray-600 font-bold uppercase">Cancel</button>
         </div>
     </div>
 
     <script>
-        let sessionProduct = ""; let sessionFeature = ""; let sessionDuration = "Life Time"; let sessionPrice = ""; let sessionMethod = "";
-
-        const variants = {
-            'PANEL iOS': ['Bypass System V1', 'Extreme Smooth V2', 'FPS Booster Pro'],
-            'XIT iOS': ['Aimbody (Badan)', 'Aimneck (Leher)', 'Aimdrag (Drag)', 'Magic Bullet (Angin)'],
-            'TOOLS iOS': ['Anti-Lag System', 'Touch Optimizer', 'Resolution Changer']
-        };
-
-        const prices = {
-            'PANEL iOS': {'1 Day': '70.000', '7 Day': '200.000', '30 Day': '350.000'},
-            'XIT iOS': '500.000', 'TOOLS iOS': '250.000'
-        };
+        let sessionData = { cat: "", item: "", dur: "", price: "", method: "" };
 
         function handleLogin() {
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            if(user && pass) {
+            if(document.getElementById('username').value && document.getElementById('password').value) {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-dashboard').classList.remove('hidden');
-            } else { alert("Please input login details!"); }
+            } else { alert("Error: Access Key Required"); }
         }
 
         function changePage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId + '-page').classList.add('active-page');
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('nav-active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.add('text-gray-700'));
             document.getElementById('nav-' + pageId).classList.add('nav-active');
-            if(pageId === 'home') backToCategory();
+            document.getElementById('nav-' + pageId).classList.remove('text-gray-700');
+            if(pageId === 'home') backToHome();
         }
 
         function selectCategory(cat) {
-            sessionProduct = cat;
+            sessionData.cat = cat;
             document.getElementById('category-section').classList.add('hidden');
-            document.getElementById('variant-section').classList.remove('hidden');
-            document.getElementById('category-title').innerText = cat;
-            const list = document.getElementById('variant-list');
+            const sub = document.getElementById('sub-menu');
+            const list = document.getElementById('menu-list');
+            sub.classList.remove('hidden');
             list.innerHTML = "";
-            variants[cat].forEach(v => {
-                list.innerHTML += `<div onclick="selectVariant('${v}')" class="glass p-5 border border-white/5 font-black uppercase italic text-sm tracking-widest flex justify-between items-center"><span>${v}</span><i class="fas fa-plus text-[10px] opacity-30"></i></div>`;
-            });
-        }
+            document.getElementById('menu-title').innerText = cat;
 
-        function selectVariant(v) {
-            sessionFeature = v;
-            document.getElementById('variant-section').classList.add('hidden');
-            document.getElementById('duration-section').classList.remove('hidden');
-            document.getElementById('variant-title').innerText = v;
-            
-            const list = document.getElementById('duration-list');
-            list.innerHTML = "";
-            
-            if(sessionProduct === 'PANEL iOS') {
-                for (const [dur, prc] of Object.entries(prices['PANEL iOS'])) {
-                    list.innerHTML += `<div onclick="openPayment('${dur}', '${prc}')" class="glass p-6 flex justify-between items-center border border-white/5"><span class="font-bold text-xs uppercase italic tracking-widest">Access ${dur}</span><span class="text-cyan-400 font-black">${prc.split('.')[0]}K</span></div>`;
+            if(cat === 'PANEL iOS') {
+                document.getElementById('menu-desc').innerText = "Select Your Plan Duration";
+                const p = {'1 Day': '70.000', '7 Day': '200.000', '30 Day': '350.000'};
+                for (let [d, pr] of Object.entries(p)) {
+                    list.innerHTML += `<div onclick="openPay('Access ${d}', '${pr}')" class="glass p-6 border border-white/5 font-black uppercase italic text-xs tracking-widest flex justify-between"><span>${d}</span><span class="text-cyan-400">${pr.split('.')[0]}K</span></div>`;
                 }
-            } else {
-                let p = prices[sessionProduct];
-                list.innerHTML = `<div onclick="openPayment('Life Time', '${p}')" class="glass p-6 flex justify-between items-center border border-white/5"><span class="font-bold text-xs uppercase italic tracking-widest">Access Life Time</span><span class="text-cyan-400 font-black">${p.split('.')[0]}K</span></div>`;
+            } else if(cat === 'XIT iOS') {
+                document.getElementById('menu-desc').innerText = "Select Feature (Lifetime Access)";
+                const f = ['Aimbody (Badan)', 'Aimneck (Leher)', 'Aimdrag (Drag)', 'Magic Bullet (Angin)'];
+                f.forEach(item => {
+                    list.innerHTML += `<div onclick="openPay('${item}', '250.000')" class="glass p-6 border border-white/5 font-black uppercase italic text-xs tracking-widest flex justify-between"><span>${item}</span><span class="text-cyan-400">250K</span></div>`;
+                });
+            } else if(cat === 'TOOLS iOS') {
+                document.getElementById('menu-desc').innerText = "System Stabilizer & Optimizer";
+                list.innerHTML = `
+                    <div class="glass p-6 mb-6 text-[11px] text-gray-400 leading-relaxed uppercase font-bold tracking-tighter">
+                        Paket Tools iOS mencakup perbaikan FPS, sensitivitas layar, dan optimalisasi RAM untuk performa gaming maksimal secara permanen.
+                    </div>
+                    <button onclick="openPay('Full Tools Pack', '200.000')" class="w-full py-5 btn-glow rounded-xl font-black italic uppercase text-xs tracking-widest">Beli Sekarang - 200K</button>
+                `;
             }
         }
 
-        function openPayment(dur, price) {
-            sessionDuration = dur; sessionPrice = price;
-            document.getElementById('pay-product').innerText = `${sessionFeature} (${dur})`;
+        function openPay(item, price) {
+            sessionData.item = item; sessionData.price = price;
+            document.getElementById('pay-product').innerText = `${item}`;
             document.getElementById('paymentModal').style.display = 'flex';
         }
 
         function handleQRIS() {
-            sessionMethod = "QRIS (Katalog)";
-            const waLink = "https://wa.me/c/6283845203074"; // Link katalog/profil
-            window.open(waLink, '_blank');
-            // Menampilkan instruksi kembali ke web
-            document.getElementById('final-method').innerText = "QRIS - WA KATALOG";
-            document.getElementById('final-target').innerText = "Cek Profil Admin";
-            document.getElementById('final-an').innerText = "Silakan Bayar & Klik Done";
+            sessionData.method = "QRIS (Katalog)";
+            window.open("https://wa.me/c/6283845203074", '_blank');
+            document.getElementById('final-method').innerText = "QRIS WA CATALOG";
+            document.getElementById('final-target').innerText = "Profil Admin";
+            document.getElementById('final-an').innerText = "Bayar & Konfirmasi Done";
             document.getElementById('finalModal').style.display = 'flex';
         }
 
-        function showFinal(method) {
-            sessionMethod = method;
-            document.getElementById('final-method').innerText = "Nomor Tujuan " + method;
+        function showFinal(m) {
+            sessionData.method = m;
+            document.getElementById('final-method').innerText = "Nomor Tujuan " + m;
             document.getElementById('final-target').innerText = "083845203074";
-            document.getElementById('final-an').innerText = "A/N MANJII iOS STORE";
             document.getElementById('finalModal').style.display = 'flex';
         }
 
         function confirmToWA() {
-            const msg = `Halo Admin MANJII iOS,%0A%0ASaya sudah membayar via *${sessionMethod}*.%0A%0A*Order Detail:*%0A- Produk: *${sessionFeature}*%0A- Durasi: *${sessionDuration}*%0A- Harga: *IDR ${sessionPrice}*%0A%0AMohon kirimkan Key Access. Terimakasih!`;
+            const msg = `Halo Admin MANJII iOS,%0A%0ASaya sudah membayar via *${sessionData.method}*.%0A%0A*Order:*%0A- Kategori: *${sessionData.cat}*%0A- Produk: *${sessionData.item}*%0A- Harga: *IDR ${sessionData.price}*%0A%0AMohon kirimkan Key Access. Terimakasih!`;
             window.location.href = `https://wa.me/6283845203074?text=${msg}`;
         }
 
-        function backToCategory() {
+        function backToHome() {
             document.getElementById('category-section').classList.remove('hidden');
-            document.getElementById('variant-section').classList.add('hidden');
-            document.getElementById('duration-section').classList.add('hidden');
-        }
-
-        function backToVariant() {
-            document.getElementById('variant-section').classList.remove('hidden');
-            document.getElementById('duration-section').classList.add('hidden');
+            document.getElementById('sub-menu').classList.add('hidden');
         }
 
         function closeModal() { document.getElementById('paymentModal').style.display = 'none'; }
