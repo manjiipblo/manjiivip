@@ -15,9 +15,7 @@
         }
         body { background-color: #020406; color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
         
-        /* Font Login Spesial */
         .font-logo { font-family: 'Orbitron', sans-serif; letter-spacing: -2px; text-shadow: 0 0 15px var(--neon-cyan); }
-        
         .glass { background: rgba(15, 20, 28, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; }
         
         /* Neon Stroke Animation */
@@ -29,7 +27,6 @@
         .neon-btn-red { border: 2px solid var(--neon-red); animation: stroke-red 2s infinite; }
         .neon-btn-purple { border: 2px solid var(--neon-purple); animation: stroke-purple 2s infinite; }
 
-        /* Square Login Button */
         .btn-square { 
             background: var(--neon-cyan); color: black; font-weight: 800; 
             width: 100%; height: 55px; border-radius: 4px;
@@ -37,7 +34,6 @@
             box-shadow: 0 0 20px var(--neon-cyan); transition: 0.3s;
         }
 
-        /* Testimoni Floating */
         #testi-popup {
             position: fixed; bottom: 100px; left: 15px; right: 15px; max-width: 320px;
             background: rgba(5, 5, 5, 0.95); border: 1px solid var(--neon-cyan);
@@ -86,28 +82,20 @@
                 <p class="text-[8px] text-gray-500 uppercase tracking-widest font-bold">Sold Items</p>
             </div>
         </div>
-        <p class="mt-20 text-[9px] text-gray-700 font-bold uppercase tracking-[4px]">Developer MANJII iOS</p>
     </div>
 
     <div id="main-dashboard" class="hidden">
-        
         <div id="home-page" class="page active-page">
             <div class="mb-10 pt-6 px-2">
                 <h1 class="text-3xl font-black italic tracking-tighter uppercase font-logo text-white">Marketplace</h1>
                 <p class="text-cyan-400 text-[9px] font-bold uppercase tracking-[4px]">Elite Private Store</p>
             </div>
 
-            <div class="glass p-6 mb-8 border-l-4 border-cyan-400">
-                <p class="text-[11px] text-gray-300 leading-relaxed italic">
-                    Solusi premium untuk optimasi sistem iOS Anda. Ditenagai oleh **Advanced System Stabilization** untuk performa tanpa batas. Keamanan terjamin oleh **OFFICIAL DEVELOPER**.
-                </p>
-            </div>
-
             <div id="category-section" class="space-y-6">
                 <div onclick="selectCategory('PANEL iOS')" class="glass p-6 flex justify-between items-center cursor-pointer neon-btn-cyan active:scale-95 transition-all">
                     <div>
                         <h3 class="font-black text-xl italic uppercase tracking-tighter">Panel iOS</h3>
-                        <p class="text-[9px] text-cyan-400 font-bold uppercase italic">Duration Plan</p>
+                        <p class="text-[9px] text-cyan-400 font-bold uppercase italic">Advanced Features</p>
                     </div>
                     <i class="fas fa-bolt text-2xl text-cyan-400"></i>
                 </div>
@@ -136,38 +124,6 @@
             </div>
         </div>
 
-        <div id="cs-page" class="page pt-12 text-center px-8">
-            <h2 class="text-2xl font-black italic uppercase mb-10 tracking-tighter font-logo">Connect</h2>
-            <div class="space-y-4">
-                <a href="https://wa.me/6283845203074" class="glass p-6 flex items-center justify-between neon-btn-cyan">
-                    <div class="flex items-center gap-4 text-green-500">
-                        <i class="fab fa-whatsapp text-2xl"></i>
-                        <span class="font-black text-xs uppercase italic">WhatsApp Admin</span>
-                    </div>
-                </a>
-                <a href="https://tiktok.com/@manjiixit" class="glass p-6 flex items-center justify-between neon-btn-purple">
-                    <div class="flex items-center gap-4 text-white">
-                        <i class="fab fa-tiktok text-2xl"></i>
-                        <span class="font-black text-xs uppercase italic">TikTok @manjiixit</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <div id="account-page" class="page pt-12 px-6">
-            <h2 class="text-2xl font-black italic uppercase mb-8 text-center font-logo">Identity</h2>
-            <div class="glass p-8 space-y-6 neon-btn-cyan">
-                <div class="flex justify-between items-center border-b border-white/5 pb-4">
-                    <span class="text-gray-500 text-[10px] font-bold uppercase">Client Status</span>
-                    <span class="text-cyan-400 text-[10px] font-black uppercase italic">Registered</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-500 text-[10px] font-bold uppercase">Developer</span>
-                    <span class="text-white text-[10px] font-black uppercase italic">MANJII iOS</span>
-                </div>
-            </div>
-        </div>
-
         <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[85%] glass p-4 flex justify-around items-center border border-white/10 shadow-2xl z-50">
             <button onclick="changePage('home')" id="nav-home" class="text-cyan-400"><i class="fas fa-store text-lg"></i></button>
             <button onclick="changePage('cs')" id="nav-cs" class="text-gray-700"><i class="fas fa-headset text-lg"></i></button>
@@ -181,9 +137,8 @@
     <script>
         let sessionData = { cat: "", item: "", price: "", method: "" };
 
-        // EXTENDED TESTIMONI DATA
-        const names = ["ADAM_RESA", "KEVIN_99", "DIKA_PRO", "REVAN_XYZ", "SULTAN_ID", "FAJAR_SET", "ALIF_OFFICIAL", "RIZKY_FF", "DAFFA_MODS", "BOY_SULTAN"];
-        const actions = ["Order Panel 30 Hari Done!", "Tf Dana Aman, Fast Respon!", "XIT Aimbody Aktif, Gokil!", "Tools HP Jadi Dingin Parah!", "Repeat Order Ke-2 Kali Sukses.", "QRIS Berhasil, Gas Mabar!", "Magic Bullet Ngeri Boss!", "Panel 7 Hari Udah Masuk.", "Verified Member MANJII.", "Admin Ramah, Proses Kilat!"];
+        const names = ["ADAM_RESA", "KEVIN_99", "DIKA_PRO", "REVAN_XYZ", "SULTAN_ID"];
+        const actions = ["Order Panel Done!", "Tf Dana Aman!", "Aimbody Aktif!", "HP Jadi Dingin!", "Verified Member!"];
         
         function showTesti() {
             const popup = document.getElementById('testi-popup');
@@ -201,14 +156,6 @@
             } else { alert("ERROR: INVALID KEY!"); }
         }
 
-        function changePage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(pageId + '-page').classList.add('active-page');
-            document.querySelectorAll('nav button').forEach(b => { b.classList.remove('text-cyan-400'); b.classList.add('text-gray-700'); });
-            document.getElementById('nav-' + pageId).classList.add('text-cyan-400');
-            if(pageId === 'home') backToHome();
-        }
-
         function selectCategory(cat) {
             sessionData.cat = cat;
             document.getElementById('category-section').classList.add('hidden');
@@ -219,21 +166,31 @@
             document.getElementById('menu-title').innerText = cat;
 
             if(cat === 'PANEL iOS') {
-                const p = {'1 Day': '70.000', '7 Day': '200.000', '30 Day': '350.000'};
-                for (let [d, pr] of Object.entries(p)) {
-                    list.innerHTML += `<div onclick="openPay('Access ${d}', '${pr}')" class="glass p-6 neon-btn-cyan flex justify-between items-center cursor-pointer uppercase italic font-black text-xs"><span>${d}</span><span class="text-cyan-400">${pr.split('.')[0]}K</span></div>`;
+                list.innerHTML = `
+                    <div class="glass p-6 mb-6 neon-btn-cyan text-[10px] text-gray-300 leading-relaxed font-bold uppercase italic">
+                        <span class="text-cyan-400">●</span> Silent / Vectored Aimbot<br>
+                        <span class="text-cyan-400">●</span> Smooth ESP<br>
+                        <span class="text-cyan-400">●</span> Field of View (FOV)<br>
+                        <span class="text-cyan-400">●</span> Stream Hide / Stream Proff<br>
+                        <span class="text-cyan-400">●</span> Advanced Anticheat Bypass<br>
+                        <span class="text-cyan-400">●</span> Save / Load Settings
+                    </div>
+                `;
+                const plans = {'1 Day': '70K', '7 Day': '200K', '30 Day': '350K'};
+                for (let [d, pr] of Object.entries(plans)) {
+                    list.innerHTML += `<div onclick="openPay('Panel ${d}', '${pr}')" class="glass p-6 neon-btn-cyan flex justify-between items-center cursor-pointer uppercase italic font-black text-xs"><span>${d}</span><span class="text-cyan-400">${pr}</span></div>`;
                 }
             } else if(cat === 'XIT iOS') {
                 const f = ['Aimbody (Badan)', 'Aimneck (Leher)', 'Aimdrag (Drag)', 'Magic Bullet (Angin)'];
                 f.forEach(item => {
-                    list.innerHTML += `<div onclick="openPay('${item}', '250.000')" class="glass p-6 neon-btn-red flex justify-between items-center cursor-pointer uppercase italic font-black text-xs"><span>${item}</span><span class="text-red-500">250K</span></div>`;
+                    list.innerHTML += `<div onclick="openPay('${item}', '250K')" class="glass p-6 neon-btn-red flex justify-between items-center cursor-pointer uppercase italic font-black text-xs"><span>${item}</span><span class="text-red-500">250K</span></div>`;
                 });
             } else if(cat === 'TOOLS iOS') {
                 list.innerHTML = `
                     <div class="glass p-6 mb-6 neon-btn-purple text-[10px] text-gray-400 leading-relaxed font-bold uppercase italic">
                         - Fix FPS Drop & Lag<br>- Optimize RAM Management<br>- Bypass Thermal Guard
                     </div>
-                    <button onclick="openPay('Full Tools Optimizer', '200.000')" class="btn-square" style="background:var(--neon-purple); box-shadow:0 0 20px var(--neon-purple)">ORDER NOW - 200K</button>
+                    <button onclick="openPay('Full Optimizer', '200K')" class="btn-square" style="background:var(--neon-purple); box-shadow:0 0 20px var(--neon-purple)">ORDER NOW - 200K</button>
                 `;
             }
         }
@@ -245,7 +202,7 @@
         }
 
         function handleQRIS() {
-            sessionData.method = "QRIS (Katalog)";
+            sessionData.method = "QRIS";
             window.open("https://wa.me/c/6283845203074", '_blank');
             document.getElementById('finalModal').style.display = 'flex';
         }
@@ -256,7 +213,7 @@
         }
 
         function confirmToWA() {
-            const msg = `Halo Admin MANJII iOS,%0A%0ASaya sudah transfer via *${sessionData.method}*.%0A%0A*ORDER DETAIL:*%0A- Item: *${sessionData.item}*%0A- Harga: *IDR ${sessionData.price}*%0A%0AMohon diproses.`;
+            const msg = `Halo Admin MANJII iOS,%0A%0ASaya sudah transfer via *${sessionData.method}*.%0A%0A*ORDER DETAIL:*%0A- Item: *${sessionData.item}*%0A- Harga: *${sessionData.price}*%0A%0AMohon diproses.`;
             window.location.href = `https://wa.me/6283845203074?text=${msg}`;
         }
 
@@ -266,6 +223,7 @@
         }
 
         function closeModal() { document.getElementById('paymentModal').style.display = 'none'; }
+        function changePage(p) { if(p === 'home') backToHome(); }
     </script>
 </body>
 </html>
