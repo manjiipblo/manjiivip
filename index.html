@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Dice Simulator - MANJII</title>
+    <style>
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-magenta: #ff00ff;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #202124;
+            color: white;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            box-sizing: border-box;
+            padding: 20px 10px;
+        }
+
+        /* Area Tampilan Dadu Utama */
+        .game-container {
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .total-display {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #e8eaed;
+            font-weight: 500;
+        }
+        .total-display span {
+            font-weight: bold;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .dice-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .dice {
+            width: 80px;
+            height: 80px;
+            background: #8ab4f8;
+            color: #202124;
+            font-size: 2.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .rolling {
+            transform: rotate(360deg) scale(1.1);
+            background: #aecbfa !important;
+        }
+
+        .btn-roll {
+            background-color: #8ab4f8;
+            color: #202124;
+            border: none;
+            padding: 14px 45px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 100px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            active: scale(0.95);
+        }
+
+        /* Panel Kontrol Rahasia (Neon Glassmorphism) */
+        .control-panel {
+            width: 90%;
+            max-width: 340px;
+            background: rgba(15, 15, 25, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 20px var(--neon-cyan);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .control-panel h4 {
+            margin: 0 0 10px 0;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 5px var(--neon-cyan);
+            letter-spacing: 1px;
+        }
+
+        .control-panel input {
+            width: 85%;
+            background: #111;
+            color: #fff;
+            border: 1px solid var(--neon-cyan);
+            padding: 8px;
+            text-align: center;
+            font-size: 1rem;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .control-panel button {
+            background: transparent;
+            color: var(--neon-magenta);
+            border: 1px solid var(--neon-magenta);
+            padding: 6px 15px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 0 5px var(--neon-magenta);
+            width: 45%;
+        }
+        
+        .status-text {
+            font-size: 11px;
+            margin: 8px 0 0 0;
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="total-display">Total: <span id="total-score">9</span></div>
+
+        <div class="dice-grid">
+            <div class="dice" id="d1">1</div><div class="dice" id="d2">1</div><div class="dice" id="d3">1</div>
+            <div class="dice" id="d4">1</div><div class="dice" id="d5">1</div><div class="dice" id="d6">1</div>
+            <div class="dice" id="d7">1</div><div class="dice" id="d8">1</div><div class="dice" id="d9">1</div>
+        </div>
+
+        <button class="btn-roll" onclick="jalankanRoll()">Lempar</button>
+    </div>
+
+    <div class="control-panel">
+        <h4>MANJII CORE SETTING</h4>
+        <input type="text" id="sequenceInput" placeholder="Contoh: 35-32-25">
+        <div style="display: flex; justify-content: space-around;">
+            <button onclick="simpanSettingan()" style="color: var(--neon-cyan); border-color: var(--neon-cyan); box-shadow: 0 0 5px var(--neon-cyan);">APPLY</button>
+            <button onclick="resetSettingan()">RESET</button>
+        </div>
+        <p class="status-text" id="statusInfo">Status: Dadu Normal (Acak)</p>
+    </div>
+
+    <script>
+        const JUMLAH_DADU = 9;
+        const diceElements = Array.from({length: JUMLAH_DADU}, (_, i) => document.getElementById(`d${i+1}`));
+
+        // Ambil data antrean saat halaman dimuat/refresh
+        let antreanSettingan = JSON.parse(localStorage.getItem('diceQueue')) || [];
+        
+        function updateStatusUI() {
+            const info = document.getElementById('statusInfo');
+            if (antreanSettingan.length > 0) {
+                info.innerText = `Sisa Antrean Roll: [ ${antreanSettingan.join(' -> ')} ]`;
+                info.style.color = "#00ff00";
+            } else {
+                info.innerText = "Status: Antrean Habis / Mode Acak";
+                info.style.color = "#ffaa00";
+            }
+        }
+        updateStatusUI();
+
+        function simpanSettingan() {
+            const inputVal = document.getElementById('sequenceInput').value.trim();
+            if (!inputVal) return;
+
+            // Memisahkan string berdasarkan tanda '-' dan mengubahnya menjadi angka Array
+            const angkaArray = inputVal.split('-').map(num => parseInt(num.trim())).filter(num => !isNaN(num));
+
+            // Validasi batas angka untuk 9 dadu (minimal 9, maksimal 54)
+            const valid = angkaArray.every(num => num >= 9 && num <= 54);
+            if (!valid) {
+                alert("Rentang total angka untuk 9 dadu harus antara 9 sampai 54!");
+                return;
+            }
+
+            antreanSettingan = angkaArray;
+            localStorage.setItem('diceQueue', JSON.stringify(antreanSettingan));
+            updateStatusUI();
+            document.getElementById('sequenceInput').value = '';
+        }
+
+        function resetSettingan() {
+            antreanSettingan = [];
+            localStorage.removeItem('diceQueue');
+            updateStatusUI();
+        }
+
+        function jalankanRoll() {
+            // Efek Animasi Putar
+            diceElements.forEach(d => d.classList.add('rolling'));
+
+            setTimeout(() => {
+                let targetTotal;
+
+                if (antreanSettingan.length > 0) {
+                    // Ambil angka pertama dari antrean dan hapus dari array
+                    targetTotal = antreanSettingan.shift();
+                    localStorage.setItem('diceQueue', JSON.stringify(antreanSettingan));
+                    updateStatusUI();
+                } else {
+                    // Jika settingan habis, gunakan pengacak normal murni
+                    targetTotal = 0;
+                    diceElements.forEach(d => {
+                        targetTotal += Math.floor(Math.random() * 6) + 1;
+                    });
+                }
+
+                // Distribusi angka ke 9 dadu agar totalnya sesuai target
+                let sisa = targetTotal;
+                let hasilDadu = Array(JUMLAH_DADU).fill(1);
+                sisa -= JUMLAH_DADU; // Kurangi base value (1) per dadu
+
+                for (let i = 0; i < JUMLAH_DADU; i++) {
+                    if (sisa > 0) {
+                        let tambah = Math.min(5, sisa);
+                        let acakTambah = Math.floor(Math.random() * (tambah + 1));
+                        hasilDadu[i] += acakTambah;
+                        sisa -= acakTambah;
+                    }
+                }
+
+                // Atasi sisa pembagian akibat pembulatan acak
+                let idx = 0;
+                while (sisa > 0) {
+                    if (hasilDadu[idx] < 6) {
+                        hasilDadu[idx]++;
+                        sisa--;
+                    }
+                    idx = (idx + 1) % JUMLAH_DADU;
+                }
+
+                // Update visual angka ke layar dokumen HTML
+                let hitungTotalAsli = 0;
+                diceElements.forEach((d, index) => {
+                    d.innerText = hasilDadu[index];
+                    d.classList.remove('rolling');
+                    hitungTotalAsli += hasilDadu[index];
+                });
+
+                document.getElementById('total-score').innerText = hitungTotalAsli;
+            }, 400); // Durasi animasi berputar
+        }
+    </script>
+</body>
+</html>
