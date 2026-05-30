@@ -8,10 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            var(--accent): #ff2a5f;
+            --accent: #ff2a5f;
             --accent-glow: rgba(255, 42, 95, 0.3);
             --accent-glow-strong: rgba(255, 42, 95, 0.5);
-
             --bg-main: rgba(0, 0, 0, 0.6);
             --bg-card: rgba(15, 15, 20, 0.5); 
             --text-main: #ffffff;
@@ -28,10 +27,9 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-        
         body { color: var(--text-main); transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
-        /* BACKGROUND IMAGE DENGAN BLUR */
+        /* BACKGROUND */
         .bg-image {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: url('latarbelakang.png') center/cover no-repeat;
@@ -42,32 +40,26 @@
             background: var(--bg-main); z-index: -1; transition: 0.3s;
         }
 
-        /* LOADING SCREEN AWAL */
+        /* LOADERS */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0a0a0c; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        
-        /* ACTION LOADING OVERLAY (UNTUK CHECKOUT, ADD PRODUK DLL) */
-        #action-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            z-index: 10000; display: none; flex-direction: column;
-            justify-content: center; align-items: center;
+        #action-loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 9998;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
         }
-
         .loader-container { position: relative; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; }
         .loading-circle {
             position: absolute; width: 100%; height: 100%;
             border: 2px dashed var(--accent); border-radius: 50%;
-            animation: rotate 3s linear infinite; box-shadow: 0 0 10px var(--accent-glow);
+            animation: rotate 2s linear infinite; box-shadow: 0 0 10px var(--accent-glow);
         }
         .loading-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; z-index: 2; border: 1px solid var(--accent); }
         @keyframes rotate { 100% { transform: rotate(360deg); } }
-        
-        #loading-text { margin-top: 25px; font-size: 20px; font-weight: 700; color: var(--accent); letter-spacing: 2px; }
-        #action-text { margin-top: 20px; font-size: 14px; font-weight: 700; color: var(--text-main); letter-spacing: 1px; text-transform: uppercase;}
+        .loading-text { margin-top: 25px; font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: 2px; }
 
         /* HEADER & NAVBAR */
         header {
@@ -91,22 +83,16 @@
         }
         .settings-dropdown.active { display: flex; }
         .dropdown-title { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;}
-        .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        .color-grid, .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .color-pill {
             display: flex; align-items: center; gap: 8px; padding: 8px 12px;
             background: transparent; border: 1px solid var(--border-color);
             border-radius: 20px; cursor: pointer; font-size: 12px; transition: 0.3s; font-weight: 500;
         }
-        .color-pill:hover, .color-pill.active { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+        .color-pill:hover, .color-pill.active { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); color: var(--accent); }
         .color-circle { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 5px inherit;}
-        .check-icon { margin-left: auto; color: var(--accent); font-size: 10px; display: none; }
-        .color-pill.active .check-icon { display: block; }
-        .theme-list { display: flex; flex-direction: column; gap: 5px; }
-        .theme-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: 0.2s; }
-        .theme-item:hover, .theme-item.active { background: rgba(255,255,255,0.05); color: var(--accent); }
-        .theme-indicator { margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: none; }
-        .theme-item.active .theme-indicator { display: block; box-shadow: 0 0 5px var(--accent-glow); }
-
+        
         .sidebar {
             position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
             background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -119,7 +105,7 @@
         }
         .sidebar a:hover { background: rgba(255,255,255,0.05); border-left: 2px solid var(--accent); color: var(--accent); box-shadow: inset 15px 0 15px -15px var(--accent-glow); }
 
-        /* CONTAINERS & PAGES */
+        /* CONTAINERS */
         .page { display: none; padding: 100px 20px 40px; max-width: 800px; margin: 0 auto; min-height: 100vh; animation: fadeIn 0.4s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -127,7 +113,18 @@
         .glass-container {
             background: var(--bg-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); margin-bottom: 20px; position: relative;
+        }
+
+        /* MODAL DETAIL ORDER */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1002;
+            display: none; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background: var(--bg-card); backdrop-filter: blur(15px); border: 1px solid var(--accent);
+            border-radius: 12px; padding: 20px; width: 100%; max-width: 400px; box-shadow: 0 0 20px var(--accent-glow);
         }
 
         /* HOME UI */
@@ -144,34 +141,38 @@
         .stat h3 { font-size: 18px; color: var(--accent); margin-bottom: 2px; text-shadow: 0 0 8px var(--accent-glow); font-weight: 700;}
         .stat p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
 
-        /* TOMBOL NEON RAPIH */
+        /* TOMBOL & BADGE */
         .btn {
-            background: transparent; backdrop-filter: blur(8px);
-            color: var(--accent); border: 1px solid var(--accent); 
+            background: transparent; backdrop-filter: blur(8px); color: var(--accent); border: 1px solid var(--accent); 
             border-radius: 10px; padding: 12px 20px; font-weight: 600; cursor: pointer; font-size: 13px;
             width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
             transition: 0.3s; text-decoration: none; letter-spacing: 0.5px;
             box-shadow: 0 0 8px var(--accent-glow), inset 0 0 5px var(--accent-glow);
         }
         .btn:hover { background: var(--accent); color: #fff; box-shadow: 0 0 15px var(--accent-glow-strong); }
-
         .section-title { font-size: 16px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; text-shadow: 0 0 5px var(--accent-glow); font-weight: 700; letter-spacing: 1px; }
 
         /* PRODUCT CATALOG */
         .product-grid { display: grid; gap: 20px; }
         .product-card {
-            background: var(--bg-card); backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color); border-left: 3px solid var(--accent);
-            border-radius: 12px; padding: 20px; position: relative; transition: 0.3s;
+            background: var(--bg-card); backdrop-filter: blur(10px); border: 1px solid var(--border-color); 
+            border-left: 3px solid var(--accent); border-radius: 12px; padding: 20px; position: relative; transition: 0.3s;
         }
         .product-card:hover { border-color: var(--accent); box-shadow: 0 5px 20px var(--accent-glow); }
         .p-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
         .p-specs { list-style: none; margin-bottom: 15px; font-size: 12px; color: var(--text-muted); line-height: 1.8;}
         .p-specs li { display: flex; align-items: center; gap: 8px; }
         .p-specs li::before { content: '✓'; color: var(--accent); font-weight: bold; text-shadow: 0 0 5px var(--accent-glow);}
-        .p-price-row { margin-bottom: 15px; }
-        .p-price { font-size: 20px; font-weight: 800; color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
         
+        .p-price-row { margin-bottom: 15px; display: flex; flex-direction: column; }
+        .p-price { font-size: 20px; font-weight: 800; color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
+        .p-price-strike { font-size: 12px; color: var(--text-muted); text-decoration: line-through; margin-bottom: 3px; }
+        .discount-badge {
+            position: absolute; top: -10px; right: -10px; background: #ff2a2a; color: #fff;
+            font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255,42,42,0.6); transform: rotate(5deg);
+        }
+
         .m-badge { 
             border: 1px solid #ff2a2a; color: #ff2a2a; padding: 8px 15px; font-size: 12px;
             font-weight: 700; letter-spacing: 1px; background: rgba(0,0,0,0.5); border-radius: 6px;
@@ -186,21 +187,25 @@
             color: var(--text-main); border-radius: 8px; outline: none; transition: 0.3s; font-size: 13px;
         }
         input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
-        
-        /* ADMIN TABLES */
+
+        /* TABLES */
         .table-responsive { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
         th, td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); text-align: left; }
         th { background: rgba(0,0,0,0.4); color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
-        tr:last-child td { border-bottom: none; }
         tr:hover td { background: rgba(255,255,255,0.02); }
 
         .tab-menu { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
         .tab-menu .btn { width: auto; white-space: nowrap; padding: 8px 15px; font-size: 11px; }
         
         .news-card { padding: 15px; border-left: 3px solid var(--accent); background: rgba(0,0,0,0.2); margin-bottom: 10px; border-radius: 0 8px 8px 0; }
-        .news-date { font-size: 10px; color: var(--text-muted); margin-bottom: 5px; }
-        .news-text { font-size: 13px; line-height: 1.6; }
+        
+        /* HISTORY ITEM (CLICKABLE) */
+        .history-item {
+            border-left: 3px solid var(--accent); background: rgba(0,0,0,0.2); padding: 15px; 
+            border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.3s;
+        }
+        .history-item:hover { background: rgba(255,255,255,0.05); transform: translateX(5px); box-shadow: 0 0 10px var(--accent-glow); }
 
     </style>
 </head>
@@ -213,15 +218,23 @@
             <div class="loading-circle"></div>
             <img src="loadingscreen.png" class="loading-logo" onerror="this.src='https://via.placeholder.com/70x70.png?text=LOGO'">
         </div>
-        <div id="loading-text">0%</div>
+        <div class="loading-text" id="loading-text-init">MEMUAT SYSTEM...</div>
     </div>
 
-    <div id="action-overlay">
+    <div id="action-loader">
         <div class="loader-container">
             <div class="loading-circle"></div>
-            <img src="loadingscreen.png" class="loading-logo" onerror="this.src='https://via.placeholder.com/70x70.png?text=LOGO'">
+            <i class="fa-solid fa-microchip" style="font-size: 30px; color: var(--accent); z-index: 2;"></i>
         </div>
-        <div id="action-text">MEMPROSES...</div>
+        <div class="loading-text" data-i18n="processing">MEMPROSES DATA...</div>
+    </div>
+
+    <div id="history-modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" id="modal-box">
+            <h3 style="color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 10px; margin-bottom: 15px;" data-i18n="order_detail_title">DETAIL PESANAN</h3>
+            <div id="modal-content-data" style="font-size: 12px; line-height: 1.8;"></div>
+            <button class="btn" style="margin-top: 15px;" onclick="document.getElementById('history-modal').style.display='none'" data-i18n="close">TUTUP</button>
+        </div>
     </div>
 
     <header>
@@ -230,66 +243,66 @@
         </div>
         <div class="header-actions">
             <button class="icon-btn" onclick="checkAuthAndGo('history')"><i class="fa-solid fa-clock-rotate-left"></i></button>
-            <button class="icon-btn" onclick="toggleSettings()"><i class="fa-solid fa-palette"></i></button>
+            <button class="icon-btn" onclick="toggleSettings()"><i class="fa-solid fa-gear"></i></button>
             <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars-staggered"></i></button>
         </div>
     </header>
 
     <div class="settings-dropdown" id="settingsMenu">
         <div>
-            <div class="dropdown-title">Warna Aksen</div>
-            <div class="color-grid">
-                <div class="color-pill active" onclick="setAccent('#ff2a5f', this)"><div class="color-circle" style="background:#ff2a5f;"></div> Rose <i class="fa-solid fa-check check-icon"></i></div>
-                <div class="color-pill" onclick="setAccent('#00a8ff', this)"><div class="color-circle" style="background:#00a8ff;"></div> Ocean <i class="fa-solid fa-check check-icon"></i></div>
-                <div class="color-pill" onclick="setAccent('#00ff88', this)"><div class="color-circle" style="background:#00ff88;"></div> Emerald <i class="fa-solid fa-check check-icon"></i></div>
-                <div class="color-pill" onclick="setAccent('#ff9f43', this)"><div class="color-circle" style="background:#ff9f43;"></div> Sun <i class="fa-solid fa-check check-icon"></i></div>
+            <div class="dropdown-title" data-i18n="language">Bahasa / Language</div>
+            <div class="lang-grid">
+                <div class="color-pill" id="lang-id" onclick="setLang('id')">🇮🇩 Indonesia</div>
+                <div class="color-pill" id="lang-en" onclick="setLang('en')">🇬🇧 English</div>
             </div>
         </div>
         <div style="height: 1px; background: var(--border-color); margin: 5px 0;"></div>
         <div>
-            <div class="dropdown-title">Tema Latar</div>
-            <div class="theme-list">
-                <div class="theme-item" onclick="setTheme('light', this)"><i class="fa-regular fa-sun"></i> Kaca Terang <div class="theme-indicator"></div></div>
-                <div class="theme-item active" onclick="setTheme('dark', this)"><i class="fa-regular fa-moon"></i> Kaca Gelap <div class="theme-indicator"></div></div>
+            <div class="dropdown-title" data-i18n="accent_color">Warna Aksen</div>
+            <div class="color-grid">
+                <div class="color-pill active" onclick="setAccent('#ff2a5f', this)"><div class="color-circle" style="background:#ff2a5f;"></div> Rose</div>
+                <div class="color-pill" onclick="setAccent('#00a8ff', this)"><div class="color-circle" style="background:#00a8ff;"></div> Ocean</div>
+                <div class="color-pill" onclick="setAccent('#00ff88', this)"><div class="color-circle" style="background:#00ff88;"></div> Emerald</div>
+                <div class="color-pill" onclick="setAccent('#ff9f43', this)"><div class="color-circle" style="background:#ff9f43;"></div> Sun</div>
             </div>
         </div>
     </div>
 
     <div class="sidebar" id="sidebarMenu">
         <div id="user-profile-sidebar" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
-            <div style="font-size: 12px; color: var(--text-muted);">Status Akun:</div>
+            <div style="font-size: 12px; color: var(--text-muted);" data-i18n="account_status">Status Akun:</div>
             <div id="sidebar-username" style="font-size: 16px; font-weight: 700; color: var(--accent); margin-top: 5px;">Belum Login</div>
         </div>
-        <a href="#" onclick="showPage('home')"><i class="fa-solid fa-house"></i> Beranda</a>
-        <a href="#" onclick="showPage('products')"><i class="fa-solid fa-box"></i> Katalog Produk</a>
-        <a href="#" onclick="showPage('news')"><i class="fa-solid fa-bullhorn"></i> Pengumuman</a>
-        <a href="#" onclick="checkAuthAndGo('history')"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</a>
+        <a href="#" onclick="showPage('home')"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Beranda</span></a>
+        <a href="#" onclick="showPage('products')"><i class="fa-solid fa-box"></i> <span data-i18n="nav_catalog">Katalog Produk</span></a>
+        <a href="#" onclick="showPage('news')"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="nav_news">Pengumuman</span></a>
+        <a href="#" onclick="checkAuthAndGo('history')"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="nav_history">Riwayat Transaksi</span></a>
         <a href="https://wa.me/6283845203074" target="_blank"><i class="fa-brands fa-whatsapp"></i> Customer Service</a>
         <a href="https://tiktok.com/@manjiixit" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
         
         <div style="margin-top: 30px;">
-            <a href="#" id="auth-btn-sidebar" onclick="showPage('auth')" style="color: #00ff88; border-left-color: #00ff88;"><i class="fa-solid fa-right-to-bracket"></i> Login / Daftar</a>
-            <a href="#" id="logout-btn-sidebar" onclick="logoutUser()" style="display:none; color: #ff2a2a; border-left-color: #ff2a2a;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-            <a href="#" onclick="showPage('admin-login')" style="color: var(--text-muted); font-size: 12px; margin-top:20px;"><i class="fa-solid fa-shield-halved"></i> Admin Akses</a>
+            <a href="#" id="auth-btn-sidebar" onclick="showPage('auth')" style="color: #00ff88; border-left-color: #00ff88;"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="nav_login">Login / Daftar</span></a>
+            <a href="#" id="logout-btn-sidebar" onclick="logoutUser()" style="display:none; color: #ff2a2a; border-left-color: #ff2a2a;"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="nav_logout">Logout</span></a>
+            <a href="#" onclick="showPage('admin-login')" style="color: var(--text-muted); font-size: 12px; margin-top:20px;"><i class="fa-solid fa-shield-halved"></i> Admin Panel</a>
         </div>
     </div>
 
     <div id="auth" class="page">
-        <h2 class="section-title"><i class="fa-solid fa-user-shield"></i> PORTAL PENGGUNA</h2>
+        <h2 class="section-title"><i class="fa-solid fa-user-shield"></i> <span data-i18n="portal_title">PORTAL PENGGUNA</span></h2>
         <div class="glass-container">
             <div class="tab-menu" style="justify-content: center;">
-                <button class="btn" id="btn-tab-login" style="background:var(--accent); color:#fff;" onclick="switchAuthTab('login')">LOGIN</button>
-                <button class="btn" id="btn-tab-reg" onclick="switchAuthTab('register')">DAFTAR BARU</button>
+                <button class="btn" id="btn-tab-login" style="background:var(--accent); color:#fff;" onclick="switchAuthTab('login')" data-i18n="tab_login">LOGIN</button>
+                <button class="btn" id="btn-tab-reg" onclick="switchAuthTab('register')" data-i18n="tab_register">DAFTAR BARU</button>
             </div>
             <div id="form-login">
-                <div class="form-group"><label>Username</label><input type="text" id="log-user" placeholder="Masukkan username..."></div>
-                <div class="form-group"><label>Password</label><input type="password" id="log-pass" placeholder="Masukkan password..."></div>
-                <button class="btn" onclick="loginUser()" style="margin-top: 10px;">MASUK SEKARANG</button>
+                <div class="form-group"><label data-i18n="lbl_username">Username</label><input type="text" id="log-user" placeholder="..."></div>
+                <div class="form-group"><label data-i18n="lbl_password">Password</label><input type="password" id="log-pass" placeholder="..."></div>
+                <button class="btn" onclick="loginUser()" style="margin-top: 10px;" data-i18n="btn_login_now">MASUK SEKARANG</button>
             </div>
             <div id="form-register" style="display: none;">
-                <div class="form-group"><label>Username Baru</label><input type="text" id="reg-user" placeholder="Buat username (bebas)..."></div>
-                <div class="form-group"><label>Password Baru</label><input type="password" id="reg-pass" placeholder="Buat password (bebas)..."></div>
-                <button class="btn" onclick="registerUser()" style="margin-top: 10px; border-color: #00a8ff; color: #00a8ff;">DAFTARKAN AKUN</button>
+                <div class="form-group"><label data-i18n="lbl_new_username">Username Baru</label><input type="text" id="reg-user" placeholder="..."></div>
+                <div class="form-group"><label data-i18n="lbl_new_password">Password Baru</label><input type="password" id="reg-pass" placeholder="..."></div>
+                <button class="btn" onclick="registerUser()" style="margin-top: 10px; border-color: #00a8ff; color: #00a8ff;" data-i18n="btn_register_now">DAFTARKAN AKUN</button>
             </div>
         </div>
     </div>
@@ -301,50 +314,59 @@
             <p class="subtitle" id="site-desc">Pusat penjualan produk cheat manjii ios dengan keamanan super tinggi. Tersertifikasi aman 99%.</p>
         </div>
         <div class="stats-box">
-            <div class="stat"><h3>5K+</h3><p>User Aktif</p></div>
-            <div class="stat"><h3>99%</h3><p>Keamanan</p></div>
-            <div class="stat"><h3>24/7</h3><p>Layanan</p></div>
+            <div class="stat"><h3>5K+</h3><p data-i18n="stat_users">User Aktif</p></div>
+            <div class="stat"><h3>99%</h3><p data-i18n="stat_security">Keamanan</p></div>
+            <div class="stat"><h3>24/7</h3><p data-i18n="stat_service">Layanan</p></div>
         </div>
-        <button class="btn" style="margin-bottom: 15px; background: rgba(255,255,255,0.05);" onclick="showPage('products')">LIHAT KATALOG PRODUK</button>
+        <button class="btn" style="margin-bottom: 15px; background: rgba(255,255,255,0.05);" onclick="showPage('products')" data-i18n="btn_view_catalog">LIHAT KATALOG PRODUK</button>
     </div>
 
     <div id="products" class="page">
-        <h2 class="section-title"><i class="fa-solid fa-fire"></i> KATALOG PRODUK</h2>
+        <h2 class="section-title"><i class="fa-solid fa-fire"></i> <span data-i18n="catalog_title">KATALOG PRODUK</span></h2>
         <div class="product-grid" id="product-list"></div>
     </div>
 
     <div id="news" class="page">
-        <h2 class="section-title"><i class="fa-solid fa-bullhorn"></i> NEWS & UPDATES</h2>
+        <h2 class="section-title"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="news_title">NEWS & UPDATES</span></h2>
         <div class="glass-container" id="news-list-public"></div>
     </div>
 
     <div id="history" class="page">
-        <h2 class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> RIWAYAT TRANSAKSI KAMU</h2>
+        <h2 class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="history_title">RIWAYAT TRANSAKSI</span></h2>
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;" data-i18n="history_desc">Klik riwayat untuk melihat detail pesanan.</p>
         <div class="glass-container">
             <div id="user-history-list"></div>
         </div>
     </div>
 
     <div id="checkout" class="page">
-        <h2 class="section-title"><i class="fa-solid fa-cart-shopping"></i> FORM CHECKOUT</h2>
+        <h2 class="section-title"><i class="fa-solid fa-cart-shopping"></i> <span data-i18n="checkout_title">FORM CHECKOUT</span></h2>
         <div class="glass-container">
             <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 3px solid var(--accent);">
-                <small style="color:var(--text-muted);">Produk Pembelian:</small>
+                <small style="color:var(--text-muted);" data-i18n="co_selected_product">Produk Pembelian:</small>
                 <h3 id="co-product-name" style="color:var(--accent); margin-top:5px; font-size: 15px;"></h3>
             </div>
-            <div class="form-group"><label>Nama Akun (Otomatis)</label><input type="text" id="co-name" disabled style="color:var(--accent); font-weight:bold;"></div>
-            <div class="form-group"><label>No WhatsApp (Aktif)</label><input type="number" id="co-wa" placeholder="08..." required></div>
+            <div class="form-group"><label data-i18n="co_account_name">Nama Akun (Otomatis)</label><input type="text" id="co-name" disabled style="color:var(--accent); font-weight:bold;"></div>
+            <div class="form-group"><label data-i18n="co_wa_number">No WhatsApp (Aktif)</label><input type="number" id="co-wa" placeholder="08..." required></div>
             <div class="form-group">
-                <label>Pilih Platform</label>
-                <select id="co-platform"><option value="iPhone Device">📱 iPhone Device</option><option value="Android Device">🤖 Android Device</option></select>
+                <label data-i18n="co_platform">Pilih Platform</label>
+                <select id="co-platform"><option value="iPhone Device">📱 iPhone Device</option><option value="Android Device">🤖 Android Device</option><option value="iPad Device">📟 iPad Device</option></select>
             </div>
-            <div style="text-align: center; margin: 25px 0; padding: 20px; border: 1px dashed var(--accent); border-radius: 12px; background: rgba(0,0,0,0.1);">
-                <h3 style="margin-bottom: 10px; color: var(--accent); font-size: 14px;">QRIS PAYMENT</h3>
-                <img src="qris.png" alt="QRIS" style="width: 180px; border-radius: 10px; border: 1px solid var(--accent); box-shadow: 0 0 10px var(--accent-glow);" onerror="this.src='https://via.placeholder.com/180x180.png?text=UPLOAD+QRIS'">
-                <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px;">Scan QRIS sesuai nominal harga produk.</p>
+            
+            <div class="form-group" style="margin-top: 25px;">
+                <label data-i18n="co_payment_method">Pilih Metode Pembayaran</label>
+                <select id="co-payment-select" onchange="updatePaymentView()"></select>
             </div>
-            <div class="form-group"><label>Upload Bukti Transfer (Otomatis Dikompres)</label><input type="file" id="co-proof" accept="image/*" required style="padding: 10px;"></div>
-            <button class="btn" onclick="submitOrder()">KIRIM BUKTI PEMBAYARAN</button>
+
+            <div id="payment-display" style="text-align: center; margin: 15px 0 25px; padding: 20px; border: 1px dashed var(--accent); border-radius: 12px; background: rgba(0,0,0,0.1);">
+                <h3 id="pay-name-display" style="margin-bottom: 10px; color: var(--accent); font-size: 14px;">QRIS PAYMENT</h3>
+                <div id="pay-info-display" style="font-size: 12px; margin-bottom: 10px; white-space: pre-line;"></div>
+                <img id="pay-img-display" src="qris.png" style="width: 180px; border-radius: 10px; border: 1px solid var(--accent); display: none; margin: 0 auto;">
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px;" data-i18n="co_transfer_desc">Lakukan pembayaran sesuai nominal harga produk.</p>
+            </div>
+
+            <div class="form-group"><label data-i18n="co_upload_proof">Upload Bukti Transfer</label><input type="file" id="co-proof" accept="image/*" required style="padding: 10px;"></div>
+            <button class="btn" onclick="submitOrder()" data-i18n="btn_submit_order">KIRIM BUKTI PEMBAYARAN</button>
         </div>
     </div>
 
@@ -360,27 +382,26 @@
     <div id="admin-panel" class="page" style="max-width: 900px;">
         <h2 class="section-title">ADMIN PANEL (MANJII iOS)</h2>
         <div class="tab-menu">
-            <button class="btn" onclick="switchAdminTab('tab-web')">Identitas Web</button>
-            <button class="btn" onclick="switchAdminTab('tab-news')">Kelola News</button>
-            <button class="btn" onclick="switchAdminTab('tab-prod')">Kelola Produk</button>
             <button class="btn" onclick="switchAdminTab('tab-order')">Status Order</button>
-            <button class="btn" onclick="switchAdminTab('tab-users')">Data Akun User</button>
+            <button class="btn" onclick="switchAdminTab('tab-prod')">Kelola Produk</button>
+            <button class="btn" onclick="switchAdminTab('tab-pay')">Kelola Payment</button>
+            <button class="btn" onclick="switchAdminTab('tab-users')">Data User</button>
+            <button class="btn" onclick="switchAdminTab('tab-news')">Pengumuman</button>
+            <button class="btn" onclick="switchAdminTab('tab-web')">Pengaturan Web</button>
             <button class="btn" style="border-color: red; color: red;" onclick="showPage('home')">Keluar</button>
         </div>
 
-        <div id="tab-web" class="admin-tab glass-container">
-            <h3>Update Identitas Website</h3><br>
-            <div class="form-group"><label>Judul Web</label><input type="text" id="set-title"></div>
-            <div class="form-group"><label>Deskripsi Web</label><textarea id="set-desc" rows="3"></textarea></div>
-            <button class="btn" onclick="saveSettings()">Simpan Pengaturan</button>
-        </div>
-
-        <div id="tab-news" class="admin-tab glass-container" style="display:none;">
-            <h3>Buat News Baru</h3><br>
-            <div class="form-group"><label>Status News (Contoh: WARNING !!!)</label><textarea id="new-news-text" rows="3"></textarea></div>
-            <button class="btn" onclick="addNews()">PUBLISH NEWS</button>
-            <h3 style="margin-top: 25px; margin-bottom: 15px;">Daftar News Aktif</h3>
-            <div id="admin-news-list"></div>
+        <div id="tab-order" class="admin-tab">
+            <div class="stats-box">
+                <div class="stat"><h3>Total</h3><p id="tot-order">0 Order</p></div>
+                <div class="stat"><h3>Pendapatan</h3><p id="tot-rev" style="color:var(--accent);">Rp 0</p></div>
+            </div>
+            <div class="glass-container table-responsive">
+                <table>
+                    <thead><tr><th>User</th><th>No WA / Platform</th><th>Produk & Harga</th><th>Bukti</th><th>Status</th><th>Aksi</th></tr></thead>
+                    <tbody id="order-table-body"></tbody>
+                </table>
+            </div>
         </div>
 
         <div id="tab-prod" class="admin-tab" style="display:none;">
@@ -389,7 +410,8 @@
                 <input type="hidden" id="p-id">
                 <div class="form-group"><label>Nama Produk</label><input type="text" id="p-name"></div>
                 <div class="form-group"><label>Spesifikasi (Enter untuk baris baru)</label><textarea id="p-specs" rows="3"></textarea></div>
-                <div class="form-group"><label>Harga Produk</label><input type="text" id="p-price" oninput="formatPriceInput(this)"></div>
+                <div class="form-group"><label>Harga Normal</label><input type="text" id="p-price" oninput="formatPriceInput(this)"></div>
+                <div class="form-group"><label>Diskon Harga (%) (Isi 0 jika tidak ada)</label><input type="number" id="p-disc" value="0" min="0" max="100"></div>
                 <div class="form-group">
                     <label>Status</label>
                     <select id="p-status"><option value="Tersedia">Tersedia ✅</option><option value="Maintenance">Maintenance ❌</option></select>
@@ -401,19 +423,16 @@
             <div id="admin-product-list" style="margin-top: 15px;"></div>
         </div>
 
-        <div id="tab-order" class="admin-tab" style="display:none;">
-            <div class="stats-box">
-                <div class="stat"><h3>Total</h3><p id="tot-order">0 Order</p></div>
-                <div class="stat"><h3>Pendapatan</h3><p id="tot-rev" style="color:var(--accent);">Rp 0</p></div>
+        <div id="tab-pay" class="admin-tab" style="display:none;">
+            <div class="glass-container">
+                <h3>Tambah Metode Pembayaran Baru</h3><br>
+                <div class="form-group"><label>Nama Payment (Cth: DANA / BCA / QRIS)</label><input type="text" id="pay-name"></div>
+                <div class="form-group"><label>Informasi No Rek / Detail (Opsional)</label><textarea id="pay-info" rows="2"></textarea></div>
+                <div class="form-group"><label>Upload Gambar / Barcode (Opsional)</label><input type="file" id="pay-img" accept="image/*"></div>
+                <button class="btn" onclick="savePayment()">TAMBAH PAYMENT</button>
             </div>
-            <div class="glass-container table-responsive">
-                <table>
-                    <thead>
-                        <tr><th>User</th><th>No WA / Platform</th><th>Produk & Harga</th><th>Bukti</th><th>Status</th><th>Aksi</th></tr>
-                    </thead>
-                    <tbody id="order-table-body"></tbody>
-                </table>
-            </div>
+            <h3>Daftar Payment Aktif</h3>
+            <div id="admin-payment-list" style="margin-top: 15px;"></div>
         </div>
 
         <div id="tab-users" class="admin-tab" style="display:none;">
@@ -425,45 +444,193 @@
                 </table>
             </div>
         </div>
+
+        <div id="tab-news" class="admin-tab" style="display:none;">
+            <div class="glass-container">
+                <h3>Buat Pengumuman Baru</h3><br>
+                <div class="form-group"><label>Isi Pengumuman</label><textarea id="new-news-text" rows="3"></textarea></div>
+                <button class="btn" onclick="addNews()">PUBLISH NEWS</button>
+            </div>
+            <h3 style="margin-top: 25px; margin-bottom: 15px;">Daftar News Aktif</h3>
+            <div id="admin-news-list"></div>
+        </div>
+
+        <div id="tab-web" class="admin-tab glass-container" style="display:none;">
+            <h3>Update Identitas Website</h3><br>
+            <div class="form-group"><label>Judul Web</label><input type="text" id="set-title"></div>
+            <div class="form-group"><label>Deskripsi Web</label><textarea id="set-desc" rows="3"></textarea></div>
+            <button class="btn" onclick="saveSettings()">Simpan Pengaturan</button>
+        </div>
     </div>
 
     <script>
-        // --- LOADING SCREEN AWAL ---
-        let loadProgress = 0;
-        let loadInterval = setInterval(() => {
-            loadProgress += 3;
-            document.getElementById('loading-text').innerText = loadProgress + '%';
-            if (loadProgress >= 100) {
-                clearInterval(loadInterval);
-                document.getElementById('loading-screen').style.display = 'none';
+        // --- TRANSLATION DICTIONARY ---
+        const i18n = {
+            id: {
+                "processing": "MEMPROSES DATA...",
+                "order_detail_title": "DETAIL PESANAN",
+                "close": "TUTUP",
+                "language": "Bahasa / Language",
+                "accent_color": "Warna Aksen",
+                "account_status": "Status Akun:",
+                "nav_home": "Beranda",
+                "nav_catalog": "Katalog Produk",
+                "nav_news": "Pengumuman",
+                "nav_history": "Riwayat Transaksi",
+                "nav_login": "Login / Daftar",
+                "nav_logout": "Logout",
+                "portal_title": "PORTAL PENGGUNA",
+                "tab_login": "LOGIN",
+                "tab_register": "DAFTAR BARU",
+                "lbl_username": "Username",
+                "lbl_password": "Password",
+                "btn_login_now": "MASUK SEKARANG",
+                "lbl_new_username": "Username Baru",
+                "lbl_new_password": "Password Baru",
+                "btn_register_now": "DAFTARKAN AKUN",
+                "stat_users": "User Aktif",
+                "stat_security": "Keamanan",
+                "stat_service": "Layanan",
+                "btn_view_catalog": "LIHAT KATALOG PRODUK",
+                "catalog_title": "KATALOG PRODUK",
+                "news_title": "NEWS & UPDATES",
+                "history_title": "RIWAYAT TRANSAKSI",
+                "history_desc": "Klik riwayat untuk melihat detail pesanan.",
+                "checkout_title": "FORM CHECKOUT",
+                "co_selected_product": "Produk Pembelian:",
+                "co_account_name": "Nama Akun (Otomatis)",
+                "co_wa_number": "No WhatsApp (Aktif)",
+                "co_platform": "Pilih Platform",
+                "co_payment_method": "Pilih Metode Pembayaran",
+                "co_transfer_desc": "Lakukan pembayaran sesuai nominal harga produk.",
+                "co_upload_proof": "Upload Bukti Transfer",
+                "btn_submit_order": "KIRIM BUKTI PEMBAYARAN",
+                "buy_now": "BELI SEKARANG",
+                "unavailable": "TIDAK TERSEDIA",
+                "empty_history": "Belum ada riwayat transaksi.",
+                "empty_news": "Belum ada pengumuman.",
+                "alert_login": "Kamu harus Login terlebih dahulu!",
+                "alert_fill": "Mohon isi semua data dengan benar!",
+                "alert_success": "Berhasil!"
+            },
+            en: {
+                "processing": "PROCESSING DATA...",
+                "order_detail_title": "ORDER DETAILS",
+                "close": "CLOSE",
+                "language": "Language / Bahasa",
+                "accent_color": "Accent Color",
+                "account_status": "Account Status:",
+                "nav_home": "Home",
+                "nav_catalog": "Product Catalog",
+                "nav_news": "Announcements",
+                "nav_history": "Transaction History",
+                "nav_login": "Login / Register",
+                "nav_logout": "Logout",
+                "portal_title": "USER PORTAL",
+                "tab_login": "LOGIN",
+                "tab_register": "REGISTER NEW",
+                "lbl_username": "Username",
+                "lbl_password": "Password",
+                "btn_login_now": "LOGIN NOW",
+                "lbl_new_username": "New Username",
+                "lbl_new_password": "New Password",
+                "btn_register_now": "REGISTER ACCOUNT",
+                "stat_users": "Active Users",
+                "stat_security": "Security",
+                "stat_service": "Service",
+                "btn_view_catalog": "VIEW PRODUCT CATALOG",
+                "catalog_title": "PRODUCT CATALOG",
+                "news_title": "NEWS & UPDATES",
+                "history_title": "TRANSACTION HISTORY",
+                "history_desc": "Click on history to view order details.",
+                "checkout_title": "CHECKOUT FORM",
+                "co_selected_product": "Selected Product:",
+                "co_account_name": "Account Name (Auto)",
+                "co_wa_number": "Active WhatsApp No",
+                "co_platform": "Select Platform",
+                "co_payment_method": "Select Payment Method",
+                "co_transfer_desc": "Make payment according to the product price.",
+                "co_upload_proof": "Upload Payment Proof",
+                "btn_submit_order": "SUBMIT PAYMENT PROOF",
+                "buy_now": "BUY NOW",
+                "unavailable": "UNAVAILABLE",
+                "empty_history": "No transaction history yet.",
+                "empty_news": "No announcements yet.",
+                "alert_login": "You must Login first!",
+                "alert_fill": "Please fill all data correctly!",
+                "alert_success": "Success!"
             }
-        }, 20);
+        };
 
-        // --- SISTEM FUNGSI PROSES LOADING (MENCEGAH KESAN DELAY) ---
-        function processAction(loadingText, callback) {
-            let overlay = document.getElementById('action-overlay');
-            document.getElementById('action-text').innerText = loadingText;
-            overlay.style.display = 'flex';
-            setTimeout(() => {
-                callback();
-                overlay.style.display = 'none';
-            }, 1200); // Simulasi delay 1.2 detik agar terlihat "berproses"
+        let currentLang = localStorage.getItem('manjii_lang') || 'id';
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('manjii_lang', lang);
+            document.querySelectorAll('.lang-grid .color-pill').forEach(el => el.classList.remove('active'));
+            document.getElementById('lang-' + lang).classList.add('active');
+            applyTranslations();
+            renderAll(); // Re-render dynamic content
         }
 
-        // --- DB LOCALSTORAGE (MENGGUNAKAN VERSI 6 AGAR MULAI BERSIH DARI BUG) ---
-        let db = JSON.parse(localStorage.getItem('manjii_db_v6')) || {
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                let key = el.getAttribute('data-i18n');
+                if(i18n[currentLang][key]) el.innerHTML = i18n[currentLang][key];
+            });
+        }
+        function getT(key) { return i18n[currentLang][key] || key; }
+
+        // --- COMPRESSOR (MENCEGAH BUG LOCALSTORAGE JEBOL & DATA HILANG) ---
+        function compressImage(file, callback) {
+            if (!file) return callback(null);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = event => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600;
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    callback(canvas.toDataURL('image/jpeg', 0.6)); // Kompresi kuat 60%
+                };
+            };
+        }
+
+        // --- INITIAL LOAD ---
+        window.onload = () => {
+            setLang(currentLang);
+            setTimeout(() => { document.getElementById('loading-screen').style.display = 'none'; }, 1500);
+        };
+
+        function showActionLoader(callback) {
+            document.getElementById('action-loader').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('action-loader').style.display = 'none';
+                if(callback) callback();
+            }, 1500);
+        }
+
+        // --- DATABASE ---
+        let db = JSON.parse(localStorage.getItem('manjii_db_ultimate')) || {
             title: "MANJII iOS",
             desc: "Pusat penjualan produk cheat manjii ios dengan keamanan super tinggi. Tersertifikasi aman 99%.",
-            newsList: [], products: [], orders: [], users: []
+            newsList: [], products: [], orders: [], users: [],
+            payments: [{ id: 1, name: "QRIS Default", info: "Silahkan scan QRIS ini", img: "qris.png" }]
         };
 
         function saveDB() {
             try {
-                localStorage.setItem('manjii_db_v6', JSON.stringify(db));
+                localStorage.setItem('manjii_db_ultimate', JSON.stringify(db));
                 renderAll();
             } catch (e) {
-                alert("Memori browser penuh! Harap hapus cache browser Anda.");
-                console.error("LocalStorage Error:", e);
+                alert("ERROR: Penyimpanan browser penuh! Hapus riwayat atau kurangi ukuran gambar.");
+                console.error(e);
             }
         }
 
@@ -482,15 +649,15 @@
         function registerUser() {
             let u = document.getElementById('reg-user').value.trim();
             let p = document.getElementById('reg-pass').value.trim();
-            if(!u || !p) return alert("Username dan Password wajib diisi!");
-            if(db.users.find(x => x.username.toLowerCase() === u.toLowerCase())) return alert("Username sudah terdaftar! Coba yang lain.");
+            if(!u || !p) return alert(getT("alert_fill"));
+            if(db.users.find(x => x.username.toLowerCase() === u.toLowerCase())) return alert("Username sudah terdaftar!");
             
-            processAction("MEMBUAT AKUN BARU...", () => {
+            showActionLoader(() => {
                 db.users.push({ id: Date.now(), username: u, password: p });
                 saveDB();
                 currentUser = u;
                 localStorage.setItem('manjii_logged_user', u);
-                alert("Pendaftaran Berhasil! Anda otomatis login.");
+                alert(getT("alert_success") + " Auto Login.");
                 showPage('home');
             });
         }
@@ -498,34 +665,27 @@
         function loginUser() {
             let u = document.getElementById('log-user').value.trim();
             let p = document.getElementById('log-pass').value.trim();
-            if(!u || !p) return alert("Isi Username dan Password!");
+            if(!u || !p) return alert(getT("alert_fill"));
             
-            processAction("MENGECEK KREDENSIAL...", () => {
+            showActionLoader(() => {
                 let found = db.users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
                 if(found) {
                     currentUser = found.username;
                     localStorage.setItem('manjii_logged_user', found.username);
-                    alert("Login Berhasil!");
                     showPage('home');
-                } else {
-                    alert("Username atau Password salah!");
-                }
+                } else { alert("Username / Password salah!"); }
             });
         }
 
         function logoutUser() {
-            processAction("LOGOUT SYSTEM...", () => {
-                currentUser = null;
-                localStorage.removeItem('manjii_logged_user');
-                renderAll();
-                showPage('home');
-            });
+            currentUser = null;
+            localStorage.removeItem('manjii_logged_user');
+            renderAll(); showPage('home');
         }
 
         function checkAuthAndGo(targetPage) {
-            if(!currentUser) {
-                alert("Kamu harus Login terlebih dahulu!"); showPage('auth');
-            } else { showPage(targetPage); }
+            if(!currentUser) { alert(getT("alert_login")); showPage('auth'); } 
+            else { showPage(targetPage); }
         }
 
         // --- UI & NAV ---
@@ -540,7 +700,7 @@
             document.getElementById(pageId).classList.add('active');
             document.getElementById('sidebarMenu').classList.remove('active');
             window.scrollTo(0,0);
-            if(pageId === 'home' || pageId === 'history') renderAll();
+            if(pageId === 'home' || pageId === 'history' || pageId === 'checkout') renderAll();
         }
 
         function setAccent(color, element) {
@@ -548,14 +708,8 @@
             let r = parseInt(color.slice(1, 3), 16), g = parseInt(color.slice(3, 5), 16), b = parseInt(color.slice(5, 7), 16);
             document.documentElement.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.3)`); 
             document.documentElement.style.setProperty('--accent-glow-strong', `rgba(${r}, ${g}, ${b}, 0.5)`);
-            document.querySelectorAll('.color-pill').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.color-grid .color-pill').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
-        }
-
-        function setTheme(mode, element) {
-            document.querySelectorAll('.theme-item').forEach(el => el.classList.remove('active'));
-            if(element) element.classList.add('active');
-            if(mode === 'light') document.body.classList.add('light-mode'); else document.body.classList.remove('light-mode');
         }
 
         function formatRupiah(angka) { return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
@@ -577,87 +731,127 @@
                 document.getElementById('logout-btn-sidebar').style.display = 'block';
                 if(document.getElementById('co-name')) document.getElementById('co-name').value = currentUser;
             } else {
-                document.getElementById('sidebar-username').innerText = "Belum Login";
+                document.getElementById('sidebar-username').innerText = "Guest";
                 document.getElementById('auth-btn-sidebar').style.display = 'block';
                 document.getElementById('logout-btn-sidebar').style.display = 'none';
             }
 
+            // Render News
             let newsHtml = '';
-            db.newsList.forEach(n => {
-                newsHtml += `<div class="news-card"><div class="news-date">${n.date}</div><div class="news-text">${n.text}</div></div>`;
-            });
-            document.getElementById('news-list-public').innerHTML = newsHtml || '<i>Belum ada pengumuman.</i>';
+            db.newsList.forEach(n => { newsHtml += `<div class="news-card"><div style="font-size:10px;color:var(--text-muted);">${n.date}</div><div style="font-size:13px;">${n.text}</div></div>`; });
+            document.getElementById('news-list-public').innerHTML = newsHtml || `<i>${getT("empty_news")}</i>`;
 
-            const prodList = document.getElementById('product-list');
-            prodList.innerHTML = '';
+            // Render Products
+            const prodList = document.getElementById('product-list'); prodList.innerHTML = '';
             db.products.forEach(p => {
                 let specList = p.specs.split('\n').filter(s=>s.trim()!=='').map(s => `<li>${s}</li>`).join('');
                 let isMaintenance = p.status === 'Maintenance';
+                let finalPrice = p.price;
+                let priceHtml = `<div class="p-price">${formatRupiah(finalPrice)}</div>`;
+                
+                if (p.discount && p.discount > 0) {
+                    finalPrice = p.price - (p.price * (p.discount / 100));
+                    priceHtml = `
+                        <div class="p-price-strike">${formatRupiah(p.price)}</div>
+                        <div class="p-price">${formatRupiah(finalPrice)}</div>
+                        <div class="discount-badge">-${p.discount}%</div>
+                    `;
+                }
+
                 prodList.innerHTML += `
                     <div class="product-card">
                         ${isMaintenance ? `<div class="m-badge">MAINTENANCE / OFF</div>` : ''}
                         <div class="p-title">${p.name}</div>
                         <ul class="p-specs">${specList}</ul>
-                        <div class="p-price-row"><span class="p-price">${formatRupiah(p.price)}</span></div>
+                        <div class="p-price-row">${priceHtml}</div>
                         <button class="btn" onclick="checkCheckoutAuth(${p.id})" ${isMaintenance ? 'disabled style="border-color:#555; color:#555;"' : ''}>
-                            ${isMaintenance ? 'TIDAK TERSEDIA' : 'BELI SEKARANG'}
+                            ${isMaintenance ? getT("unavailable") : getT("buy_now")}
                         </button>
                     </div>
                 `;
             });
 
+            // Render History
             if(currentUser) {
                 let uHist = db.orders.filter(o => o.username.toLowerCase() === currentUser.toLowerCase());
                 let histHtml = '';
                 uHist.forEach(o => {
                     let c = o.status.includes('Setuju') ? '#00ff88' : (o.status.includes('Tolak') ? '#ff2a2a' : '#ff9f43');
                     histHtml += `
-                        <div style="border-left:3px solid ${c}; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; margin-bottom:10px;">
+                        <div class="history-item" style="border-left-color: ${c};" onclick="openHistoryDetail(${o.id})">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
                                 <strong style="font-size:13px;">${o.productName}</strong>
                                 <span style="font-size:11px; font-weight:bold; color:${c}; padding:3px 8px; background:rgba(0,0,0,0.5); border-radius:4px;">${o.status}</span>
                             </div>
-                            <div style="font-size:11px; color:var(--text-muted);">Tanggal: ${o.date} | Harga: ${formatRupiah(o.price)}</div>
+                            <div style="font-size:11px; color:var(--text-muted);">${o.date} | ${formatRupiah(o.finalPrice)}</div>
                         </div>
                     `;
                 });
-                document.getElementById('user-history-list').innerHTML = histHtml || '<div style="text-align:center; padding:20px; font-size:12px;">Belum ada riwayat transaksi.</div>';
+                document.getElementById('user-history-list').innerHTML = histHtml || `<div style="text-align:center; padding:20px; font-size:12px;">${getT("empty_history")}</div>`;
             }
 
-            document.getElementById('set-title').value = db.title;
-            document.getElementById('set-desc').value = db.desc;
-            
+            // Render Payment Select at Checkout
+            let paySelect = document.getElementById('co-payment-select');
+            if(paySelect) {
+                paySelect.innerHTML = '';
+                db.payments.forEach(pay => {
+                    paySelect.innerHTML += `<option value="${pay.id}">${pay.name}</option>`;
+                });
+                updatePaymentView();
+            }
+
             renderAdminPanel();
         }
 
-        // --- CHECKOUT LOGIC & KOMPRESI GAMBAR (ANTI HILANG SAAT REFRESH) ---
+        // --- HISTORY MODAL LOGIC ---
+        function openHistoryDetail(orderId) {
+            let o = db.orders.find(x => x.id === orderId);
+            if(!o) return;
+            
+            let c = o.status.includes('Setuju') ? '#00ff88' : (o.status.includes('Tolak') ? '#ff2a2a' : '#ff9f43');
+            let content = `
+                <div style="margin-bottom: 10px;"><strong>Produk:</strong> <span style="color:var(--accent);">${o.productName}</span></div>
+                <div style="margin-bottom: 10px;"><strong>Harga Akhir:</strong> ${formatRupiah(o.finalPrice)}</div>
+                <div style="margin-bottom: 10px;"><strong>Platform:</strong> ${o.platform}</div>
+                <div style="margin-bottom: 10px;"><strong>No WA:</strong> ${o.wa}</div>
+                <div style="margin-bottom: 10px;"><strong>Tgl Order:</strong> ${o.date}</div>
+                <div style="margin-bottom: 15px;"><strong>Status:</strong> <span style="color:${c}; font-weight:bold;">${o.status}</span></div>
+                <div style="margin-bottom: 10px;"><strong>Bukti Transfer:</strong></div>
+                <img src="${o.proof}" style="width:100%; border-radius:8px; border:1px solid var(--border-color);">
+            `;
+            document.getElementById('modal-content-data').innerHTML = content;
+            document.getElementById('history-modal').style.display = 'flex';
+        }
+        function closeModal(e) {
+            if(e.target === document.getElementById('history-modal')) {
+                document.getElementById('history-modal').style.display = 'none';
+            }
+        }
+
+        // --- CHECKOUT LOGIC ---
         let selectedProductId = null;
         function checkCheckoutAuth(id) {
-            if(!currentUser) { alert("Silahkan Login atau Daftar dahulu!"); showPage('auth'); return; }
+            if(!currentUser) { alert(getT("alert_login")); showPage('auth'); return; }
             let p = db.products.find(x => x.id === id);
             selectedProductId = id;
-            document.getElementById('co-product-name').innerText = p.name + " (" + formatRupiah(p.price) + ")";
+            
+            let finalPrice = p.price;
+            if(p.discount && p.discount > 0) finalPrice = p.price - (p.price * (p.discount / 100));
+
+            document.getElementById('co-product-name').innerText = p.name + " (" + formatRupiah(finalPrice) + ")";
             showPage('checkout');
         }
 
-        // FUNGSI KOMPRESI GAMBAR AGAR LOCALSTORAGE TIDAK PENUH
-        function resizeImageFile(file, callback) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let img = new Image();
-                img.onload = function() {
-                    let canvas = document.createElement('canvas');
-                    let MAX_WIDTH = 600; // Maksimal lebar gambar
-                    let scale = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scale;
-                    let ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    callback(canvas.toDataURL('image/jpeg', 0.6)); // Kualitas 60%
-                }
-                img.src = e.target.result;
+        function updatePaymentView() {
+            let pid = document.getElementById('co-payment-select').value;
+            let pay = db.payments.find(x => x.id == pid);
+            if(pay) {
+                document.getElementById('pay-name-display').innerText = pay.name.toUpperCase();
+                document.getElementById('pay-info-display').innerText = pay.info;
+                let imgEl = document.getElementById('pay-img-display');
+                if(pay.img) { imgEl.src = pay.img; imgEl.style.display = 'block'; }
+                else { imgEl.style.display = 'none'; }
             }
-            reader.readAsDataURL(file);
         }
 
         function submitOrder() {
@@ -665,20 +859,22 @@
             let platform = document.getElementById('co-platform').value;
             let fileInput = document.getElementById('co-proof');
 
-            if(!wa || !fileInput.files[0]) return alert("Lengkapi data dan upload bukti transfer!");
+            if(!wa || !fileInput.files[0]) return alert(getT("alert_fill"));
 
-            processAction("MENGIRIM PESANAN...", () => {
-                // Resize gambar sebelum disimpan ke DB
-                resizeImageFile(fileInput.files[0], function(compressedDataUrl) {
+            showActionLoader(() => {
+                compressImage(fileInput.files[0], (compressedData) => {
                     let p = db.products.find(x => x.id === selectedProductId);
+                    let finalPrice = p.price;
+                    if(p.discount && p.discount > 0) finalPrice = p.price - (p.price * (p.discount / 100));
+
                     db.orders.unshift({ 
                         id: Date.now(), date: new Date().toLocaleString(),
                         username: currentUser, wa, platform, 
-                        productName: p.name, price: p.price,
-                        proof: compressedDataUrl, status: 'Menunggu Review ⏳'
+                        productName: p.name, price: p.price, finalPrice: finalPrice,
+                        proof: compressedData, status: 'Menunggu Review ⏳'
                     });
                     saveDB();
-                    alert("Pesanan berhasil dikirim! Silahkan cek riwayat secara berkala.");
+                    alert(getT("alert_success"));
                     document.getElementById('co-wa').value = '';
                     document.getElementById('co-proof').value = '';
                     showPage('history');
@@ -691,10 +887,8 @@
             let u = document.getElementById('adm-user').value;
             let p = document.getElementById('adm-pass').value;
             if (u === 'MANJII-ESCOBAR' || u === 'admin') {
-                processAction("MEMASUKI PANEL ADMIN...", () => {
-                    showPage('admin-panel');
-                    document.getElementById('adm-user').value = ''; document.getElementById('adm-pass').value = '';
-                });
+                showPage('admin-panel');
+                document.getElementById('adm-user').value = ''; document.getElementById('adm-pass').value = '';
             } else { alert("Akses Ditolak!"); }
         }
 
@@ -704,25 +898,18 @@
         }
 
         function saveSettings() {
-            processAction("MENYIMPAN IDENTITAS...", () => {
-                db.title = document.getElementById('set-title').value;
-                db.desc = document.getElementById('set-desc').value;
-                saveDB(); alert("Berhasil Disimpan!");
-            });
+            db.title = document.getElementById('set-title').value;
+            db.desc = document.getElementById('set-desc').value;
+            saveDB(); alert("Berhasil Disimpan!");
         }
 
         function addNews() {
             let text = document.getElementById('new-news-text').value;
-            if(!text) return alert("Isi teks news!");
-            processAction("PUBLISH NEWS...", () => {
-                db.newsList.unshift({ id: Date.now(), text, date: new Date().toLocaleDateString() });
-                saveDB(); document.getElementById('new-news-text').value = '';
-                alert("News berhasil dipublish!");
-            });
+            if(!text) return;
+            db.newsList.unshift({ id: Date.now(), text, date: new Date().toLocaleDateString() });
+            saveDB(); document.getElementById('new-news-text').value = '';
         }
-        function deleteNews(id) {
-            if(confirm("Hapus news ini?")) { processAction("MENGHAPUS...", () => { db.newsList = db.newsList.filter(x => x.id !== id); saveDB(); }); }
-        }
+        function deleteNews(id) { if(confirm("Hapus?")) { db.newsList = db.newsList.filter(x => x.id !== id); saveDB(); } }
 
         function saveProduct() {
             let id = document.getElementById('p-id').value;
@@ -730,65 +917,84 @@
             let specs = document.getElementById('p-specs').value;
             let priceStr = document.getElementById('p-price').value.replace(/\./g, '');
             let price = parseInt(priceStr);
+            let discount = parseInt(document.getElementById('p-disc').value) || 0;
             let status = document.getElementById('p-status').value;
 
             if(!name || !specs || isNaN(price)) return alert("Isi form dengan benar!");
 
-            processAction("MENYIMPAN PRODUK...", () => {
+            showActionLoader(() => {
                 if(id) { 
                     let idx = db.products.findIndex(x => x.id == id);
-                    if(idx !== -1) { db.products[idx].name = name; db.products[idx].specs = specs; db.products[idx].price = price; db.products[idx].status = status; }
+                    if(idx !== -1) { db.products[idx].name = name; db.products[idx].specs = specs; db.products[idx].price = price; db.products[idx].discount = discount; db.products[idx].status = status; }
                 } else { 
-                    db.products.push({ id: Date.now(), name, specs, price, status });
+                    db.products.push({ id: Date.now(), name, specs, price, discount, status });
                 }
-                saveDB(); clearProductForm(); alert("Produk berhasil disimpan/diupdate!");
+                saveDB(); clearProductForm();
             });
         }
         function clearProductForm() {
             document.getElementById('p-id').value = ''; document.getElementById('p-name').value = '';
-            document.getElementById('p-specs').value = ''; document.getElementById('p-price').value = ''; document.getElementById('p-status').value = 'Tersedia';
+            document.getElementById('p-specs').value = ''; document.getElementById('p-price').value = ''; 
+            document.getElementById('p-disc').value = '0'; document.getElementById('p-status').value = 'Tersedia';
         }
         function editProduct(id) {
             let p = db.products.find(x => x.id === id);
             document.getElementById('p-id').value = p.id; document.getElementById('p-name').value = p.name;
             document.getElementById('p-specs').value = p.specs; document.getElementById('p-price').value = p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            document.getElementById('p-status').value = p.status; alert("Edit di form atas, lalu klik Simpan.");
+            document.getElementById('p-disc').value = p.discount || 0;
+            document.getElementById('p-status').value = p.status; alert("Silahkan edit di form atas.");
         }
-        function deleteProduct(id) { 
-            if(confirm("Hapus permanen?")) { processAction("MENGHAPUS PRODUK...", () => { db.products = db.products.filter(x => x.id !== id); saveDB(); }); } 
-        }
+        function deleteProduct(id) { if(confirm("Hapus?")) { db.products = db.products.filter(x => x.id !== id); saveDB(); } }
 
-        function updateOrderStatus(id, status) {
-            processAction("UPDATE STATUS...", () => {
-                let idx = db.orders.findIndex(x => x.id === id);
-                db.orders[idx].status = status; saveDB();
+        function savePayment() {
+            let name = document.getElementById('pay-name').value;
+            let info = document.getElementById('pay-info').value;
+            let fileInput = document.getElementById('pay-img');
+            
+            if(!name) return alert("Nama Payment Wajib Diisi!");
+
+            showActionLoader(() => {
+                if(fileInput.files.length > 0) {
+                    compressImage(fileInput.files[0], (imgData) => {
+                        db.payments.push({ id: Date.now(), name, info, img: imgData });
+                        saveDB(); document.getElementById('pay-name').value = ''; document.getElementById('pay-info').value = ''; document.getElementById('pay-img').value = '';
+                    });
+                } else {
+                    db.payments.push({ id: Date.now(), name, info, img: null });
+                    saveDB(); document.getElementById('pay-name').value = ''; document.getElementById('pay-info').value = '';
+                }
             });
         }
+        function deletePayment(id) { if(confirm("Hapus Payment?")) { db.payments = db.payments.filter(x => x.id !== id); saveDB(); } }
 
-        function editUser(id) {
-            let u = db.users.find(x => x.id === id);
-            let newU = prompt("Ubah Username:", u.username);
-            let newP = prompt("Ubah Password:", u.password);
-            if(newU && newP) { processAction("UPDATE USER...", () => { u.username = newU; u.password = newP; saveDB(); alert("User diupdate!"); }); }
+        function updateOrderStatus(id, status) {
+            let idx = db.orders.findIndex(x => x.id === id);
+            db.orders[idx].status = status; saveDB();
         }
-        function deleteUser(id) {
-            if(confirm("Hapus user ini?")) { processAction("HAPUS USER...", () => { db.users = db.users.filter(x => x.id !== id); saveDB(); }); }
-        }
+        function deleteUser(id) { if(confirm("Hapus user?")) { db.users = db.users.filter(x => x.id !== id); saveDB(); } }
 
-        // RENDER ADMIN
         function renderAdminPanel() {
+            document.getElementById('set-title').value = db.title;
+            document.getElementById('set-desc').value = db.desc;
+
             let nList = document.getElementById('admin-news-list'); nList.innerHTML = '';
             db.newsList.forEach((n) => {
                 nList.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:10px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;">
                     <div style="font-size:12px;"><strong>${n.date}</strong><br>${n.text}</div>
-                    <button class="btn" style="width:auto; padding:5px 10px; font-size:10px; border-color:red; color:red;" onclick="deleteNews(${n.id})">Hapus</button>
-                </div>`;
+                    <button class="btn" style="width:auto; padding:5px 10px; font-size:10px; border-color:red; color:red;" onclick="deleteNews(${n.id})">Hapus</button></div>`;
+            });
+
+            let payList = document.getElementById('admin-payment-list'); payList.innerHTML = '';
+            db.payments.forEach((p) => {
+                payList.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:10px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="font-size:12px;"><strong style="color:var(--accent);">${p.name}</strong><br>${p.info}</div>
+                    <button class="btn" style="width:auto; padding:5px 10px; font-size:10px; border-color:red; color:red;" onclick="deletePayment(${p.id})">Hapus</button></div>`;
             });
 
             let pList = document.getElementById('admin-product-list'); pList.innerHTML = '';
-            db.products.forEach((p, i) => {
+            db.products.forEach((p) => {
                 pList.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:15px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <div><strong style="color:var(--accent); font-size:13px;">${p.name}</strong><br><small>${formatRupiah(p.price)} | ${p.status}</small></div>
+                    <div><strong style="color:var(--accent); font-size:13px;">${p.name}</strong><br><small>${formatRupiah(p.price)} | Diskon: ${p.discount||0}% | ${p.status}</small></div>
                     <div style="display:flex; gap:5px;">
                         <button class="btn" style="width:auto; padding:5px 10px; font-size:11px;" onclick="editProduct(${p.id})">Edit</button>
                         <button class="btn" style="width:auto; padding:5px 10px; font-size:11px; border-color:red; color:red;" onclick="deleteProduct(${p.id})">Del</button>
@@ -798,7 +1004,7 @@
             let oBody = document.getElementById('order-table-body'); oBody.innerHTML = '';
             let tRev = 0;
             db.orders.forEach(o => {
-                if(o.status.includes('Setuju')) tRev += o.price;
+                if(o.status.includes('Setuju')) tRev += o.finalPrice;
                 let btnAction = o.status.includes('Menunggu') ? `
                     <button style="background:#00ff88; color:#000; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:bold; margin-right:5px;" onclick="updateOrderStatus(${o.id}, 'Setuju ✅')">Setuju</button>
                     <button style="background:#ff2a2a; color:#fff; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:bold;" onclick="updateOrderStatus(${o.id}, 'Tolak ❌')">Tolak</button>
@@ -807,7 +1013,7 @@
                 oBody.innerHTML += `<tr>
                     <td><strong style="color:var(--accent);">${o.username}</strong></td>
                     <td>${o.wa}<br><small style="color:var(--text-muted);">${o.platform}</small></td>
-                    <td>${o.productName}<br><strong style="color:#00ff88;">${formatRupiah(o.price)}</strong></td>
+                    <td>${o.productName}<br><strong style="color:#00ff88;">${formatRupiah(o.finalPrice)}</strong></td>
                     <td><a href="${o.proof}" target="_blank" style="color:var(--accent); text-decoration:none;">Bukti 🖼️</a></td>
                     <td><span style="font-size:11px; font-weight:bold;">${o.status}</span></td>
                     <td>${btnAction}</td>
@@ -818,20 +1024,12 @@
 
             let uBody = document.getElementById('admin-user-list'); uBody.innerHTML = '';
             db.users.forEach((u, i) => {
-                uBody.innerHTML += `<tr>
-                    <td>${i+1}</td>
-                    <td style="color:var(--accent); font-weight:bold;">${u.username}</td>
-                    <td>${u.password}</td>
-                    <td>
-                        <button class="btn" style="width:auto; display:inline-block; padding:4px 8px; font-size:10px;" onclick="editUser(${u.id})">Edit</button>
-                        <button class="btn" style="width:auto; display:inline-block; padding:4px 8px; font-size:10px; border-color:red; color:red;" onclick="deleteUser(${u.id})">Del</button>
-                    </td>
+                uBody.innerHTML += `<tr><td>${i+1}</td>
+                    <td style="color:var(--accent); font-weight:bold;">${u.username}</td><td>${u.password}</td>
+                    <td><button class="btn" style="width:auto; display:inline-block; padding:4px 8px; font-size:10px; border-color:red; color:red;" onclick="deleteUser(${u.id})">Del</button></td>
                 </tr>`;
             });
         }
-
-        // INIT
-        renderAll();
     </script>
 </body>
 </html>
