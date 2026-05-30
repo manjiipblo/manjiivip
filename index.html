@@ -71,8 +71,9 @@
         .logo-text { font-size: 18px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; letter-spacing: 1px;}
         .logo-text span { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
         .header-actions { display: flex; gap: 15px; align-items: center; }
-        .icon-btn { background: transparent; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; transition: 0.2s; }
+        .icon-btn { background: transparent; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; transition: 0.2s; position: relative; }
         .icon-btn:hover { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
+        .badge { position: absolute; top: -5px; right: -8px; background: red; color: white; font-size: 9px; padding: 2px 5px; border-radius: 10px; font-weight: bold;}
 
         /* DROPDOWN & SIDEBAR */
         .settings-dropdown {
@@ -103,7 +104,7 @@
             display: block; padding: 15px; margin-bottom: 10px; color: var(--text-main);
             text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 8px; transition: 0.3s; border-left: 2px solid transparent;
         }
-        .sidebar a:hover { background: rgba(255,255,255,0.05); border-left: 2px solid var(--accent); color: var(--accent); box-shadow: inset 15px 0 15px -15px var(--accent-glow); }
+        .sidebar a:hover, .sidebar a.active-link { background: rgba(255,255,255,0.05); border-left: 2px solid var(--accent); color: var(--accent); box-shadow: inset 15px 0 15px -15px var(--accent-glow); }
 
         /* CONTAINERS */
         .page { display: none; padding: 100px 20px 40px; max-width: 800px; margin: 0 auto; min-height: 100vh; animation: fadeIn 0.4s; }
@@ -198,15 +199,20 @@
         .tab-menu { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
         .tab-menu .btn { width: auto; white-space: nowrap; padding: 8px 15px; font-size: 11px; }
         
-        .news-card { padding: 15px; border-left: 3px solid var(--accent); background: rgba(0,0,0,0.2); margin-bottom: 10px; border-radius: 0 8px 8px 0; }
+        /* CHAT UI */
+        .chat-box { height: 350px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .chat-bubble { max-width: 80%; padding: 12px 15px; border-radius: 12px; font-size: 13px; line-height: 1.5; position: relative; }
+        .chat-bubble .time { font-size: 9px; opacity: 0.7; margin-top: 5px; display: block; text-align: right; }
+        .chat-bubble.mine { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 2px; box-shadow: 0 0 10px var(--accent-glow); }
+        .chat-bubble.other { align-self: flex-start; background: rgba(255,255,255,0.1); border-bottom-left-radius: 2px; border: 1px solid var(--border-color); }
+        .chat-bubble.sys { align-self: center; background: transparent; border: 1px dashed var(--accent); color: var(--accent); text-align: center; font-size: 11px; width: 90%; }
         
-        /* HISTORY ITEM (CLICKABLE) */
-        .history-item {
-            border-left: 3px solid var(--accent); background: rgba(0,0,0,0.2); padding: 15px; 
-            border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.3s;
-        }
-        .history-item:hover { background: rgba(255,255,255,0.05); transform: translateX(5px); box-shadow: 0 0 10px var(--accent-glow); }
+        .chat-input-area { display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; }
+        .chat-input-area button { width: auto; padding: 0 20px; }
 
+        .history-item { border-left: 3px solid var(--accent); background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
+        .history-item:hover { background: rgba(255,255,255,0.05); transform: translateX(5px); box-shadow: 0 0 10px var(--accent-glow); }
     </style>
 </head>
 <body>
@@ -242,6 +248,7 @@
             <i class="fa-solid fa-cube" style="color:var(--accent);"></i> <span id="header-brand">MANJII iOS</span>
         </div>
         <div class="header-actions">
+            <button class="icon-btn" onclick="checkAuthAndGo('chat-user')"><i class="fa-solid fa-comments"></i></button>
             <button class="icon-btn" onclick="checkAuthAndGo('history')"><i class="fa-solid fa-clock-rotate-left"></i></button>
             <button class="icon-btn" onclick="toggleSettings()"><i class="fa-solid fa-gear"></i></button>
             <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars-staggered"></i></button>
@@ -275,10 +282,9 @@
         </div>
         <a href="#" onclick="showPage('home')"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Beranda</span></a>
         <a href="#" onclick="showPage('products')"><i class="fa-solid fa-box"></i> <span data-i18n="nav_catalog">Katalog Produk</span></a>
-        <a href="#" onclick="showPage('news')"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="nav_news">Pengumuman</span></a>
+        <a href="#" onclick="checkAuthAndGo('chat-user')"><i class="fa-solid fa-comments"></i> <span data-i18n="nav_chat">Chat Admin</span></a>
         <a href="#" onclick="checkAuthAndGo('history')"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="nav_history">Riwayat Transaksi</span></a>
-        <a href="https://wa.me/6283845203074" target="_blank"><i class="fa-brands fa-whatsapp"></i> Customer Service</a>
-        <a href="https://tiktok.com/@manjiixit" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+        <a href="https://wa.me/6283845203074" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp Dev</a>
         
         <div style="margin-top: 30px;">
             <a href="#" id="auth-btn-sidebar" onclick="showPage('auth')" style="color: #00ff88; border-left-color: #00ff88;"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="nav_login">Login / Daftar</span></a>
@@ -326,11 +332,6 @@
         <div class="product-grid" id="product-list"></div>
     </div>
 
-    <div id="news" class="page">
-        <h2 class="section-title"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="news_title">NEWS & UPDATES</span></h2>
-        <div class="glass-container" id="news-list-public"></div>
-    </div>
-
     <div id="history" class="page">
         <h2 class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="history_title">RIWAYAT TRANSAKSI</span></h2>
         <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;" data-i18n="history_desc">Klik riwayat untuk melihat detail pesanan.</p>
@@ -362,11 +363,22 @@
                 <h3 id="pay-name-display" style="margin-bottom: 10px; color: var(--accent); font-size: 14px;">QRIS PAYMENT</h3>
                 <div id="pay-info-display" style="font-size: 12px; margin-bottom: 10px; white-space: pre-line;"></div>
                 <img id="pay-img-display" src="qris.png" style="width: 180px; border-radius: 10px; border: 1px solid var(--accent); display: none; margin: 0 auto;">
-                <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px;" data-i18n="co_transfer_desc">Lakukan pembayaran sesuai nominal harga produk.</p>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px;" data-i18n="co_transfer_desc">Konfirmasi pembayaran hanya melalui menu Live Chat Admin di aplikasi ini.</p>
             </div>
 
-            <div class="form-group"><label data-i18n="co_upload_proof">Upload Bukti Transfer</label><input type="file" id="co-proof" accept="image/*" required style="padding: 10px;"></div>
-            <button class="btn" onclick="submitOrder()" data-i18n="btn_submit_order">KIRIM BUKTI PEMBAYARAN</button>
+            <button class="btn" onclick="submitOrder()" data-i18n="btn_submit_order">SELESAIKAN CHECKOUT</button>
+        </div>
+    </div>
+
+    <div id="chat-user" class="page">
+        <h2 class="section-title"><i class="fa-solid fa-comments"></i> <span data-i18n="chat_title">LIVE CHAT ADMIN</span></h2>
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;" data-i18n="chat_desc">Silahkan konfirmasi pembayaran dan kirim pesan ke Admin di sini.</p>
+        <div class="glass-container">
+            <div class="chat-box" id="user-chat-box"></div>
+            <div class="chat-input-area">
+                <input type="text" id="user-chat-input" placeholder="Ketik pesan..." onkeypress="if(event.key === 'Enter') sendUserChat()">
+                <button class="btn" onclick="sendUserChat()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
         </div>
     </div>
 
@@ -383,11 +395,10 @@
         <h2 class="section-title">ADMIN PANEL (MANJII iOS)</h2>
         <div class="tab-menu">
             <button class="btn" onclick="switchAdminTab('tab-order')">Status Order</button>
+            <button class="btn" onclick="switchAdminTab('tab-chat')">Live Chat User</button>
             <button class="btn" onclick="switchAdminTab('tab-prod')">Kelola Produk</button>
             <button class="btn" onclick="switchAdminTab('tab-pay')">Kelola Payment</button>
             <button class="btn" onclick="switchAdminTab('tab-users')">Data User</button>
-            <button class="btn" onclick="switchAdminTab('tab-news')">Pengumuman</button>
-            <button class="btn" onclick="switchAdminTab('tab-web')">Pengaturan Web</button>
             <button class="btn" style="border-color: red; color: red;" onclick="showPage('home')">Keluar</button>
         </div>
 
@@ -398,9 +409,23 @@
             </div>
             <div class="glass-container table-responsive">
                 <table>
-                    <thead><tr><th>User</th><th>No WA / Platform</th><th>Produk & Harga</th><th>Bukti</th><th>Status</th><th>Aksi</th></tr></thead>
+                    <thead><tr><th>User</th><th>No WA / Platform</th><th>Produk & Harga</th><th>Status</th><th>Aksi</th></tr></thead>
                     <tbody id="order-table-body"></tbody>
                 </table>
+            </div>
+        </div>
+
+        <div id="tab-chat" class="admin-tab" style="display:none;">
+            <div class="glass-container">
+                <div class="form-group">
+                    <label>Pilih User untuk Dichat:</label>
+                    <select id="admin-chat-select" onchange="renderAdminChat()"></select>
+                </div>
+                <div class="chat-box" id="admin-chat-box"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="admin-chat-input" placeholder="Balas ke user terpilih..." onkeypress="if(event.key === 'Enter') sendAdminChat()">
+                    <button class="btn" onclick="sendAdminChat()"><i class="fa-solid fa-paper-plane"></i> Kirim</button>
+                </div>
             </div>
         </div>
 
@@ -417,7 +442,6 @@
                     <select id="p-status"><option value="Tersedia">Tersedia ✅</option><option value="Maintenance">Maintenance ❌</option></select>
                 </div>
                 <button class="btn" onclick="saveProduct()">SIMPAN PRODUK</button>
-                <button class="btn" onclick="clearProductForm()" style="margin-top: 10px; border-color: gray; color: gray;">Reset Form</button>
             </div>
             <h3>Daftar Produk Aktif</h3>
             <div id="admin-product-list" style="margin-top: 15px;"></div>
@@ -427,8 +451,7 @@
             <div class="glass-container">
                 <h3>Tambah Metode Pembayaran Baru</h3><br>
                 <div class="form-group"><label>Nama Payment (Cth: DANA / BCA / QRIS)</label><input type="text" id="pay-name"></div>
-                <div class="form-group"><label>Informasi No Rek / Detail (Opsional)</label><textarea id="pay-info" rows="2"></textarea></div>
-                <div class="form-group"><label>Upload Gambar / Barcode (Opsional)</label><input type="file" id="pay-img" accept="image/*"></div>
+                <div class="form-group"><label>Informasi No Rek / Detail</label><textarea id="pay-info" rows="2"></textarea></div>
                 <button class="btn" onclick="savePayment()">TAMBAH PAYMENT</button>
             </div>
             <h3>Daftar Payment Aktif</h3>
@@ -444,23 +467,6 @@
                 </table>
             </div>
         </div>
-
-        <div id="tab-news" class="admin-tab" style="display:none;">
-            <div class="glass-container">
-                <h3>Buat Pengumuman Baru</h3><br>
-                <div class="form-group"><label>Isi Pengumuman</label><textarea id="new-news-text" rows="3"></textarea></div>
-                <button class="btn" onclick="addNews()">PUBLISH NEWS</button>
-            </div>
-            <h3 style="margin-top: 25px; margin-bottom: 15px;">Daftar News Aktif</h3>
-            <div id="admin-news-list"></div>
-        </div>
-
-        <div id="tab-web" class="admin-tab glass-container" style="display:none;">
-            <h3>Update Identitas Website</h3><br>
-            <div class="form-group"><label>Judul Web</label><input type="text" id="set-title"></div>
-            <div class="form-group"><label>Deskripsi Web</label><textarea id="set-desc" rows="3"></textarea></div>
-            <button class="btn" onclick="saveSettings()">Simpan Pengaturan</button>
-        </div>
     </div>
 
     <script>
@@ -475,7 +481,7 @@
                 "account_status": "Status Akun:",
                 "nav_home": "Beranda",
                 "nav_catalog": "Katalog Produk",
-                "nav_news": "Pengumuman",
+                "nav_chat": "Chat Admin",
                 "nav_history": "Riwayat Transaksi",
                 "nav_login": "Login / Daftar",
                 "nav_logout": "Logout",
@@ -493,7 +499,6 @@
                 "stat_service": "Layanan",
                 "btn_view_catalog": "LIHAT KATALOG PRODUK",
                 "catalog_title": "KATALOG PRODUK",
-                "news_title": "NEWS & UPDATES",
                 "history_title": "RIWAYAT TRANSAKSI",
                 "history_desc": "Klik riwayat untuk melihat detail pesanan.",
                 "checkout_title": "FORM CHECKOUT",
@@ -502,13 +507,13 @@
                 "co_wa_number": "No WhatsApp (Aktif)",
                 "co_platform": "Pilih Platform",
                 "co_payment_method": "Pilih Metode Pembayaran",
-                "co_transfer_desc": "Lakukan pembayaran sesuai nominal harga produk.",
-                "co_upload_proof": "Upload Bukti Transfer",
-                "btn_submit_order": "KIRIM BUKTI PEMBAYARAN",
+                "co_transfer_desc": "Konfirmasi pembayaran hanya melalui menu Live Chat Admin di aplikasi ini.",
+                "btn_submit_order": "SELESAIKAN CHECKOUT",
+                "chat_title": "LIVE CHAT ADMIN",
+                "chat_desc": "Silahkan konfirmasi pembayaran dan kirim pesan ke Admin di sini.",
                 "buy_now": "BELI SEKARANG",
                 "unavailable": "TIDAK TERSEDIA",
                 "empty_history": "Belum ada riwayat transaksi.",
-                "empty_news": "Belum ada pengumuman.",
                 "alert_login": "Kamu harus Login terlebih dahulu!",
                 "alert_fill": "Mohon isi semua data dengan benar!",
                 "alert_success": "Berhasil!"
@@ -522,7 +527,7 @@
                 "account_status": "Account Status:",
                 "nav_home": "Home",
                 "nav_catalog": "Product Catalog",
-                "nav_news": "Announcements",
+                "nav_chat": "Chat Admin",
                 "nav_history": "Transaction History",
                 "nav_login": "Login / Register",
                 "nav_logout": "Logout",
@@ -540,7 +545,6 @@
                 "stat_service": "Service",
                 "btn_view_catalog": "VIEW PRODUCT CATALOG",
                 "catalog_title": "PRODUCT CATALOG",
-                "news_title": "NEWS & UPDATES",
                 "history_title": "TRANSACTION HISTORY",
                 "history_desc": "Click on history to view order details.",
                 "checkout_title": "CHECKOUT FORM",
@@ -549,13 +553,13 @@
                 "co_wa_number": "Active WhatsApp No",
                 "co_platform": "Select Platform",
                 "co_payment_method": "Select Payment Method",
-                "co_transfer_desc": "Make payment according to the product price.",
-                "co_upload_proof": "Upload Payment Proof",
-                "btn_submit_order": "SUBMIT PAYMENT PROOF",
+                "co_transfer_desc": "Confirm payment only via Live Chat Admin menu in this app.",
+                "btn_submit_order": "COMPLETE CHECKOUT",
+                "chat_title": "LIVE CHAT ADMIN",
+                "chat_desc": "Please confirm your payment and message Admin here.",
                 "buy_now": "BUY NOW",
                 "unavailable": "UNAVAILABLE",
                 "empty_history": "No transaction history yet.",
-                "empty_news": "No announcements yet.",
                 "alert_login": "You must Login first!",
                 "alert_fill": "Please fill all data correctly!",
                 "alert_success": "Success!"
@@ -570,7 +574,7 @@
             document.querySelectorAll('.lang-grid .color-pill').forEach(el => el.classList.remove('active'));
             document.getElementById('lang-' + lang).classList.add('active');
             applyTranslations();
-            renderAll(); // Re-render dynamic content
+            renderAll(); 
         }
 
         function applyTranslations() {
@@ -581,61 +585,50 @@
         }
         function getT(key) { return i18n[currentLang][key] || key; }
 
-        // --- COMPRESSOR (MENCEGAH BUG LOCALSTORAGE JEBOL & DATA HILANG) ---
-        function compressImage(file, callback) {
-            if (!file) return callback(null);
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = event => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 600;
-                    const scaleSize = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scaleSize;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    callback(canvas.toDataURL('image/jpeg', 0.6)); // Kompresi kuat 60%
-                };
-            };
-        }
-
-        // --- INITIAL LOAD ---
-        window.onload = () => {
-            setLang(currentLang);
-            setTimeout(() => { document.getElementById('loading-screen').style.display = 'none'; }, 1500);
-        };
-
-        function showActionLoader(callback) {
-            document.getElementById('action-loader').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('action-loader').style.display = 'none';
-                if(callback) callback();
-            }, 1500);
-        }
-
-        // --- DATABASE ---
+        // --- DATABASE INIT & AUTO CLEANUP ---
         let db = JSON.parse(localStorage.getItem('manjii_db_ultimate')) || {
             title: "MANJII iOS",
             desc: "Pusat penjualan produk cheat manjii ios dengan keamanan super tinggi. Tersertifikasi aman 99%.",
-            newsList: [], products: [], orders: [], users: [],
-            payments: [{ id: 1, name: "QRIS Default", info: "Silahkan scan QRIS ini", img: "qris.png" }]
+            products: [], orders: [], users: [], chats: [],
+            payments: [{ id: 1, name: "QRIS Default", info: "Silahkan scan QRIS ini" }]
         };
+
+        // AUTO CLEANUP: Hapus data base-64 image dari riwayat lama supaya storage lega permanen.
+        let storageCleaned = false;
+        if(db.orders) {
+            db.orders.forEach(o => { if(o.proof) { delete o.proof; storageCleaned = true; } });
+        }
+        if(db.payments) {
+            db.payments.forEach(p => { if(p.img) { delete p.img; storageCleaned = true; } });
+        }
+        if(!db.chats) db.chats = [];
+        if(storageCleaned) localStorage.setItem('manjii_db_ultimate', JSON.stringify(db));
 
         function saveDB() {
             try {
                 localStorage.setItem('manjii_db_ultimate', JSON.stringify(db));
                 renderAll();
             } catch (e) {
-                alert("ERROR: Penyimpanan browser penuh! Hapus riwayat atau kurangi ukuran gambar.");
-                console.error(e);
+                alert("ERROR Kritis Storage. Hubungi Developer.");
             }
         }
 
-        // --- AUTH SYSTEM ---
+        // --- AUTH & AUTO-LOGOUT SYSTEM ---
         let currentUser = localStorage.getItem('manjii_logged_user') || null;
+
+        function checkDeletedUser() {
+            if(currentUser) {
+                let validUser = db.users.find(u => u.username.toLowerCase() === currentUser.toLowerCase());
+                if(!validUser) {
+                    currentUser = null;
+                    localStorage.removeItem('manjii_logged_user');
+                    alert("PEMBERITAHUAN: Akun anda telah dihapus permanen oleh admin!");
+                    window.location.reload(); 
+                    return false;
+                }
+            }
+            return true;
+        }
 
         function switchAuthTab(tab) {
             document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
@@ -673,7 +666,7 @@
                     currentUser = found.username;
                     localStorage.setItem('manjii_logged_user', found.username);
                     showPage('home');
-                } else { alert("Username / Password salah!"); }
+                } else { alert("Username / Password salah atau Akun telah dihapus Admin!"); }
             });
         }
 
@@ -684,11 +677,18 @@
         }
 
         function checkAuthAndGo(targetPage) {
+            if(!checkDeletedUser()) return; 
             if(!currentUser) { alert(getT("alert_login")); showPage('auth'); } 
             else { showPage(targetPage); }
         }
 
         // --- UI & NAV ---
+        window.onload = () => {
+            setLang(currentLang);
+            checkDeletedUser();
+            setTimeout(() => { document.getElementById('loading-screen').style.display = 'none'; }, 1500);
+        };
+
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
         function toggleSettings() { document.getElementById('settingsMenu').classList.toggle('active'); }
         window.onclick = function(event) {
@@ -696,11 +696,12 @@
             if (!event.target.closest('.header-actions') && !event.target.closest('.sidebar')) document.getElementById('sidebarMenu').classList.remove('active');
         }
         function showPage(pageId) {
+            if(!checkDeletedUser()) return;
             document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             document.getElementById('sidebarMenu').classList.remove('active');
             window.scrollTo(0,0);
-            if(pageId === 'home' || pageId === 'history' || pageId === 'checkout') renderAll();
+            if(pageId === 'home' || pageId === 'history' || pageId === 'checkout' || pageId === 'chat-user') renderAll();
         }
 
         function setAccent(color, element) {
@@ -717,6 +718,13 @@
             let val = input.value.replace(/[^0-9]/g, '');
             if(val !== '') input.value = val.replace(/\B(?=(\d{3})+(?!\d))/g, "."); else input.value = '';
         }
+        function showActionLoader(callback) {
+            document.getElementById('action-loader').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('action-loader').style.display = 'none';
+                if(callback) callback();
+            }, 1500);
+        }
 
         // --- RENDER UTAMA ---
         function renderAll() {
@@ -730,16 +738,12 @@
                 document.getElementById('auth-btn-sidebar').style.display = 'none';
                 document.getElementById('logout-btn-sidebar').style.display = 'block';
                 if(document.getElementById('co-name')) document.getElementById('co-name').value = currentUser;
+                renderUserChat();
             } else {
                 document.getElementById('sidebar-username').innerText = "Guest";
                 document.getElementById('auth-btn-sidebar').style.display = 'block';
                 document.getElementById('logout-btn-sidebar').style.display = 'none';
             }
-
-            // Render News
-            let newsHtml = '';
-            db.newsList.forEach(n => { newsHtml += `<div class="news-card"><div style="font-size:10px;color:var(--text-muted);">${n.date}</div><div style="font-size:13px;">${n.text}</div></div>`; });
-            document.getElementById('news-list-public').innerHTML = newsHtml || `<i>${getT("empty_news")}</i>`;
 
             // Render Products
             const prodList = document.getElementById('product-list'); prodList.innerHTML = '';
@@ -794,20 +798,17 @@
             let paySelect = document.getElementById('co-payment-select');
             if(paySelect) {
                 paySelect.innerHTML = '';
-                db.payments.forEach(pay => {
-                    paySelect.innerHTML += `<option value="${pay.id}">${pay.name}</option>`;
-                });
+                db.payments.forEach(pay => { paySelect.innerHTML += `<option value="${pay.id}">${pay.name}</option>`; });
                 updatePaymentView();
             }
 
             renderAdminPanel();
         }
 
-        // --- HISTORY MODAL LOGIC ---
+        // --- HISTORY MODAL ---
         function openHistoryDetail(orderId) {
             let o = db.orders.find(x => x.id === orderId);
             if(!o) return;
-            
             let c = o.status.includes('Setuju') ? '#00ff88' : (o.status.includes('Tolak') ? '#ff2a2a' : '#ff9f43');
             let content = `
                 <div style="margin-bottom: 10px;"><strong>Produk:</strong> <span style="color:var(--accent);">${o.productName}</span></div>
@@ -816,21 +817,18 @@
                 <div style="margin-bottom: 10px;"><strong>No WA:</strong> ${o.wa}</div>
                 <div style="margin-bottom: 10px;"><strong>Tgl Order:</strong> ${o.date}</div>
                 <div style="margin-bottom: 15px;"><strong>Status:</strong> <span style="color:${c}; font-weight:bold;">${o.status}</span></div>
-                <div style="margin-bottom: 10px;"><strong>Bukti Transfer:</strong></div>
-                <img src="${o.proof}" style="width:100%; border-radius:8px; border:1px solid var(--border-color);">
             `;
             document.getElementById('modal-content-data').innerHTML = content;
             document.getElementById('history-modal').style.display = 'flex';
         }
         function closeModal(e) {
-            if(e.target === document.getElementById('history-modal')) {
-                document.getElementById('history-modal').style.display = 'none';
-            }
+            if(e.target === document.getElementById('history-modal')) document.getElementById('history-modal').style.display = 'none';
         }
 
         // --- CHECKOUT LOGIC ---
         let selectedProductId = null;
         function checkCheckoutAuth(id) {
+            if(!checkDeletedUser()) return;
             if(!currentUser) { alert(getT("alert_login")); showPage('auth'); return; }
             let p = db.products.find(x => x.id === id);
             selectedProductId = id;
@@ -848,38 +846,101 @@
             if(pay) {
                 document.getElementById('pay-name-display').innerText = pay.name.toUpperCase();
                 document.getElementById('pay-info-display').innerText = pay.info;
-                let imgEl = document.getElementById('pay-img-display');
-                if(pay.img) { imgEl.src = pay.img; imgEl.style.display = 'block'; }
-                else { imgEl.style.display = 'none'; }
             }
         }
 
         function submitOrder() {
             let wa = document.getElementById('co-wa').value;
             let platform = document.getElementById('co-platform').value;
-            let fileInput = document.getElementById('co-proof');
 
-            if(!wa || !fileInput.files[0]) return alert(getT("alert_fill"));
+            if(!wa) return alert(getT("alert_fill"));
 
             showActionLoader(() => {
-                compressImage(fileInput.files[0], (compressedData) => {
-                    let p = db.products.find(x => x.id === selectedProductId);
-                    let finalPrice = p.price;
-                    if(p.discount && p.discount > 0) finalPrice = p.price - (p.price * (p.discount / 100));
+                let p = db.products.find(x => x.id === selectedProductId);
+                let finalPrice = p.price;
+                if(p.discount && p.discount > 0) finalPrice = p.price - (p.price * (p.discount / 100));
 
-                    db.orders.unshift({ 
-                        id: Date.now(), date: new Date().toLocaleString(),
-                        username: currentUser, wa, platform, 
-                        productName: p.name, price: p.price, finalPrice: finalPrice,
-                        proof: compressedData, status: 'Menunggu Review ⏳'
-                    });
-                    saveDB();
-                    alert(getT("alert_success"));
-                    document.getElementById('co-wa').value = '';
-                    document.getElementById('co-proof').value = '';
-                    showPage('history');
+                // 1. Simpan Data Order Tanpa Bukti Gambar
+                db.orders.unshift({ 
+                    id: Date.now(), date: new Date().toLocaleString(),
+                    username: currentUser, wa, platform, 
+                    productName: p.name, price: p.price, finalPrice: finalPrice,
+                    status: 'Menunggu Review ⏳'
                 });
+
+                // 2. Buat Pesan Sistem Otomatis di Chat
+                db.chats.push({
+                    id: Date.now(), sender: currentUser, receiver: 'admin', isSystem: true,
+                    text: `[SYSTEM] Saya telah melakukan checkout produk "${p.name}". Mohon segera diproses.`,
+                    time: new Date().toLocaleString()
+                });
+
+                saveDB();
+                alert("Checkout Berhasil! Silahkan konfirmasi di Live Chat.");
+                document.getElementById('co-wa').value = '';
+                showPage('chat-user'); // Langsung lempar ke chat admin
             });
+        }
+
+        // --- LIVE CHAT SYSTEM ---
+        function renderUserChat() {
+            if(!currentUser) return;
+            let box = document.getElementById('user-chat-box');
+            let myChats = db.chats.filter(c => (c.sender === currentUser && c.receiver === 'admin') || (c.sender === 'admin' && c.receiver === currentUser));
+            
+            box.innerHTML = '';
+            myChats.forEach(c => {
+                if(c.isSystem) {
+                    box.innerHTML += `<div class="chat-bubble sys">${c.text}</div>`;
+                } else if(c.sender === currentUser) {
+                    box.innerHTML += `<div class="chat-bubble mine">${c.text}<span class="time">${c.time}</span></div>`;
+                } else {
+                    box.innerHTML += `<div class="chat-bubble other"><strong>ADMIN</strong><br>${c.text}<span class="time">${c.time}</span></div>`;
+                }
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendUserChat() {
+            let txt = document.getElementById('user-chat-input').value.trim();
+            if(!txt || !currentUser) return;
+            db.chats.push({
+                id: Date.now(), sender: currentUser, receiver: 'admin', isSystem: false,
+                text: txt, time: new Date().toLocaleString()
+            });
+            saveDB();
+            document.getElementById('user-chat-input').value = '';
+        }
+
+        function renderAdminChat() {
+            let userSel = document.getElementById('admin-chat-select').value;
+            let box = document.getElementById('admin-chat-box');
+            box.innerHTML = '';
+            if(!userSel) return;
+
+            let userChats = db.chats.filter(c => (c.sender === userSel && c.receiver === 'admin') || (c.sender === 'admin' && c.receiver === userSel));
+            userChats.forEach(c => {
+                if(c.isSystem) {
+                    box.innerHTML += `<div class="chat-bubble sys">${c.text}</div>`;
+                } else if(c.sender === 'admin') {
+                    box.innerHTML += `<div class="chat-bubble mine">Anda<br>${c.text}<span class="time">${c.time}</span></div>`;
+                } else {
+                    box.innerHTML += `<div class="chat-bubble other"><strong>${c.sender}</strong><br>${c.text}<span class="time">${c.time}</span></div>`;
+                }
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendAdminChat() {
+            let userSel = document.getElementById('admin-chat-select').value;
+            let txt = document.getElementById('admin-chat-input').value.trim();
+            if(!txt || !userSel) return;
+            db.chats.push({
+                id: Date.now(), sender: 'admin', receiver: userSel, isSystem: false,
+                text: txt, time: new Date().toLocaleString()
+            });
+            saveDB();
+            document.getElementById('admin-chat-input').value = '';
         }
 
         // --- ADMIN PANEL LOGIC ---
@@ -896,20 +957,6 @@
             document.querySelectorAll('.admin-tab').forEach(el => el.style.display = 'none');
             document.getElementById(id).style.display = 'block';
         }
-
-        function saveSettings() {
-            db.title = document.getElementById('set-title').value;
-            db.desc = document.getElementById('set-desc').value;
-            saveDB(); alert("Berhasil Disimpan!");
-        }
-
-        function addNews() {
-            let text = document.getElementById('new-news-text').value;
-            if(!text) return;
-            db.newsList.unshift({ id: Date.now(), text, date: new Date().toLocaleDateString() });
-            saveDB(); document.getElementById('new-news-text').value = '';
-        }
-        function deleteNews(id) { if(confirm("Hapus?")) { db.newsList = db.newsList.filter(x => x.id !== id); saveDB(); } }
 
         function saveProduct() {
             let id = document.getElementById('p-id').value;
@@ -929,40 +976,20 @@
                 } else { 
                     db.products.push({ id: Date.now(), name, specs, price, discount, status });
                 }
-                saveDB(); clearProductForm();
+                saveDB(); 
+                document.getElementById('p-id').value = ''; document.getElementById('p-name').value = '';
+                document.getElementById('p-specs').value = ''; document.getElementById('p-price').value = ''; 
+                document.getElementById('p-disc').value = '0';
             });
         }
-        function clearProductForm() {
-            document.getElementById('p-id').value = ''; document.getElementById('p-name').value = '';
-            document.getElementById('p-specs').value = ''; document.getElementById('p-price').value = ''; 
-            document.getElementById('p-disc').value = '0'; document.getElementById('p-status').value = 'Tersedia';
-        }
-        function editProduct(id) {
-            let p = db.products.find(x => x.id === id);
-            document.getElementById('p-id').value = p.id; document.getElementById('p-name').value = p.name;
-            document.getElementById('p-specs').value = p.specs; document.getElementById('p-price').value = p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            document.getElementById('p-disc').value = p.discount || 0;
-            document.getElementById('p-status').value = p.status; alert("Silahkan edit di form atas.");
-        }
         function deleteProduct(id) { if(confirm("Hapus?")) { db.products = db.products.filter(x => x.id !== id); saveDB(); } }
-
         function savePayment() {
             let name = document.getElementById('pay-name').value;
             let info = document.getElementById('pay-info').value;
-            let fileInput = document.getElementById('pay-img');
-            
             if(!name) return alert("Nama Payment Wajib Diisi!");
-
             showActionLoader(() => {
-                if(fileInput.files.length > 0) {
-                    compressImage(fileInput.files[0], (imgData) => {
-                        db.payments.push({ id: Date.now(), name, info, img: imgData });
-                        saveDB(); document.getElementById('pay-name').value = ''; document.getElementById('pay-info').value = ''; document.getElementById('pay-img').value = '';
-                    });
-                } else {
-                    db.payments.push({ id: Date.now(), name, info, img: null });
-                    saveDB(); document.getElementById('pay-name').value = ''; document.getElementById('pay-info').value = '';
-                }
+                db.payments.push({ id: Date.now(), name, info });
+                saveDB(); document.getElementById('pay-name').value = ''; document.getElementById('pay-info').value = '';
             });
         }
         function deletePayment(id) { if(confirm("Hapus Payment?")) { db.payments = db.payments.filter(x => x.id !== id); saveDB(); } }
@@ -971,18 +998,21 @@
             let idx = db.orders.findIndex(x => x.id === id);
             db.orders[idx].status = status; saveDB();
         }
-        function deleteUser(id) { if(confirm("Hapus user?")) { db.users = db.users.filter(x => x.id !== id); saveDB(); } }
+        function deleteUser(id) { 
+            if(confirm("Hapus akun user permanen? User tidak akan bisa login lagi.")) { 
+                db.users = db.users.filter(x => x.id !== id); 
+                saveDB(); 
+            } 
+        }
 
         function renderAdminPanel() {
-            document.getElementById('set-title').value = db.title;
-            document.getElementById('set-desc').value = db.desc;
-
-            let nList = document.getElementById('admin-news-list'); nList.innerHTML = '';
-            db.newsList.forEach((n) => {
-                nList.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:10px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;">
-                    <div style="font-size:12px;"><strong>${n.date}</strong><br>${n.text}</div>
-                    <button class="btn" style="width:auto; padding:5px 10px; font-size:10px; border-color:red; color:red;" onclick="deleteNews(${n.id})">Hapus</button></div>`;
-            });
+            // Populate Admin Chat Select
+            let chatSel = document.getElementById('admin-chat-select');
+            let prevSel = chatSel.value;
+            chatSel.innerHTML = '<option value="">-- Pilih User --</option>';
+            db.users.forEach(u => { chatSel.innerHTML += `<option value="${u.username}">${u.username}</option>`; });
+            if(prevSel && db.users.find(u => u.username === prevSel)) chatSel.value = prevSel;
+            renderAdminChat();
 
             let payList = document.getElementById('admin-payment-list'); payList.innerHTML = '';
             db.payments.forEach((p) => {
@@ -995,10 +1025,8 @@
             db.products.forEach((p) => {
                 pList.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:15px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
                     <div><strong style="color:var(--accent); font-size:13px;">${p.name}</strong><br><small>${formatRupiah(p.price)} | Diskon: ${p.discount||0}% | ${p.status}</small></div>
-                    <div style="display:flex; gap:5px;">
-                        <button class="btn" style="width:auto; padding:5px 10px; font-size:11px;" onclick="editProduct(${p.id})">Edit</button>
-                        <button class="btn" style="width:auto; padding:5px 10px; font-size:11px; border-color:red; color:red;" onclick="deleteProduct(${p.id})">Del</button>
-                    </div></div>`;
+                    <div><button class="btn" style="width:auto; padding:5px 10px; font-size:11px; border-color:red; color:red;" onclick="deleteProduct(${p.id})">Del</button></div>
+                    </div>`;
             });
 
             let oBody = document.getElementById('order-table-body'); oBody.innerHTML = '';
@@ -1014,7 +1042,6 @@
                     <td><strong style="color:var(--accent);">${o.username}</strong></td>
                     <td>${o.wa}<br><small style="color:var(--text-muted);">${o.platform}</small></td>
                     <td>${o.productName}<br><strong style="color:#00ff88;">${formatRupiah(o.finalPrice)}</strong></td>
-                    <td><a href="${o.proof}" target="_blank" style="color:var(--accent); text-decoration:none;">Bukti 🖼️</a></td>
                     <td><span style="font-size:11px; font-weight:bold;">${o.status}</span></td>
                     <td>${btnAction}</td>
                 </tr>`;
