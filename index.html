@@ -3,267 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Dice Simulator - MANJII</title>
+    <title>MANJII OFFICIAL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-cyan: #00f3ff;
-            --neon-magenta: #ff00ff;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #202124;
-            color: white;
-            font-family: 'Google Sans', Roboto, Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 100vh;
-            box-sizing: border-box;
-            padding: 20px 10px;
+            /* Default System: Dark */
+            --bg-color: #0f0f13;
+            --text-color: #ffffff;
+            --glass-bg: rgba(25, 25, 30, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            
+            /* Default Accent: Red */
+            --accent-color: #ff2a2a; 
+            --accent-glow: 0 0 15px var(--accent-color), 0 0 30px var(--accent-color);
         }
 
-        /* Area Tampilan Dadu Utama */
-        .game-container {
-            width: 100%;
-            max-width: 360px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: auto;
-            margin-bottom: auto;
+        /* Light Mode Variables */
+        body.light-mode {
+            --bg-color: #f4f4f9;
+            --text-color: #111111;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
         }
 
-        .total-display {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            color: #e8eaed;
-            font-weight: 500;
-        }
-        .total-display span {
-            font-weight: bold;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        .dice-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .dice {
-            width: 80px;
-            height: 80px;
-            background: #8ab4f8;
-            color: #202124;
-            font-size: 2.2rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .rolling {
-            transform: rotate(360deg) scale(1.1);
-            background: #aecbfa !important;
-        }
-
-        .btn-roll {
-            background-color: #8ab4f8;
-            color: #202124;
-            border: none;
-            padding: 14px 45px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 100px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            active: scale(0.95);
-        }
-
-        /* Panel Kontrol Rahasia (Neon Glassmorphism) */
-        .control-panel {
-            width: 90%;
-            max-width: 340px;
-            background: rgba(15, 15, 25, 0.8);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 15px;
-            border-radius: 20px;
-            border: 1px solid var(--neon-cyan);
-            box-shadow: 0 0 20px var(--neon-cyan);
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        .control-panel h4 {
-            margin: 0 0 10px 0;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 5px var(--neon-cyan);
-            letter-spacing: 1px;
-        }
-
-        .control-panel input {
-            width: 85%;
-            background: #111;
-            color: #fff;
-            border: 1px solid var(--neon-cyan);
-            padding: 8px;
-            text-align: center;
-            font-size: 1rem;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .control-panel button {
-            background: transparent;
-            color: var(--neon-magenta);
-            border: 1px solid var(--neon-magenta);
-            padding: 6px 15px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            box-shadow: 0 0 5px var(--neon-magenta);
-            width: 45%;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
-        .status-text {
-            font-size: 11px;
-            margin: 8px 0 0 0;
-            color: #00ff00;
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
         }
+
+        /* LOADING SCREEN */
+        #loading-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .loading-circle {
+            width: 120px; height: 120px; border-radius: 50%;
+            border: 4px dashed var(--accent-color);
+            animation: rotate 2s linear infinite;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: var(--accent-glow);
+            background: url('loadingscreen.png') center/cover;
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        #loading-text { margin-top: 20px; font-size: 24px; font-weight: 600; color: var(--accent-color); text-shadow: var(--accent-glow); }
+
+        /* NAVBAR */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 15px 30px;
+            background: var(--glass-bg); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+        }
+        .logo { font-size: 20px; font-weight: 800; color: var(--accent-color); text-shadow: 0 0 10px var(--accent-color); cursor: pointer;}
+        .menu-btn { font-size: 24px; cursor: pointer; color: var(--text-color); }
+        .nav-links {
+            display: none; position: absolute; top: 60px; right: 20px;
+            background: var(--glass-bg); backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); border-radius: 10px;
+            flex-direction: column; padding: 10px; min-width: 200px;
+        }
+        .nav-links.active { display: flex; }
+        .nav-links a {
+            color: var(--text-color); text-decoration: none; padding: 10px;
+            border-bottom: 1px solid var(--glass-border); font-size: 14px;
+        }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* CONTAINER & GLASSMORPHISM */
+        .container { padding: 80px 20px 20px; max-width: 1200px; margin: 0 auto; min-height: 100vh; display: none; }
+        .container.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .glass-box {
+            background: var(--glass-bg); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 15px;
+            padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* TYPOGRAPHY & BUTTONS */
+        h1, h2, h3 { margin-bottom: 10px; }
+        .neon-text { color: var(--accent-color); text-shadow: var(--accent-glow); }
+        .btn {
+            background: transparent; color: var(--accent-color);
+            border: 2px solid var(--accent-color); border-radius: 8px;
+            padding: 10px 20px; cursor: pointer; font-weight: 600;
+            box-shadow: 0 0 10px var(--accent-color) inset, 0 0 10px var(--accent-color);
+            transition: 0.3s; width: 100%; display: block; text-align: center; text-decoration: none; margin-top: 10px;
+        }
+        .btn:hover { background: var(--accent-color); color: #fff; box-shadow: var(--accent-glow); }
+
+        /* HOME SECTION */
+        .stats { display: flex; justify-content: space-around; margin: 20px 0; text-align: center; flex-wrap: wrap;}
+        .stat-item { padding: 10px; }
+        .stat-item i { font-size: 30px; color: var(--accent-color); margin-bottom: 5px; }
+        .socials a {
+            display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px;
+            border-radius: 30px; border: 1px solid var(--glass-border);
+            color: var(--text-color); text-decoration: none; margin: 5px; background: var(--glass-bg);
+        }
+        .socials a:hover { border-color: var(--accent-color); color: var(--accent-color); }
+
+        /* PRODUCTS SECTION */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .product-card { position: relative; overflow: hidden; }
+        .product-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; background: #333;}
+        .maintenance-stamp {
+            position: absolute; top: 30%; left: 0; width: 100%;
+            background: rgba(255, 0, 0, 0.8); color: white; text-align: center;
+            padding: 10px; font-weight: bold; transform: rotate(-15deg); font-size: 18px;
+            letter-spacing: 2px; text-shadow: 0 0 5px #000; z-index: 10;
+        }
+
+        /* FORMS & INPUTS */
+        input, select, textarea {
+            width: 100%; padding: 12px; margin: 8px 0;
+            background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);
+            color: var(--text-color); border-radius: 8px; outline: none;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-color); }
+        .qris-box { text-align: center; margin: 20px 0; }
+        .qris-box img { max-width: 200px; border-radius: 10px; border: 2px solid var(--accent-color); box-shadow: var(--accent-glow);}
+
+        /* THEME CUSTOMIZER */
+        .theme-panel { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
+        .color-btn { width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer; }
+
+        /* ADMIN PANEL */
+        .admin-nav { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; }
+        .admin-nav .btn { width: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid var(--glass-border); padding: 10px; text-align: left; }
     </style>
 </head>
 <body>
 
-    <div class="game-container">
-        <div class="total-display">Total: <span id="total-score">9</span></div>
-
-        <div class="dice-grid">
-            <div class="dice" id="d1">1</div><div class="dice" id="d2">1</div><div class="dice" id="d3">1</div>
-            <div class="dice" id="d4">1</div><div class="dice" id="d5">1</div><div class="dice" id="d6">1</div>
-            <div class="dice" id="d7">1</div><div class="dice" id="d8">1</div><div class="dice" id="d9">1</div>
-        </div>
-
-        <button class="btn-roll" onclick="jalankanRoll()">Lempar</button>
+    <div id="loading-screen">
+        <div class="loading-circle"></div>
+        <div id="loading-text">0%</div>
     </div>
 
-    <div class="control-panel">
-        <h4>MANJII CORE SETTING</h4>
-        <input type="text" id="sequenceInput" placeholder="Contoh: 35-32-25">
-        <div style="display: flex; justify-content: space-around;">
-            <button onclick="simpanSettingan()" style="color: var(--neon-cyan); border-color: var(--neon-cyan); box-shadow: 0 0 5px var(--neon-cyan);">APPLY</button>
-            <button onclick="resetSettingan()">RESET</button>
+    <nav id="navbar">
+        <div class="logo" onclick="openAdminLogin()">ADMIN <i class="fa-solid fa-lock" style="font-size: 12px;"></i></div>
+        <div class="theme-panel" style="margin: 0;">
+            <button class="color-btn" style="background:#0f0f13; border:1px solid #fff" onclick="setMode('dark')"></button>
+            <button class="color-btn" style="background:#f4f4f9; border:1px solid #000" onclick="setMode('light')"></button>
+            <button class="color-btn" style="background:#ff2a2a;" onclick="setAccent('#ff2a2a')"></button>
+            <button class="color-btn" style="background:#00d2ff;" onclick="setAccent('#00d2ff')"></button>
+            <button class="color-btn" style="background:#00ff88;" onclick="setAccent('#00ff88')"></button>
+            <button class="color-btn" style="background:#ff9900;" onclick="setAccent('#ff9900')"></button>
         </div>
-        <p class="status-text" id="statusInfo">Status: Dadu Normal (Acak)</p>
+        <div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
+        <div class="nav-links" id="navLinks">
+            <a href="#" onclick="showPage('home')"><i class="fa-solid fa-house"></i> BERANDA</a>
+            <a href="#" onclick="showPage('products')"><i class="fa-solid fa-box"></i> PRODUK</a>
+            <a href="https://wa.me/6283845203074" target="_blank"><i class="fa-solid fa-headset"></i> CUSTOMER SERVICE</a>
+            <a href="#" onclick="showPage('news')"><i class="fa-solid fa-newspaper"></i> NEWS</a>
+        </div>
+    </nav>
+
+    <div id="home" class="container active">
+        <div class="glass-box" style="text-align: center;">
+            <h1 class="neon-text" id="site-title">MANJII OFFICIAL</h1>
+            <p id="site-desc">Pusat penjualan produk cheat/panel iPhone dengan tingkat keamanan super tinggi. Telah melalui uji keamanan ketat untuk performa maksimal dan aman 100%.</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <i class="fa-solid fa-users"></i>
+                    <h3>5K+</h3>
+                    <p>Pengguna Aktif</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h3>99%</h3>
+                    <p>Aman Terkendali</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <h3>24/7</h3>
+                    <p>Dukungan Penuh</p>
+                </div>
+            </div>
+
+            <div class="socials">
+                <a href="https://tiktok.com/@manjiixit" target="_blank"><i class="fa-brands fa-tiktok"></i> @manjiixit</a>
+                <a href="https://wa.me/6283845203074" target="_blank"><i class="fa-brands fa-whatsapp"></i> 083845203074</a>
+                <a href="https://wa.me/6283845203074" target="_blank"><i class="fa-solid fa-headset"></i> Customer Service</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="products" class="container">
+        <h2 class="neon-text mb-20"><i class="fa-solid fa-fire"></i> PRODUK KAMI</h2>
+        <div class="product-grid" id="product-list">
+            </div>
+    </div>
+
+    <div id="news" class="container">
+        <h2 class="neon-text"><i class="fa-solid fa-bullhorn"></i> PENGUMUMAN (NEWS)</h2>
+        <div id="news-list">
+            </div>
+    </div>
+
+    <div id="checkout" class="container">
+        <div class="glass-box">
+            <h2 class="neon-text">CHECKOUT PRODUK</h2>
+            <h3 id="co-product-name" style="margin-bottom: 20px;">-</h3>
+            
+            <input type="text" id="co-name" placeholder="Nama / Username" required>
+            <input type="number" id="co-wa" placeholder="No WhatsApp (Aktif)" required>
+            <select id="co-platform">
+                <option value="iPhone Device">📱 iPhone Device</option>
+                <option value="Android Device">🤖 Android Device</option>
+            </select>
+
+            <div class="qris-box">
+                <h3 class="neon-text">PAYMENT : QRIS ALLPAY</h3>
+                <p>Silahkan scan QRIS di bawah ini untuk membayar.</p>
+                <img src="qris.png" alt="QRIS MANJII OFFICIAL" onerror="this.src='https://via.placeholder.com/200x200.png?text=QRIS.PNG'">
+            </div>
+
+            <label>Upload Bukti Transfer (Screenshot):</label>
+            <input type="file" id="co-proof" accept="image/*" required>
+
+            <button class="btn" onclick="submitOrder()">KIRIM PESANAN</button>
+        </div>
+    </div>
+
+    <div id="admin-login" class="container">
+        <div class="glass-box" style="max-width: 400px; margin: 100px auto;">
+            <h2 class="neon-text text-center">LOGIN ADMIN</h2>
+            <input type="text" id="adm-user" placeholder="Username">
+            <input type="password" id="adm-pass" placeholder="Password">
+            <button class="btn" onclick="loginAdmin()">LOGIN</button>
+            <button class="btn" style="border-color: grey; color: grey;" onclick="showPage('home')">BATAL</button>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="container">
+        <h2 class="neon-text">DASHBOARD ADMIN</h2>
+        <div class="admin-nav">
+            <button class="btn" onclick="switchAdminTab('adm-settings')">Pengaturan Web</button>
+            <button class="btn" onclick="switchAdminTab('adm-products')">Kelola Produk</button>
+            <button class="btn" onclick="switchAdminTab('adm-orders')">Cek Stats Order</button>
+        </div>
+
+        <div id="adm-settings" class="glass-box admin-tab">
+            <h3>Update Website</h3>
+            <input type="text" id="set-title" placeholder="Judul Website">
+            <textarea id="set-desc" rows="3" placeholder="Deskripsi Website"></textarea>
+            <textarea id="set-news" rows="3" placeholder="Isi Pengumuman / News (Kosongkan jika tidak ada)"></textarea>
+            <button class="btn" onclick="saveSettings()">SIMPAN PENGATURAN</button>
+        </div>
+
+        <div id="adm-products" class="glass-box admin-tab" style="display:none;">
+            <h3>Tambah / Update Produk</h3>
+            <input type="hidden" id="p-id">
+            <input type="text" id="p-name" placeholder="Nama Produk">
+            <textarea id="p-specs" rows="3" placeholder="Spesifikasi (Gunakan Enter untuk list, cth: ANTI BANNED ✅)"></textarea>
+            <input type="number" id="p-price" placeholder="Harga Produk (Angka)">
+            <select id="p-status">
+                <option value="Tersedia">Tersedia ✅</option>
+                <option value="Maintenance">Maintenance ❌</option>
+            </select>
+            <label>Thumbnail Produk (banner.png):</label>
+            <input type="file" id="p-img" accept="image/*">
+            <button class="btn" onclick="saveProduct()">SIMPAN PRODUK</button>
+
+            <h3 style="margin-top: 20px;">List Produk</h3>
+            <div id="admin-product-list"></div>
+        </div>
+
+        <div id="adm-orders" class="glass-box admin-tab" style="display:none;">
+            <h3>Statistik Pesanan</h3>
+            <div class="stats">
+                <div class="stat-item">
+                    <h4>Total Order</h4>
+                    <p id="tot-order" class="neon-text">0</p>
+                </div>
+                <div class="stat-item">
+                    <h4>Estimasi Pendapatan</h4>
+                    <p id="tot-rev" class="neon-text">Rp 0</p>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>WA</th>
+                            <th>Produk</th>
+                            <th>Bukti</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
-        const JUMLAH_DADU = 9;
-        const diceElements = Array.from({length: JUMLAH_DADU}, (_, i) => document.getElementById(`d${i+1}`));
+        // --- LOADING SCREEN LOGIC ---
+        let loadProgress = 0;
+        let loadInterval = setInterval(() => {
+            loadProgress += 2;
+            document.getElementById('loading-text').innerText = loadProgress + '%';
+            if (loadProgress >= 100) {
+                clearInterval(loadInterval);
+                document.getElementById('loading-screen').style.display = 'none';
+            }
+        }, 30); // Cepat untuk demo
 
-        // Ambil data antrean saat halaman dimuat/refresh
-        let antreanSettingan = JSON.parse(localStorage.getItem('diceQueue')) || [];
-        
-        function updateStatusUI() {
-            const info = document.getElementById('statusInfo');
-            if (antreanSettingan.length > 0) {
-                info.innerText = `Sisa Antrean Roll: [ ${antreanSettingan.join(' -> ')} ]`;
-                info.style.color = "#00ff00";
+        // --- DATABASE LOCALSTORAGE (Simulasi Backend) ---
+        let db = JSON.parse(localStorage.getItem('manjii_db')) || {
+            title: "MANJII OFFICIAL",
+            desc: "Pusat penjualan produk cheat/panel iPhone dengan tingkat keamanan super tinggi. Telah melalui uji keamanan ketat untuk performa maksimal dan aman 100%.",
+            news: "",
+            products: [],
+            orders: []
+        };
+
+        function saveDB() {
+            localStorage.setItem('manjii_db', JSON.stringify(db));
+            renderAll();
+        }
+
+        // --- NAVIGATION & UI ---
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.container').forEach(el => el.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById('navLinks').classList.remove('active');
+            if(pageId === 'home') renderAll();
+        }
+
+        // --- THEME & ACCENT SYSTEM ---
+        function setMode(mode) {
+            if(mode === 'dark') document.body.classList.remove('light-mode');
+            if(mode === 'light') document.body.classList.add('light-mode');
+        }
+        function setAccent(color) {
+            document.documentElement.style.setProperty('--accent-color', color);
+        }
+
+        // --- RENDER LOGIC ---
+        function formatRupiah(angka) {
+            return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function renderAll() {
+            // Update Text Web
+            document.getElementById('site-title').innerText = db.title;
+            document.getElementById('site-desc').innerText = db.desc;
+            
+            // Render News
+            const newsBox = document.getElementById('news-list');
+            if(!db.news || db.news.trim() === "") {
+                newsBox.innerHTML = `<div class="glass-box"><p style="text-align:center; color:grey;">Belum ada pengumuman saat ini.</p></div>`;
             } else {
-                info.innerText = "Status: Antrean Habis / Mode Acak";
-                info.style.color = "#ffaa00";
-            }
-        }
-        updateStatusUI();
-
-        function simpanSettingan() {
-            const inputVal = document.getElementById('sequenceInput').value.trim();
-            if (!inputVal) return;
-
-            // Memisahkan string berdasarkan tanda '-' dan mengubahnya menjadi angka Array
-            const angkaArray = inputVal.split('-').map(num => parseInt(num.trim())).filter(num => !isNaN(num));
-
-            // Validasi batas angka untuk 9 dadu (minimal 9, maksimal 54)
-            const valid = angkaArray.every(num => num >= 9 && num <= 54);
-            if (!valid) {
-                alert("Rentang total angka untuk 9 dadu harus antara 9 sampai 54!");
-                return;
+                newsBox.innerHTML = `<div class="glass-box"><p>${db.news.replace(/\n/g, '<br>')}</p></div>`;
             }
 
-            antreanSettingan = angkaArray;
-            localStorage.setItem('diceQueue', JSON.stringify(antreanSettingan));
-            updateStatusUI();
-            document.getElementById('sequenceInput').value = '';
+            // Render Products (User Side)
+            const prodList = document.getElementById('product-list');
+            prodList.innerHTML = '';
+            db.products.forEach(p => {
+                let specHtml = p.specs.split('\n').map(s => `<li>${s}</li>`).join('');
+                let disabled = p.status === 'Maintenance' ? 'disabled' : '';
+                let btnText = p.status === 'Maintenance' ? 'TIDAK TERSEDIA' : 'BELI SEKARANG';
+                let stamp = p.status === 'Maintenance' ? `<div class="maintenance-stamp">SEDANG MAINTENANCE UPDATE</div>` : '';
+                
+                prodList.innerHTML += `
+                    <div class="glass-box product-card">
+                        ${stamp}
+                        <img src="${p.img || 'https://via.placeholder.com/300x150.png?text=BANNER+PRODUK'}" class="product-img">
+                        <h3 class="neon-text">${p.name}</h3>
+                        <ul style="margin: 10px 0 10px 20px; font-size:14px;">${specHtml}</ul>
+                        <h3 style="margin-bottom:15px;">${formatRupiah(p.price)}</h3>
+                        <button class="btn" onclick="goCheckout(${p.id})" ${disabled}>${btnText}</button>
+                    </div>
+                `;
+            });
+
+            // Populate Admin Settings Inputs
+            document.getElementById('set-title').value = db.title;
+            document.getElementById('set-desc').value = db.desc;
+            document.getElementById('set-news').value = db.news;
+            
+            renderAdminProducts();
+            renderAdminOrders();
         }
 
-        function resetSettingan() {
-            antreanSettingan = [];
-            localStorage.removeItem('diceQueue');
-            updateStatusUI();
+        // --- CHECKOUT LOGIC ---
+        let selectedProductId = null;
+        function goCheckout(id) {
+            let p = db.products.find(x => x.id === id);
+            if(!p) return;
+            selectedProductId = id;
+            document.getElementById('co-product-name').innerText = p.name + " - " + formatRupiah(p.price);
+            showPage('checkout');
         }
 
-        function jalankanRoll() {
-            // Efek Animasi Putar
-            diceElements.forEach(d => d.classList.add('rolling'));
+        function submitOrder() {
+            let name = document.getElementById('co-name').value;
+            let wa = document.getElementById('co-wa').value;
+            let platform = document.getElementById('co-platform').value;
+            let fileInput = document.getElementById('co-proof');
 
-            setTimeout(() => {
-                let targetTotal;
+            if(!name || !wa || !fileInput.files[0]) {
+                alert("Harap isi semua data dan upload bukti transfer!"); return;
+            }
 
-                if (antreanSettingan.length > 0) {
-                    // Ambil angka pertama dari antrean dan hapus dari array
-                    targetTotal = antreanSettingan.shift();
-                    localStorage.setItem('diceQueue', JSON.stringify(antreanSettingan));
-                    updateStatusUI();
-                } else {
-                    // Jika settingan habis, gunakan pengacak normal murni
-                    targetTotal = 0;
-                    diceElements.forEach(d => {
-                        targetTotal += Math.floor(Math.random() * 6) + 1;
-                    });
-                }
-
-                // Distribusi angka ke 9 dadu agar totalnya sesuai target
-                let sisa = targetTotal;
-                let hasilDadu = Array(JUMLAH_DADU).fill(1);
-                sisa -= JUMLAH_DADU; // Kurangi base value (1) per dadu
-
-                for (let i = 0; i < JUMLAH_DADU; i++) {
-                    if (sisa > 0) {
-                        let tambah = Math.min(5, sisa);
-                        let acakTambah = Math.floor(Math.random() * (tambah + 1));
-                        hasilDadu[i] += acakTambah;
-                        sisa -= acakTambah;
-                    }
-                }
-
-                // Atasi sisa pembagian akibat pembulatan acak
-                let idx = 0;
-                while (sisa > 0) {
-                    if (hasilDadu[idx] < 6) {
-                        hasilDadu[idx]++;
-                        sisa--;
-                    }
-                    idx = (idx + 1) % JUMLAH_DADU;
-                }
-
-                // Update visual angka ke layar dokumen HTML
-                let hitungTotalAsli = 0;
-                diceElements.forEach((d, index) => {
-                    d.innerText = hasilDadu[index];
-                    d.classList.remove('rolling');
-                    hitungTotalAsli += hasilDadu[index];
+            // Convert image to Base64 to save in LocalStorage (Simulation)
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let p = db.products.find(x => x.id === selectedProductId);
+                db.orders.push({
+                    id: Date.now(),
+                    date: new Date().toLocaleDateString(),
+                    name: name,
+                    wa: wa,
+                    platform: platform,
+                    productName: p.name,
+                    price: p.price,
+                    proof: e.target.result,
+                    status: 'Pending'
                 });
-
-                document.getElementById('total-score').innerText = hitungTotalAsli;
-            }, 400); // Durasi animasi berputar
+                saveDB();
+                alert("Pesanan berhasil dikirim! Menunggu persetujuan admin.");
+                showPage('home');
+            };
+            reader.readAsDataURL(fileInput.files[0]);
         }
+
+        // --- ADMIN PANEL LOGIC ---
+        function openAdminLogin() { showPage('admin-login'); }
+
+        function loginAdmin() {
+            let u = document.getElementById('adm-user').value;
+            let p = document.getElementById('adm-pass').value;
+            if (u === 'MANJII-OFFICIAL' && p === 'MANJII-OFFICIAL-777') {
+                showPage('admin-panel');
+                document.getElementById('adm-user').value = '';
+                document.getElementById('adm-pass').value = '';
+            } else {
+                alert("Username atau Password Salah!");
+            }
+        }
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-tab').forEach(el => el.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        function saveSettings() {
+            db.title = document.getElementById('set-title').value;
+            db.desc = document.getElementById('set-desc').value;
+            db.news = document.getElementById('set-news').value;
+            saveDB();
+            alert("Pengaturan Website Diperbarui!");
+        }
+
+        function saveProduct() {
+            let id = document.getElementById('p-id').value;
+            let name = document.getElementById('p-name').value;
+            let specs = document.getElementById('p-specs').value;
+            let price = parseInt(document.getElementById('p-price').value);
+            let status = document.getElementById('p-status').value;
+            let fileInput = document.getElementById('p-img');
+
+            if(!name || !specs || isNaN(price)) { alert("Lengkapi form produk!"); return; }
+
+            let saveToDB = (imgData) => {
+                if(id) {
+                    // Update
+                    let idx = db.products.findIndex(x => x.id == id);
+                    db.products[idx] = { ...db.products[idx], name, specs, price, status };
+                    if(imgData) db.products[idx].img = imgData;
+                } else {
+                    // Add
+                    db.products.push({ id: Date.now(), name, specs, price, status, img: imgData });
+                }
+                saveDB();
+                clearProductForm();
+                alert("Produk berhasil disimpan!");
+            };
+
+            if(fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) { saveToDB(e.target.result); };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                saveToDB(null); // Save without changing image
+            }
+        }
+
+        function clearProductForm() {
+            document.getElementById('p-id').value = '';
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-specs').value = '';
+            document.getElementById('p-price').value = '';
+            document.getElementById('p-status').value = 'Tersedia';
+            document.getElementById('p-img').value = '';
+        }
+
+        function editProduct(id) {
+            let p = db.products.find(x => x.id === id);
+            document.getElementById('p-id').value = p.id;
+            document.getElementById('p-name').value = p.name;
+            document.getElementById('p-specs').value = p.specs;
+            document.getElementById('p-price').value = p.price;
+            document.getElementById('p-status').value = p.status;
+            window.scrollTo(0,0);
+        }
+
+        function deleteProduct(id) {
+            if(confirm("Yakin ingin menghapus produk ini permanen?")) {
+                db.products = db.products.filter(x => x.id !== id);
+                saveDB();
+            }
+        }
+
+        function renderAdminProducts() {
+            let list = document.getElementById('admin-product-list');
+            list.innerHTML = '';
+            db.products.forEach((p, index) => {
+                list.innerHTML += `
+                    <div class="glass-box" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong>${index+1}. ${p.name}</strong> - ${formatRupiah(p.price)} (${p.status})
+                        </div>
+                        <div>
+                            <button class="btn" style="display:inline; width:auto; padding:5px 10px;" onclick="editProduct(${p.id})">Edit</button>
+                            <button class="btn" style="display:inline; width:auto; padding:5px 10px; border-color:red; color:red;" onclick="deleteProduct(${p.id})">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function updateOrderStatus(id, status) {
+            let idx = db.orders.findIndex(x => x.id === id);
+            db.orders[idx].status = status;
+            saveDB();
+        }
+
+        function renderAdminOrders() {
+            let tbody = document.getElementById('order-table-body');
+            tbody.innerHTML = '';
+            let totalRevenue = 0;
+            
+            db.orders.forEach(o => {
+                if(o.status === 'Setuju ✅') totalRevenue += o.price;
+                
+                let btnAction = o.status === 'Pending' ? `
+                    <button style="background:green; color:white; border:none; padding:5px; cursor:pointer;" onclick="updateOrderStatus(${o.id}, 'Setuju ✅')">✅</button>
+                    <button style="background:red; color:white; border:none; padding:5px; cursor:pointer;" onclick="updateOrderStatus(${o.id}, 'Tolak ❌')">❌</button>
+                ` : '-';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${o.name} <br><small>${o.platform}</small></td>
+                        <td>${o.wa}</td>
+                        <td>${o.productName}</td>
+                        <td><a href="${o.proof}" target="_blank" style="color:var(--accent-color);">Lihat</a></td>
+                        <td>${o.status}</td>
+                        <td>${btnAction}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('tot-order').innerText = db.orders.length;
+            document.getElementById('tot-rev').innerText = formatRupiah(totalRevenue);
+        }
+
+        // Init
+        renderAll();
     </script>
 </body>
 </html>
