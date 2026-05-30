@@ -8,12 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Warna Aksen - Neon yang lebih redup (Medium) */
-            --accent: #ff2a5f;
+            var(--accent): #ff2a5f;
             --accent-glow: rgba(255, 42, 95, 0.3);
             --accent-glow-strong: rgba(255, 42, 95, 0.5);
 
-            /* Default Theme (Dark Glass) */
             --bg-main: rgba(0, 0, 0, 0.6);
             --bg-card: rgba(15, 15, 20, 0.5); 
             --text-main: #ffffff;
@@ -21,7 +19,6 @@
             --border-color: rgba(255, 255, 255, 0.15);
         }
 
-        /* Light Theme Overrides (Opsional, lebih bagus tetap dark untuk efek neon) */
         body.light-mode {
             --bg-main: rgba(255, 255, 255, 0.6);
             --bg-card: rgba(255, 255, 255, 0.6);
@@ -32,51 +29,52 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         
-        body { 
-            color: var(--text-main); 
-            transition: 0.3s; 
-            overflow-x: hidden; 
-            min-height: 100vh;
-        }
+        body { color: var(--text-main); transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
         /* BACKGROUND IMAGE DENGAN BLUR */
         .bg-image {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: url('latarbelakang.png') center/cover no-repeat;
-            filter: blur(10px); /* Latar belakang diblur sedikit */
-            z-index: -2;
-            transform: scale(1.05); /* Mencegah border putih saat diblur */
+            filter: blur(10px); z-index: -2; transform: scale(1.05);
         }
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: var(--bg-main); z-index: -1; transition: 0.3s;
         }
 
-        /* LOADING SCREEN */
+        /* LOADING SCREEN AWAL */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0a0a0c; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
+        
+        /* ACTION LOADING OVERLAY (UNTUK CHECKOUT, ADD PRODUK DLL) */
+        #action-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 10000; display: none; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+
         .loader-container { position: relative; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; }
         .loading-circle {
             position: absolute; width: 100%; height: 100%;
             border: 2px dashed var(--accent); border-radius: 50%;
-            animation: rotate 3s linear infinite;
-            box-shadow: 0 0 10px var(--accent-glow);
+            animation: rotate 3s linear infinite; box-shadow: 0 0 10px var(--accent-glow);
         }
         .loading-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; z-index: 2; border: 1px solid var(--accent); }
         @keyframes rotate { 100% { transform: rotate(360deg); } }
+        
         #loading-text { margin-top: 25px; font-size: 20px; font-weight: 700; color: var(--accent); letter-spacing: 2px; }
+        #action-text { margin-top: 20px; font-size: 14px; font-weight: 700; color: var(--text-main); letter-spacing: 1px; text-transform: uppercase;}
 
         /* HEADER & NAVBAR */
         header {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(10, 10, 15, 0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--border-color);
-            display: flex; justify-content: space-between; align-items: center; padding: 0 20px;
-            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 1000;
         }
         .logo-text { font-size: 18px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; letter-spacing: 1px;}
         .logo-text span { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
@@ -87,9 +85,8 @@
         /* DROPDOWN & SIDEBAR */
         .settings-dropdown {
             position: absolute; top: 70px; right: 60px; width: 250px;
-            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; 
-            display: none; flex-direction: column; gap: 15px; z-index: 1001;
+            background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border-color); 
+            border-radius: 12px; padding: 15px; display: none; flex-direction: column; gap: 15px; z-index: 1001;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .settings-dropdown.active { display: flex; }
@@ -104,12 +101,8 @@
         .color-circle { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 5px inherit;}
         .check-icon { margin-left: auto; color: var(--accent); font-size: 10px; display: none; }
         .color-pill.active .check-icon { display: block; }
-
         .theme-list { display: flex; flex-direction: column; gap: 5px; }
-        .theme-item {
-            display: flex; align-items: center; gap: 12px; padding: 10px;
-            border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: 0.2s;
-        }
+        .theme-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: 0.2s; }
         .theme-item:hover, .theme-item.active { background: rgba(255,255,255,0.05); color: var(--accent); }
         .theme-indicator { margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: none; }
         .theme-item.active .theme-indicator { display: block; box-shadow: 0 0 5px var(--accent-glow); }
@@ -117,19 +110,14 @@
         .sidebar {
             position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
             background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-left: 1px solid var(--border-color);
-            padding: 80px 20px 20px; transition: 0.4s ease-in-out; z-index: 999;
+            border-left: 1px solid var(--border-color); padding: 80px 20px 20px; transition: 0.4s ease-in-out; z-index: 999;
         }
         .sidebar.active { right: 0; }
         .sidebar a {
             display: block; padding: 15px; margin-bottom: 10px; color: var(--text-main);
-            text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 8px; transition: 0.3s;
-            border-left: 2px solid transparent;
+            text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 8px; transition: 0.3s; border-left: 2px solid transparent;
         }
-        .sidebar a:hover { 
-            background: rgba(255,255,255,0.05); border-left: 2px solid var(--accent); 
-            color: var(--accent); box-shadow: inset 15px 0 15px -15px var(--accent-glow);
-        }
+        .sidebar a:hover { background: rgba(255,255,255,0.05); border-left: 2px solid var(--accent); color: var(--accent); box-shadow: inset 15px 0 15px -15px var(--accent-glow); }
 
         /* CONTAINERS & PAGES */
         .page { display: none; padding: 100px 20px 40px; max-width: 800px; margin: 0 auto; min-height: 100vh; animation: fadeIn 0.4s; }
@@ -144,48 +132,35 @@
 
         /* HOME UI */
         .home-hero { text-align: center; margin-bottom: 30px; }
-        .main-logo { 
-            width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; 
-            border: 1px solid var(--accent); box-shadow: 0 0 15px var(--accent-glow);
-        }
+        .main-logo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 1px solid var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
         .title { font-size: 24px; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; }
         .subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; font-weight: 400;}
         
         .stats-box {
-            display: flex; justify-content: space-between; 
-            background: var(--bg-card); backdrop-filter: blur(10px);
-            border: 1px solid var(--accent); border-radius: 12px; padding: 15px; margin-bottom: 30px;
-            box-shadow: 0 0 10px var(--accent-glow);
+            display: flex; justify-content: space-between; background: var(--bg-card); backdrop-filter: blur(10px);
+            border: 1px solid var(--accent); border-radius: 12px; padding: 15px; margin-bottom: 30px; box-shadow: 0 0 10px var(--accent-glow);
         }
         .stat { text-align: center; width: 33%; }
         .stat h3 { font-size: 18px; color: var(--accent); margin-bottom: 2px; text-shadow: 0 0 8px var(--accent-glow); font-weight: 700;}
         .stat p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
 
-        /* NEON GLASSMORPHISM BUTTON - MEDIUM GLOW */
+        /* TOMBOL NEON RAPIH */
         .btn {
-            background: transparent; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            background: transparent; backdrop-filter: blur(8px);
             color: var(--accent); border: 1px solid var(--accent); 
             border-radius: 10px; padding: 12px 20px; font-weight: 600; cursor: pointer; font-size: 13px;
             width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
             transition: 0.3s; text-decoration: none; letter-spacing: 0.5px;
             box-shadow: 0 0 8px var(--accent-glow), inset 0 0 5px var(--accent-glow);
         }
-        .btn:hover { 
-            background: var(--accent); color: #fff;
-            box-shadow: 0 0 15px var(--accent-glow-strong); 
-        }
+        .btn:hover { background: var(--accent); color: #fff; box-shadow: 0 0 15px var(--accent-glow-strong); }
 
-        /* TYPOGRAPHY & SECTIONS */
-        .section-title { 
-            font-size: 16px; color: var(--accent); border-bottom: 1px solid var(--accent); 
-            padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; 
-            text-shadow: 0 0 5px var(--accent-glow); font-weight: 700; letter-spacing: 1px;
-        }
+        .section-title { font-size: 16px; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; text-shadow: 0 0 5px var(--accent-glow); font-weight: 700; letter-spacing: 1px; }
 
         /* PRODUCT CATALOG */
         .product-grid { display: grid; gap: 20px; }
         .product-card {
-            background: var(--bg-card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            background: var(--bg-card); backdrop-filter: blur(10px);
             border: 1px solid var(--border-color); border-left: 3px solid var(--accent);
             border-radius: 12px; padding: 20px; position: relative; transition: 0.3s;
         }
@@ -212,7 +187,7 @@
         }
         input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
         
-        /* ADMIN TABLES (RAPIH) */
+        /* ADMIN TABLES */
         .table-responsive { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
         th, td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); text-align: left; }
@@ -220,15 +195,10 @@
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: rgba(255,255,255,0.02); }
 
-        /* TAB MENU RAPIH */
         .tab-menu { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
         .tab-menu .btn { width: auto; white-space: nowrap; padding: 8px 15px; font-size: 11px; }
         
-        /* NEWS CARD */
-        .news-card {
-            padding: 15px; border-left: 3px solid var(--accent);
-            background: rgba(0,0,0,0.2); margin-bottom: 10px; border-radius: 0 8px 8px 0;
-        }
+        .news-card { padding: 15px; border-left: 3px solid var(--accent); background: rgba(0,0,0,0.2); margin-bottom: 10px; border-radius: 0 8px 8px 0; }
         .news-date { font-size: 10px; color: var(--text-muted); margin-bottom: 5px; }
         .news-text { font-size: 13px; line-height: 1.6; }
 
@@ -244,6 +214,14 @@
             <img src="loadingscreen.png" class="loading-logo" onerror="this.src='https://via.placeholder.com/70x70.png?text=LOGO'">
         </div>
         <div id="loading-text">0%</div>
+    </div>
+
+    <div id="action-overlay">
+        <div class="loader-container">
+            <div class="loading-circle"></div>
+            <img src="loadingscreen.png" class="loading-logo" onerror="this.src='https://via.placeholder.com/70x70.png?text=LOGO'">
+        </div>
+        <div id="action-text">MEMPROSES...</div>
     </div>
 
     <header>
@@ -303,13 +281,11 @@
                 <button class="btn" id="btn-tab-login" style="background:var(--accent); color:#fff;" onclick="switchAuthTab('login')">LOGIN</button>
                 <button class="btn" id="btn-tab-reg" onclick="switchAuthTab('register')">DAFTAR BARU</button>
             </div>
-            
             <div id="form-login">
                 <div class="form-group"><label>Username</label><input type="text" id="log-user" placeholder="Masukkan username..."></div>
                 <div class="form-group"><label>Password</label><input type="password" id="log-pass" placeholder="Masukkan password..."></div>
                 <button class="btn" onclick="loginUser()" style="margin-top: 10px;">MASUK SEKARANG</button>
             </div>
-
             <div id="form-register" style="display: none;">
                 <div class="form-group"><label>Username Baru</label><input type="text" id="reg-user" placeholder="Buat username (bebas)..."></div>
                 <div class="form-group"><label>Password Baru</label><input type="password" id="reg-pass" placeholder="Buat password (bebas)..."></div>
@@ -330,10 +306,6 @@
             <div class="stat"><h3>24/7</h3><p>Layanan</p></div>
         </div>
         <button class="btn" style="margin-bottom: 15px; background: rgba(255,255,255,0.05);" onclick="showPage('products')">LIHAT KATALOG PRODUK</button>
-        <div style="display: flex; gap: 10px;">
-            <a href="https://wa.me/6283845203074" class="btn" target="_blank"><i class="fa-brands fa-whatsapp"></i> Chat Admin</a>
-            <a href="https://tiktok.com/@manjiixit" class="btn" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
-        </div>
     </div>
 
     <div id="products" class="page">
@@ -343,8 +315,7 @@
 
     <div id="news" class="page">
         <h2 class="section-title"><i class="fa-solid fa-bullhorn"></i> NEWS & UPDATES</h2>
-        <div class="glass-container" id="news-list-public">
-            </div>
+        <div class="glass-container" id="news-list-public"></div>
     </div>
 
     <div id="history" class="page">
@@ -365,17 +336,14 @@
             <div class="form-group"><label>No WhatsApp (Aktif)</label><input type="number" id="co-wa" placeholder="08..." required></div>
             <div class="form-group">
                 <label>Pilih Platform</label>
-                <select id="co-platform">
-                    <option value="iPhone Device">📱 iPhone Device</option>
-                    <option value="Android Device">🤖 Android Device</option>
-                </select>
+                <select id="co-platform"><option value="iPhone Device">📱 iPhone Device</option><option value="Android Device">🤖 Android Device</option></select>
             </div>
             <div style="text-align: center; margin: 25px 0; padding: 20px; border: 1px dashed var(--accent); border-radius: 12px; background: rgba(0,0,0,0.1);">
                 <h3 style="margin-bottom: 10px; color: var(--accent); font-size: 14px;">QRIS PAYMENT</h3>
                 <img src="qris.png" alt="QRIS" style="width: 180px; border-radius: 10px; border: 1px solid var(--accent); box-shadow: 0 0 10px var(--accent-glow);" onerror="this.src='https://via.placeholder.com/180x180.png?text=UPLOAD+QRIS'">
                 <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px;">Scan QRIS sesuai nominal harga produk.</p>
             </div>
-            <div class="form-group"><label>Upload Bukti Transfer</label><input type="file" id="co-proof" accept="image/*" required style="padding: 10px;"></div>
+            <div class="form-group"><label>Upload Bukti Transfer (Otomatis Dikompres)</label><input type="file" id="co-proof" accept="image/*" required style="padding: 10px;"></div>
             <button class="btn" onclick="submitOrder()">KIRIM BUKTI PEMBAYARAN</button>
         </div>
     </div>
@@ -391,7 +359,6 @@
 
     <div id="admin-panel" class="page" style="max-width: 900px;">
         <h2 class="section-title">ADMIN PANEL (MANJII iOS)</h2>
-        
         <div class="tab-menu">
             <button class="btn" onclick="switchAdminTab('tab-web')">Identitas Web</button>
             <button class="btn" onclick="switchAdminTab('tab-news')">Kelola News</button>
@@ -403,17 +370,14 @@
 
         <div id="tab-web" class="admin-tab glass-container">
             <h3>Update Identitas Website</h3><br>
-            <div class="form-group"><label>Judul Web (Contoh: MANJII iOS)</label><input type="text" id="set-title"></div>
+            <div class="form-group"><label>Judul Web</label><input type="text" id="set-title"></div>
             <div class="form-group"><label>Deskripsi Web</label><textarea id="set-desc" rows="3"></textarea></div>
             <button class="btn" onclick="saveSettings()">Simpan Pengaturan</button>
         </div>
 
         <div id="tab-news" class="admin-tab glass-container" style="display:none;">
-            <h3>Buat News / Pengumuman Baru</h3><br>
-            <div class="form-group">
-                <label>Status News (Contoh: WARNING !!!)</label>
-                <textarea id="new-news-text" rows="3" placeholder="Ketik pengumuman di sini..."></textarea>
-            </div>
+            <h3>Buat News Baru</h3><br>
+            <div class="form-group"><label>Status News (Contoh: WARNING !!!)</label><textarea id="new-news-text" rows="3"></textarea></div>
             <button class="btn" onclick="addNews()">PUBLISH NEWS</button>
             <h3 style="margin-top: 25px; margin-bottom: 15px;">Daftar News Aktif</h3>
             <div id="admin-news-list"></div>
@@ -425,10 +389,7 @@
                 <input type="hidden" id="p-id">
                 <div class="form-group"><label>Nama Produk</label><input type="text" id="p-name"></div>
                 <div class="form-group"><label>Spesifikasi (Enter untuk baris baru)</label><textarea id="p-specs" rows="3"></textarea></div>
-                <div class="form-group">
-                    <label>Harga Produk</label>
-                    <input type="text" id="p-price" placeholder="Contoh: 100.000" oninput="formatPriceInput(this)">
-                </div>
+                <div class="form-group"><label>Harga Produk</label><input type="text" id="p-price" oninput="formatPriceInput(this)"></div>
                 <div class="form-group">
                     <label>Status</label>
                     <select id="p-status"><option value="Tersedia">Tersedia ✅</option><option value="Maintenance">Maintenance ❌</option></select>
@@ -448,14 +409,7 @@
             <div class="glass-container table-responsive">
                 <table>
                     <thead>
-                        <tr>
-                            <th>User (Akun)</th>
-                            <th>No WA / Platform</th>
-                            <th>Produk & Harga</th>
-                            <th>Bukti</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
+                        <tr><th>User</th><th>No WA / Platform</th><th>Produk & Harga</th><th>Bukti</th><th>Status</th><th>Aksi</th></tr>
                     </thead>
                     <tbody id="order-table-body"></tbody>
                 </table>
@@ -466,14 +420,7 @@
             <div class="glass-container table-responsive">
                 <h3 style="margin-bottom: 15px;">Daftar Akun Terdaftar</h3>
                 <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Username</th>
-                            <th>Password</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>No</th><th>Username</th><th>Password</th><th>Aksi</th></tr></thead>
                     <tbody id="admin-user-list"></tbody>
                 </table>
             </div>
@@ -481,7 +428,7 @@
     </div>
 
     <script>
-        // --- LOADING SCREEN ---
+        // --- LOADING SCREEN AWAL ---
         let loadProgress = 0;
         let loadInterval = setInterval(() => {
             loadProgress += 3;
@@ -490,26 +437,37 @@
                 clearInterval(loadInterval);
                 document.getElementById('loading-screen').style.display = 'none';
             }
-        }, 30);
+        }, 20);
 
-        // --- DATABASE LOCALSTORAGE (Versi 5 - Lengkap dengan Users & News Array) ---
-        let db = JSON.parse(localStorage.getItem('manjii_db_v5')) || {
+        // --- SISTEM FUNGSI PROSES LOADING (MENCEGAH KESAN DELAY) ---
+        function processAction(loadingText, callback) {
+            let overlay = document.getElementById('action-overlay');
+            document.getElementById('action-text').innerText = loadingText;
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                callback();
+                overlay.style.display = 'none';
+            }, 1200); // Simulasi delay 1.2 detik agar terlihat "berproses"
+        }
+
+        // --- DB LOCALSTORAGE (MENGGUNAKAN VERSI 6 AGAR MULAI BERSIH DARI BUG) ---
+        let db = JSON.parse(localStorage.getItem('manjii_db_v6')) || {
             title: "MANJII iOS",
             desc: "Pusat penjualan produk cheat manjii ios dengan keamanan super tinggi. Tersertifikasi aman 99%.",
-            newsList: [
-                { id: 1, text: "Selamat datang di MANJII iOS. Layanan normal.", date: new Date().toLocaleDateString() }
-            ],
-            products: [],
-            orders: [],
-            users: []
+            newsList: [], products: [], orders: [], users: []
         };
 
         function saveDB() {
-            localStorage.setItem('manjii_db_v5', JSON.stringify(db));
-            renderAll();
+            try {
+                localStorage.setItem('manjii_db_v6', JSON.stringify(db));
+                renderAll();
+            } catch (e) {
+                alert("Memori browser penuh! Harap hapus cache browser Anda.");
+                console.error("LocalStorage Error:", e);
+            }
         }
 
-        // --- AUTH (LOGIN/REGISTER) SYSTEM ---
+        // --- AUTH SYSTEM ---
         let currentUser = localStorage.getItem('manjii_logged_user') || null;
 
         function switchAuthTab(tab) {
@@ -527,14 +485,14 @@
             if(!u || !p) return alert("Username dan Password wajib diisi!");
             if(db.users.find(x => x.username.toLowerCase() === u.toLowerCase())) return alert("Username sudah terdaftar! Coba yang lain.");
             
-            db.users.push({ id: Date.now(), username: u, password: p });
-            saveDB();
-            
-            // Auto Login setelah daftar
-            currentUser = u;
-            localStorage.setItem('manjii_logged_user', u);
-            alert("Pendaftaran Berhasil! Anda otomatis login.");
-            showPage('home');
+            processAction("MEMBUAT AKUN BARU...", () => {
+                db.users.push({ id: Date.now(), username: u, password: p });
+                saveDB();
+                currentUser = u;
+                localStorage.setItem('manjii_logged_user', u);
+                alert("Pendaftaran Berhasil! Anda otomatis login.");
+                showPage('home');
+            });
         }
 
         function loginUser() {
@@ -542,35 +500,35 @@
             let p = document.getElementById('log-pass').value.trim();
             if(!u || !p) return alert("Isi Username dan Password!");
             
-            let found = db.users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
-            if(found) {
-                currentUser = found.username;
-                localStorage.setItem('manjii_logged_user', found.username);
-                alert("Login Berhasil!");
-                showPage('home');
-            } else {
-                alert("Username atau Password salah! (Belum daftar? Silahkan daftar dulu)");
-            }
+            processAction("MENGECEK KREDENSIAL...", () => {
+                let found = db.users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
+                if(found) {
+                    currentUser = found.username;
+                    localStorage.setItem('manjii_logged_user', found.username);
+                    alert("Login Berhasil!");
+                    showPage('home');
+                } else {
+                    alert("Username atau Password salah!");
+                }
+            });
         }
 
         function logoutUser() {
-            currentUser = null;
-            localStorage.removeItem('manjii_logged_user');
-            alert("Anda telah logout.");
-            renderAll();
-            showPage('home');
+            processAction("LOGOUT SYSTEM...", () => {
+                currentUser = null;
+                localStorage.removeItem('manjii_logged_user');
+                renderAll();
+                showPage('home');
+            });
         }
 
         function checkAuthAndGo(targetPage) {
             if(!currentUser) {
-                alert("Kamu harus Login terlebih dahulu untuk mengakses menu ini!");
-                showPage('auth');
-            } else {
-                showPage(targetPage);
-            }
+                alert("Kamu harus Login terlebih dahulu!"); showPage('auth');
+            } else { showPage(targetPage); }
         }
 
-        // --- UI & NAVIGATION ---
+        // --- UI & NAV ---
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
         function toggleSettings() { document.getElementById('settingsMenu').classList.toggle('active'); }
         window.onclick = function(event) {
@@ -588,8 +546,8 @@
         function setAccent(color, element) {
             document.documentElement.style.setProperty('--accent', color);
             let r = parseInt(color.slice(1, 3), 16), g = parseInt(color.slice(3, 5), 16), b = parseInt(color.slice(5, 7), 16);
-            document.documentElement.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.3)`); // Redup
-            document.documentElement.style.setProperty('--accent-glow-strong', `rgba(${r}, ${g}, ${b}, 0.5)`); // Sedang
+            document.documentElement.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.3)`); 
+            document.documentElement.style.setProperty('--accent-glow-strong', `rgba(${r}, ${g}, ${b}, 0.5)`);
             document.querySelectorAll('.color-pill').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
         }
@@ -606,15 +564,13 @@
             if(val !== '') input.value = val.replace(/\B(?=(\d{3})+(?!\d))/g, "."); else input.value = '';
         }
 
-        // --- RENDER ENGINE UTAMA ---
+        // --- RENDER UTAMA ---
         function renderAll() {
-            // Update Branding (Mengganti JUDUL otomatis ke MANJII iOS)
             document.title = db.title;
             document.getElementById('header-brand').innerText = db.title;
             document.getElementById('site-title').innerText = db.title;
             document.getElementById('site-desc').innerText = db.desc;
             
-            // Sidebar Auth Status
             if(currentUser) {
                 document.getElementById('sidebar-username').innerText = currentUser;
                 document.getElementById('auth-btn-sidebar').style.display = 'none';
@@ -626,14 +582,12 @@
                 document.getElementById('logout-btn-sidebar').style.display = 'none';
             }
 
-            // Render Public News
             let newsHtml = '';
             db.newsList.forEach(n => {
                 newsHtml += `<div class="news-card"><div class="news-date">${n.date}</div><div class="news-text">${n.text}</div></div>`;
             });
             document.getElementById('news-list-public').innerHTML = newsHtml || '<i>Belum ada pengumuman.</i>';
 
-            // Render Products
             const prodList = document.getElementById('product-list');
             prodList.innerHTML = '';
             db.products.forEach(p => {
@@ -645,16 +599,15 @@
                         <div class="p-title">${p.name}</div>
                         <ul class="p-specs">${specList}</ul>
                         <div class="p-price-row"><span class="p-price">${formatRupiah(p.price)}</span></div>
-                        <button class="btn" onclick="checkCheckoutAuth(${p.id})" ${isMaintenance ? 'disabled style="border-color:#555; color:#555; box-shadow:none;"' : ''}>
+                        <button class="btn" onclick="checkCheckoutAuth(${p.id})" ${isMaintenance ? 'disabled style="border-color:#555; color:#555;"' : ''}>
                             ${isMaintenance ? 'TIDAK TERSEDIA' : 'BELI SEKARANG'}
                         </button>
                     </div>
                 `;
             });
 
-            // Render User History
             if(currentUser) {
-                let uHist = db.orders.filter(o => o.username === currentUser);
+                let uHist = db.orders.filter(o => o.username.toLowerCase() === currentUser.toLowerCase());
                 let histHtml = '';
                 uHist.forEach(o => {
                     let c = o.status.includes('Setuju') ? '#00ff88' : (o.status.includes('Tolak') ? '#ff2a2a' : '#ff9f43');
@@ -671,25 +624,40 @@
                 document.getElementById('user-history-list').innerHTML = histHtml || '<div style="text-align:center; padding:20px; font-size:12px;">Belum ada riwayat transaksi.</div>';
             }
 
-            // Fill Admin Inputs
             document.getElementById('set-title').value = db.title;
             document.getElementById('set-desc').value = db.desc;
             
             renderAdminPanel();
         }
 
-        // --- CHECKOUT LOGIC ---
+        // --- CHECKOUT LOGIC & KOMPRESI GAMBAR (ANTI HILANG SAAT REFRESH) ---
         let selectedProductId = null;
         function checkCheckoutAuth(id) {
-            if(!currentUser) {
-                alert("Silahkan Login atau Daftar terlebih dahulu untuk membeli!");
-                showPage('auth');
-                return;
-            }
+            if(!currentUser) { alert("Silahkan Login atau Daftar dahulu!"); showPage('auth'); return; }
             let p = db.products.find(x => x.id === id);
             selectedProductId = id;
             document.getElementById('co-product-name').innerText = p.name + " (" + formatRupiah(p.price) + ")";
             showPage('checkout');
+        }
+
+        // FUNGSI KOMPRESI GAMBAR AGAR LOCALSTORAGE TIDAK PENUH
+        function resizeImageFile(file, callback) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = new Image();
+                img.onload = function() {
+                    let canvas = document.createElement('canvas');
+                    let MAX_WIDTH = 600; // Maksimal lebar gambar
+                    let scale = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scale;
+                    let ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    callback(canvas.toDataURL('image/jpeg', 0.6)); // Kualitas 60%
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
         }
 
         function submitOrder() {
@@ -697,33 +665,36 @@
             let platform = document.getElementById('co-platform').value;
             let fileInput = document.getElementById('co-proof');
 
-            if(!wa || !fileInput.files[0]) return alert("Upload bukti transfer dan masukkan nomor WA!");
+            if(!wa || !fileInput.files[0]) return alert("Lengkapi data dan upload bukti transfer!");
 
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let p = db.products.find(x => x.id === selectedProductId);
-                db.orders.unshift({ // push ke atas
-                    id: Date.now(), date: new Date().toLocaleString(),
-                    username: currentUser, wa, platform, 
-                    productName: p.name, price: p.price,
-                    proof: e.target.result, status: 'Menunggu Review ⏳'
+            processAction("MENGIRIM PESANAN...", () => {
+                // Resize gambar sebelum disimpan ke DB
+                resizeImageFile(fileInput.files[0], function(compressedDataUrl) {
+                    let p = db.products.find(x => x.id === selectedProductId);
+                    db.orders.unshift({ 
+                        id: Date.now(), date: new Date().toLocaleString(),
+                        username: currentUser, wa, platform, 
+                        productName: p.name, price: p.price,
+                        proof: compressedDataUrl, status: 'Menunggu Review ⏳'
+                    });
+                    saveDB();
+                    alert("Pesanan berhasil dikirim! Silahkan cek riwayat secara berkala.");
+                    document.getElementById('co-wa').value = '';
+                    document.getElementById('co-proof').value = '';
+                    showPage('history');
                 });
-                saveDB();
-                alert("Pesanan berhasil dikirim! Silahkan cek di menu Riwayat Transaksi.");
-                showPage('history');
-            };
-            reader.readAsDataURL(fileInput.files[0]);
+            });
         }
 
         // --- ADMIN PANEL LOGIC ---
         function loginAdmin() {
             let u = document.getElementById('adm-user').value;
             let p = document.getElementById('adm-pass').value;
-            // Admin bebas, misal MANJII-ESCOBAR
             if (u === 'MANJII-ESCOBAR' || u === 'admin') {
-                showPage('admin-panel');
-                document.getElementById('adm-user').value = '';
-                document.getElementById('adm-pass').value = '';
+                processAction("MEMASUKI PANEL ADMIN...", () => {
+                    showPage('admin-panel');
+                    document.getElementById('adm-user').value = ''; document.getElementById('adm-pass').value = '';
+                });
             } else { alert("Akses Ditolak!"); }
         }
 
@@ -733,29 +704,26 @@
         }
 
         function saveSettings() {
-            db.title = document.getElementById('set-title').value;
-            db.desc = document.getElementById('set-desc').value;
-            saveDB();
-            alert("Identitas Web Disimpan! Judul sekarang: " + db.title);
+            processAction("MENYIMPAN IDENTITAS...", () => {
+                db.title = document.getElementById('set-title').value;
+                db.desc = document.getElementById('set-desc').value;
+                saveDB(); alert("Berhasil Disimpan!");
+            });
         }
 
-        // NEWS ADMIN
         function addNews() {
             let text = document.getElementById('new-news-text').value;
             if(!text) return alert("Isi teks news!");
-            db.newsList.unshift({ id: Date.now(), text, date: new Date().toLocaleDateString() });
-            saveDB();
-            document.getElementById('new-news-text').value = '';
-            alert("News diterbitkan!");
+            processAction("PUBLISH NEWS...", () => {
+                db.newsList.unshift({ id: Date.now(), text, date: new Date().toLocaleDateString() });
+                saveDB(); document.getElementById('new-news-text').value = '';
+                alert("News berhasil dipublish!");
+            });
         }
         function deleteNews(id) {
-            if(confirm("Hapus news ini?")) {
-                db.newsList = db.newsList.filter(x => x.id !== id);
-                saveDB();
-            }
+            if(confirm("Hapus news ini?")) { processAction("MENGHAPUS...", () => { db.newsList = db.newsList.filter(x => x.id !== id); saveDB(); }); }
         }
 
-        // PRODUCT ADMIN (FIX HARGA)
         function saveProduct() {
             let id = document.getElementById('p-id').value;
             let name = document.getElementById('p-name').value;
@@ -766,13 +734,15 @@
 
             if(!name || !specs || isNaN(price)) return alert("Isi form dengan benar!");
 
-            if(id) { 
-                let idx = db.products.findIndex(x => x.id == id);
-                if(idx !== -1) { db.products[idx].name = name; db.products[idx].specs = specs; db.products[idx].price = price; db.products[idx].status = status; }
-            } else { 
-                db.products.push({ id: Date.now(), name, specs, price, status });
-            }
-            saveDB(); clearProductForm(); alert("Produk disimpan!");
+            processAction("MENYIMPAN PRODUK...", () => {
+                if(id) { 
+                    let idx = db.products.findIndex(x => x.id == id);
+                    if(idx !== -1) { db.products[idx].name = name; db.products[idx].specs = specs; db.products[idx].price = price; db.products[idx].status = status; }
+                } else { 
+                    db.products.push({ id: Date.now(), name, specs, price, status });
+                }
+                saveDB(); clearProductForm(); alert("Produk berhasil disimpan/diupdate!");
+            });
         }
         function clearProductForm() {
             document.getElementById('p-id').value = ''; document.getElementById('p-name').value = '';
@@ -781,59 +751,50 @@
         function editProduct(id) {
             let p = db.products.find(x => x.id === id);
             document.getElementById('p-id').value = p.id; document.getElementById('p-name').value = p.name;
-            document.getElementById('p-specs').value = p.specs;
-            document.getElementById('p-price').value = p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            document.getElementById('p-status').value = p.status;
-            alert("Silahkan edit di form atas.");
+            document.getElementById('p-specs').value = p.specs; document.getElementById('p-price').value = p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            document.getElementById('p-status').value = p.status; alert("Edit di form atas, lalu klik Simpan.");
         }
-        function deleteProduct(id) { if(confirm("Hapus permanen?")) { db.products = db.products.filter(x => x.id !== id); saveDB(); } }
+        function deleteProduct(id) { 
+            if(confirm("Hapus permanen?")) { processAction("MENGHAPUS PRODUK...", () => { db.products = db.products.filter(x => x.id !== id); saveDB(); }); } 
+        }
 
-        // UPDATE STATUS ORDER ADMIN
         function updateOrderStatus(id, status) {
-            let idx = db.orders.findIndex(x => x.id === id);
-            db.orders[idx].status = status;
-            saveDB();
+            processAction("UPDATE STATUS...", () => {
+                let idx = db.orders.findIndex(x => x.id === id);
+                db.orders[idx].status = status; saveDB();
+            });
         }
 
-        // MANAGE USERS ADMIN
         function editUser(id) {
             let u = db.users.find(x => x.id === id);
             let newU = prompt("Ubah Username:", u.username);
             let newP = prompt("Ubah Password:", u.password);
-            if(newU && newP) {
-                u.username = newU; u.password = newP; saveDB(); alert("User diupdate!");
-            }
+            if(newU && newP) { processAction("UPDATE USER...", () => { u.username = newU; u.password = newP; saveDB(); alert("User diupdate!"); }); }
         }
         function deleteUser(id) {
-            if(confirm("Hapus user ini permanen?")) { db.users = db.users.filter(x => x.id !== id); saveDB(); }
+            if(confirm("Hapus user ini?")) { processAction("HAPUS USER...", () => { db.users = db.users.filter(x => x.id !== id); saveDB(); }); }
         }
 
-        // RENDER ADMIN PANEL KHUSUS
+        // RENDER ADMIN
         function renderAdminPanel() {
-            // Render News List Admin
             let nList = document.getElementById('admin-news-list'); nList.innerHTML = '';
             db.newsList.forEach((n) => {
-                nList.innerHTML += `
-                    <div style="background:rgba(0,0,0,0.3); padding:10px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;">
-                        <div style="font-size:12px;"><strong>${n.date}</strong><br>${n.text}</div>
-                        <button class="btn" style="width:auto; padding:5px 10px; font-size:10px; border-color:red; color:red;" onclick="deleteNews(${n.id})">Hapus</button>
-                    </div>`;
+                nList.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:10px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="font-size:12px;"><strong>${n.date}</strong><br>${n.text}</div>
+                    <button class="btn" style="width:auto; padding:5px 10px; font-size:10px; border-color:red; color:red;" onclick="deleteNews(${n.id})">Hapus</button>
+                </div>`;
             });
 
-            // Render Product List Admin
             let pList = document.getElementById('admin-product-list'); pList.innerHTML = '';
             db.products.forEach((p, i) => {
-                pList.innerHTML += `
-                    <div style="background:rgba(0,0,0,0.3); padding:15px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-                        <div><strong style="color:var(--accent); font-size:13px;">${p.name}</strong><br><small>${formatRupiah(p.price)} | ${p.status}</small></div>
-                        <div style="display:flex; gap:5px;">
-                            <button class="btn" style="width:auto; padding:5px 10px; font-size:11px;" onclick="editProduct(${p.id})">Edit</button>
-                            <button class="btn" style="width:auto; padding:5px 10px; font-size:11px; border-color:red; color:red;" onclick="deleteProduct(${p.id})">Del</button>
-                        </div>
-                    </div>`;
+                pList.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:15px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong style="color:var(--accent); font-size:13px;">${p.name}</strong><br><small>${formatRupiah(p.price)} | ${p.status}</small></div>
+                    <div style="display:flex; gap:5px;">
+                        <button class="btn" style="width:auto; padding:5px 10px; font-size:11px;" onclick="editProduct(${p.id})">Edit</button>
+                        <button class="btn" style="width:auto; padding:5px 10px; font-size:11px; border-color:red; color:red;" onclick="deleteProduct(${p.id})">Del</button>
+                    </div></div>`;
             });
 
-            // Render Orders Admin (Table Rapi)
             let oBody = document.getElementById('order-table-body'); oBody.innerHTML = '';
             let tRev = 0;
             db.orders.forEach(o => {
@@ -843,32 +804,29 @@
                     <button style="background:#ff2a2a; color:#fff; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:bold;" onclick="updateOrderStatus(${o.id}, 'Tolak ❌')">Tolak</button>
                 ` : `<span style="font-size:11px;">Selesai</span>`;
 
-                oBody.innerHTML += `
-                    <tr>
-                        <td><strong style="color:var(--accent);">${o.username}</strong></td>
-                        <td>${o.wa}<br><small style="color:var(--text-muted);">${o.platform}</small></td>
-                        <td>${o.productName}<br><strong style="color:#00ff88;">${formatRupiah(o.price)}</strong></td>
-                        <td><a href="${o.proof}" target="_blank" style="color:var(--accent); text-decoration:none;">Lihat Gambar</a></td>
-                        <td><span style="font-size:11px; font-weight:bold;">${o.status}</span></td>
-                        <td>${btnAction}</td>
-                    </tr>`;
+                oBody.innerHTML += `<tr>
+                    <td><strong style="color:var(--accent);">${o.username}</strong></td>
+                    <td>${o.wa}<br><small style="color:var(--text-muted);">${o.platform}</small></td>
+                    <td>${o.productName}<br><strong style="color:#00ff88;">${formatRupiah(o.price)}</strong></td>
+                    <td><a href="${o.proof}" target="_blank" style="color:var(--accent); text-decoration:none;">Bukti 🖼️</a></td>
+                    <td><span style="font-size:11px; font-weight:bold;">${o.status}</span></td>
+                    <td>${btnAction}</td>
+                </tr>`;
             });
             document.getElementById('tot-order').innerText = db.orders.length + " Order";
             document.getElementById('tot-rev').innerText = formatRupiah(tRev);
 
-            // Render Users Admin (Table Rapi)
             let uBody = document.getElementById('admin-user-list'); uBody.innerHTML = '';
             db.users.forEach((u, i) => {
-                uBody.innerHTML += `
-                    <tr>
-                        <td>${i+1}</td>
-                        <td style="color:var(--accent); font-weight:bold;">${u.username}</td>
-                        <td>${u.password}</td>
-                        <td>
-                            <button class="btn" style="width:auto; display:inline-block; padding:4px 8px; font-size:10px;" onclick="editUser(${u.id})">Edit</button>
-                            <button class="btn" style="width:auto; display:inline-block; padding:4px 8px; font-size:10px; border-color:red; color:red;" onclick="deleteUser(${u.id})">Del</button>
-                        </td>
-                    </tr>`;
+                uBody.innerHTML += `<tr>
+                    <td>${i+1}</td>
+                    <td style="color:var(--accent); font-weight:bold;">${u.username}</td>
+                    <td>${u.password}</td>
+                    <td>
+                        <button class="btn" style="width:auto; display:inline-block; padding:4px 8px; font-size:10px;" onclick="editUser(${u.id})">Edit</button>
+                        <button class="btn" style="width:auto; display:inline-block; padding:4px 8px; font-size:10px; border-color:red; color:red;" onclick="deleteUser(${u.id})">Del</button>
+                    </td>
+                </tr>`;
             });
         }
 
