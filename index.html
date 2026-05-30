@@ -10,52 +10,86 @@
         :root {
             /* Default Warna Aksen (Rose/Red) */
             --accent: #ff2a5f;
-            --accent-hover: #e01f4c;
-            --accent-glow: rgba(255, 42, 95, 0.5);
+            --accent-glow: rgba(255, 42, 95, 0.6);
+            --accent-glow-strong: rgba(255, 42, 95, 0.9);
 
-            /* Default Theme (Dark / System) */
-            --bg-main: #0a0a0a;
-            --bg-card: #141414;
+            /* Default Theme (Dark) */
+            --bg-main: #070709;
+            --bg-card: rgba(20, 20, 25, 0.4); /* Lebih transparan untuk efek glass */
             --text-main: #ffffff;
             --text-muted: #888888;
-            --border-color: #222222;
+            --border-color: rgba(255, 255, 255, 0.1);
         }
 
         /* Light Theme Overrides */
         body.light-mode {
-            --bg-main: #f4f4f9;
-            --bg-card: #ffffff;
+            --bg-main: #f0f0f5;
+            --bg-card: rgba(255, 255, 255, 0.5);
             --text-main: #111111;
             --text-muted: #666666;
-            --border-color: #e0e0e0;
+            --border-color: rgba(0, 0, 0, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
-        body { background-color: var(--bg-main); color: var(--text-main); transition: 0.3s; overflow-x: hidden; }
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            transition: 0.3s; 
+            overflow-x: hidden; 
+        }
+
+        /* LOADING SCREEN (FIXED LOGO STATIS) */
+        #loading-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-main); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .loader-container {
+            position: relative; width: 130px; height: 130px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .loading-circle {
+            position: absolute; width: 100%; height: 100%;
+            border: 4px dashed var(--accent);
+            border-radius: 50%;
+            animation: rotate 2s linear infinite;
+            box-shadow: 0 0 20px var(--accent-glow), inset 0 0 15px var(--accent-glow);
+        }
+        .loading-logo {
+            width: 80px; height: 80px; border-radius: 50%; object-fit: cover; z-index: 2;
+            box-shadow: 0 0 15px var(--accent-glow); border: 2px solid var(--accent);
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        #loading-text { 
+            margin-top: 25px; font-size: 26px; font-weight: 800; 
+            color: var(--accent); text-shadow: 0 0 15px var(--accent-glow-strong); 
+        }
 
         /* HEADER & NAVBAR */
         header {
             position: fixed; top: 0; width: 100%; height: 70px;
-            background: var(--bg-card); border-bottom: 1px solid var(--border-color);
+            background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color);
             display: flex; justify-content: space-between; align-items: center; padding: 0 20px;
-            z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            z-index: 1000; box-shadow: 0 4px 30px rgba(0,0,0,0.5);
         }
-        .logo-text { font-size: 20px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
-        .logo-text span { color: var(--accent); }
+        .logo-text { font-size: 20px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; text-shadow: 0 0 10px rgba(255,255,255,0.2);}
+        .logo-text span { color: var(--accent); text-shadow: 0 0 15px var(--accent-glow); }
         
         .header-actions { display: flex; gap: 15px; align-items: center; }
         .icon-btn { 
             background: transparent; border: none; color: var(--text-main); 
             font-size: 20px; cursor: pointer; transition: 0.2s; 
         }
-        .icon-btn:hover { color: var(--accent); }
+        .icon-btn:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
 
         /* JHONALEY STYLE SETTINGS DROPDOWN */
         .settings-dropdown {
             position: absolute; top: 70px; right: 60px; width: 250px;
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             display: none; flex-direction: column; gap: 15px; z-index: 1001;
         }
         .settings-dropdown.active { display: flex; }
@@ -64,107 +98,151 @@
         .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .color-pill {
             display: flex; align-items: center; gap: 8px; padding: 8px 12px;
-            background: var(--bg-main); border: 1px solid var(--border-color);
-            border-radius: 20px; cursor: pointer; font-size: 13px; transition: 0.2s;
+            background: transparent; border: 1px solid var(--border-color);
+            border-radius: 20px; cursor: pointer; font-size: 13px; transition: 0.3s;
         }
-        .color-pill:hover, .color-pill.active { border-color: var(--accent); }
-        .color-circle { width: 14px; height: 14px; border-radius: 50%; }
+        .color-pill:hover, .color-pill.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        .color-circle { width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 8px inherit;}
         .check-icon { margin-left: auto; color: var(--accent); font-size: 12px; display: none; }
-        .color-pill.active .check-icon { display: block; }
+        .color-pill.active .check-icon { display: block; text-shadow: 0 0 5px var(--accent-glow); }
 
         .theme-list { display: flex; flex-direction: column; gap: 5px; }
         .theme-item {
             display: flex; align-items: center; gap: 12px; padding: 10px;
             border-radius: 8px; cursor: pointer; font-size: 14px; transition: 0.2s;
         }
-        .theme-item:hover, .theme-item.active { background: rgba(255,255,255,0.05); color: var(--accent); }
-        .theme-indicator { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: none; }
+        .theme-item:hover, .theme-item.active { background: rgba(255,255,255,0.05); color: var(--accent); text-shadow: 0 0 5px var(--accent-glow); }
+        .theme-indicator { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); display: none; }
         .theme-item.active .theme-indicator { display: block; }
 
         /* SIDEBAR MENU (KSX STYLE) */
         .sidebar {
             position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
-            background: var(--bg-card); border-left: 1px solid var(--border-color);
+            background: rgba(10, 10, 15, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-color);
             padding: 80px 20px 20px; transition: 0.4s ease-in-out; z-index: 999;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.5);
         }
         .sidebar.active { right: 0; }
         .sidebar a {
             display: block; padding: 15px; margin-bottom: 10px; color: var(--text-main);
-            text-decoration: none; font-size: 16px; border-radius: 8px; transition: 0.2s;
+            text-decoration: none; font-size: 16px; border-radius: 8px; transition: 0.3s;
             border-left: 3px solid transparent;
         }
-        .sidebar a:hover { background: rgba(255,255,255,0.05); border-left: 3px solid var(--accent); color: var(--accent); }
+        .sidebar a:hover { 
+            background: rgba(255,255,255,0.05); border-left: 3px solid var(--accent); 
+            color: var(--accent); text-shadow: 0 0 8px var(--accent-glow);
+            box-shadow: inset 20px 0 20px -20px var(--accent-glow);
+        }
 
         /* CONTAINERS & PAGES */
-        .page { display: none; padding: 90px 20px 40px; max-width: 800px; margin: 0 auto; min-height: 100vh; animation: fadeIn 0.4s; }
+        .page { display: none; padding: 100px 20px 40px; max-width: 800px; margin: 0 auto; min-height: 100vh; animation: fadeIn 0.4s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* HOME UI */
         .home-hero { text-align: center; margin-bottom: 30px; }
-        .main-logo { width: 120px; height: 120px; border-radius: 20%; object-fit: cover; margin-bottom: 20px; box-shadow: 0 0 20px var(--accent-glow); border: 2px solid var(--border-color);}
-        .title { font-size: 28px; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; }
+        .main-logo { 
+            width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; 
+            border: 2px solid var(--accent); box-shadow: 0 0 25px var(--accent-glow);
+        }
+        .title { font-size: 28px; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
         .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
         
         .stats-box {
-            display: flex; justify-content: space-between; background: var(--bg-card);
-            border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 30px;
+            display: flex; justify-content: space-between; 
+            background: var(--bg-card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--accent); border-radius: 12px; padding: 20px; margin-bottom: 30px;
+            box-shadow: 0 0 15px var(--accent-glow), inset 0 0 10px rgba(255, 255, 255, 0.02);
         }
         .stat { text-align: center; width: 33%; }
-        .stat h3 { font-size: 20px; color: var(--accent); margin-bottom: 5px; }
+        .stat h3 { font-size: 20px; color: var(--accent); margin-bottom: 5px; text-shadow: 0 0 10px var(--accent-glow); }
         .stat p { font-size: 11px; color: var(--text-muted); text-transform: uppercase;}
 
+        /* NEON GLASSMORPHISM BUTTON (FIXED) */
         .btn {
-            background: var(--bg-card); color: var(--text-main); border: 1px solid var(--accent);
-            padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
+            background: transparent; /* Latar belakang tembus pandang */
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); /* Efek kaca blur */
+            color: var(--accent); border: 1.5px solid var(--accent); /* Stroke Tepi */
+            border-radius: 12px; /* Tepi halus menyatu */
+            padding: 12px 20px; font-weight: 600; cursor: pointer;
             width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px;
             transition: 0.3s; text-decoration: none;
+            /* Efek Neon Menyala */
+            box-shadow: 0 0 12px var(--accent-glow), inset 0 0 8px var(--accent-glow);
+            text-shadow: 0 0 5px var(--accent-glow);
         }
-        .btn:hover { background: var(--accent); color: #fff; box-shadow: 0 0 15px var(--accent-glow); }
-        .btn-solid { background: var(--accent); color: #fff; border: none; }
+        .btn:hover { 
+            background: var(--accent); color: #fff; text-shadow: none;
+            box-shadow: 0 0 25px var(--accent-glow-strong), inset 0 0 10px rgba(255,255,255,0.5); 
+        }
 
-        /* PRODUCT CATALOG (KSX Style) */
-        .section-title { font-size: 18px; color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        /* PRODUCT CATALOG (NO THUMBNAIL) */
+        .section-title { 
+            font-size: 18px; color: var(--accent); border-bottom: 1px solid var(--accent); 
+            padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; 
+            text-shadow: 0 0 8px var(--accent-glow); box-shadow: 0 10px 10px -10px var(--accent-glow);
+        }
         
         .product-grid { display: grid; gap: 20px; }
         .product-card {
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            border-radius: 12px; overflow: hidden; transition: 0.3s; position: relative;
+            background: var(--bg-card); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color); border-left: 3px solid var(--accent);
+            border-radius: 12px; overflow: hidden; transition: 0.3s; position: relative; padding: 20px;
         }
-        .product-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
-        .p-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border-color); }
-        .p-content { padding: 20px; }
-        .p-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+        .product-card:hover { 
+            border-color: var(--accent); transform: translateY(-5px); 
+            box-shadow: 0 10px 25px var(--accent-glow); 
+        }
+        .p-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; color: var(--text-main); text-shadow: 0 0 5px rgba(255,255,255,0.3);}
         .p-specs { list-style: none; margin-bottom: 15px; font-size: 13px; color: var(--text-muted); }
         .p-specs li { margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
-        .p-specs li::before { content: '✓'; color: var(--accent); font-weight: bold; }
+        .p-specs li::before { content: '✓'; color: var(--accent); font-weight: bold; text-shadow: 0 0 5px var(--accent-glow);}
         .p-price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .p-price { font-size: 20px; font-weight: 800; color: var(--text-main); }
+        .p-price { font-size: 22px; font-weight: 800; color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
         
         .maintenance-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center;
-            flex-direction: column; z-index: 10; backdrop-filter: blur(3px);
+            background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+            flex-direction: column; z-index: 10; backdrop-filter: blur(4px);
         }
-        .m-badge { border: 2px solid #ff2a2a; color: #ff2a2a; padding: 10px 20px; font-weight: 800; transform: rotate(-10deg); letter-spacing: 2px; }
+        .m-badge { 
+            border: 2px solid #ff2a2a; color: #ff2a2a; padding: 10px 20px; 
+            font-weight: 800; transform: rotate(-10deg); letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(255,0,0,0.5), inset 0 0 10px rgba(255,0,0,0.5);
+            text-shadow: 0 0 5px rgba(255,0,0,0.8); background: rgba(0,0,0,0.5); border-radius: 8px;
+        }
 
         /* FORMS & INPUTS */
+        .glass-container {
+            background: var(--bg-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
         input, select, textarea {
-            width: 100%; padding: 14px; background: var(--bg-main); border: 1px solid var(--border-color);
+            width: 100%; padding: 14px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color);
             color: var(--text-main); border-radius: 8px; outline: none; transition: 0.3s;
         }
-        input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
         
         /* ADMIN TABLES */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
         th, td { padding: 12px; border: 1px solid var(--border-color); text-align: left; }
-        th { background: var(--bg-main); color: var(--accent); }
+        th { background: rgba(0,0,0,0.3); color: var(--accent); text-shadow: 0 0 5px var(--accent-glow); }
 
     </style>
 </head>
 <body>
+
+    <div id="loading-screen">
+        <div class="loader-container">
+            <div class="loading-circle"></div>
+            <img src="loadingscreen.png" class="loading-logo" onerror="this.src='https://via.placeholder.com/80x80.png?text=LOGO'">
+        </div>
+        <div id="loading-text">0%</div>
+    </div>
 
     <header>
         <div class="logo-text" onclick="showPage('home')" style="cursor:pointer;">
@@ -182,24 +260,24 @@
             <div class="dropdown-title">Pilih Warna Aksen</div>
             <div class="color-grid">
                 <div class="color-pill active" onclick="setAccent('#ff2a5f', this)">
-                    <div class="color-circle" style="background:#ff2a5f;"></div> Rose
+                    <div class="color-circle" style="background:#ff2a5f; box-shadow: 0 0 8px #ff2a5f;"></div> Rose
                     <i class="fa-solid fa-check check-icon"></i>
                 </div>
                 <div class="color-pill" onclick="setAccent('#00a8ff', this)">
-                    <div class="color-circle" style="background:#00a8ff;"></div> Ocean
+                    <div class="color-circle" style="background:#00a8ff; box-shadow: 0 0 8px #00a8ff;"></div> Ocean
                     <i class="fa-solid fa-check check-icon"></i>
                 </div>
-                <div class="color-pill" onclick="setAccent('#00d28e', this)">
-                    <div class="color-circle" style="background:#00d28e;"></div> Emerald
+                <div class="color-pill" onclick="setAccent('#00ff88', this)">
+                    <div class="color-circle" style="background:#00ff88; box-shadow: 0 0 8px #00ff88;"></div> Emerald
                     <i class="fa-solid fa-check check-icon"></i>
                 </div>
                 <div class="color-pill" onclick="setAccent('#ff9f43', this)">
-                    <div class="color-circle" style="background:#ff9f43;"></div> Sun
+                    <div class="color-circle" style="background:#ff9f43; box-shadow: 0 0 8px #ff9f43;"></div> Sun
                     <i class="fa-solid fa-check check-icon"></i>
                 </div>
             </div>
         </div>
-        <div style="height: 1px; background: var(--border-color);"></div>
+        <div style="height: 1px; background: var(--border-color); margin: 5px 0;"></div>
         <div>
             <div class="dropdown-title">Tema Tampilan</div>
             <div class="theme-list">
@@ -229,8 +307,7 @@
 
     <div id="home" class="page active">
         <div class="home-hero">
-            <img src="logo.png" alt="Logo" class="main-logo" onerror="this.src='https://via.placeholder.com/150x150.png?text=LOGO'">
-            
+            <img src="loadingscreen.png" alt="Logo" class="main-logo" onerror="this.src='https://via.placeholder.com/110x110.png?text=LOGO'">
             <h1 class="title" id="site-title">MANJII OFFICIAL</h1>
             <p class="subtitle" id="site-desc">Pusat penjualan produk cheat/panel iPhone dengan keamanan super tinggi. Tersertifikasi aman 99%.</p>
         </div>
@@ -241,7 +318,7 @@
             <div class="stat"><h3>24/7</h3><p>Support</p></div>
         </div>
 
-        <button class="btn btn-solid" style="margin-bottom: 15px;" onclick="showPage('products')">LIHAT KATALOG PRODUK</button>
+        <button class="btn" style="margin-bottom: 15px;" onclick="showPage('products')">LIHAT KATALOG PRODUK</button>
         <div style="display: flex; gap: 10px;">
             <a href="https://wa.me/6283845203074" class="btn" target="_blank"><i class="fa-brands fa-whatsapp"></i> Chat Admin</a>
             <a href="https://tiktok.com/@manjiixit" class="btn" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
@@ -256,16 +333,16 @@
 
     <div id="news" class="page">
         <h2 class="section-title"><i class="fa-solid fa-bullhorn"></i> NEWS & UPDATES</h2>
-        <div id="news-list" style="background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); line-height: 1.6;">
+        <div class="glass-container" id="news-list" style="line-height: 1.6;">
             </div>
     </div>
 
     <div id="checkout" class="page">
         <h2 class="section-title"><i class="fa-solid fa-cart-shopping"></i> CHECKOUT</h2>
-        <div style="background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-            <div style="background: var(--bg-main); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--accent);">
+        <div class="glass-container">
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--accent); box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
                 <small style="color:var(--text-muted);">Produk yang dipilih:</small>
-                <h3 id="co-product-name" style="color:var(--text-main); margin-top:5px;">-</h3>
+                <h3 id="co-product-name" style="color:var(--accent); margin-top:5px; text-shadow: 0 0 5px var(--accent-glow);"></h3>
             </div>
 
             <div class="form-group">
@@ -284,10 +361,10 @@
                 </select>
             </div>
 
-            <div style="text-align: center; margin: 30px 0; padding: 20px; border: 1px dashed var(--border-color); border-radius: 12px;">
-                <h3 style="margin-bottom: 10px; color: var(--accent);">QRIS ALLPAY</h3>
-                <img src="qris.png" alt="QRIS" style="width: 200px; border-radius: 12px;" onerror="this.src='https://via.placeholder.com/200x200.png?text=UPLOAD+QRIS.PNG'">
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">Silahkan scan QRIS di atas sesuai nominal harga produk.</p>
+            <div style="text-align: center; margin: 30px 0; padding: 20px; border: 1px dashed var(--accent); border-radius: 12px; background: rgba(0,0,0,0.2);">
+                <h3 style="margin-bottom: 10px; color: var(--accent); text-shadow: 0 0 8px var(--accent-glow);">QRIS ALLPAY</h3>
+                <img src="qris.png" alt="QRIS" style="width: 200px; border-radius: 12px; box-shadow: 0 0 15px var(--accent-glow); border: 2px solid var(--accent);" onerror="this.src='https://via.placeholder.com/200x200.png?text=UPLOAD+QRIS.PNG'">
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 15px;">Silahkan scan QRIS di atas sesuai nominal harga produk.</p>
             </div>
 
             <div class="form-group">
@@ -295,13 +372,13 @@
                 <input type="file" id="co-proof" accept="image/*" required style="padding: 10px;">
             </div>
 
-            <button class="btn btn-solid" onclick="submitOrder()">KIRIM BUKTI PEMBAYARAN</button>
+            <button class="btn" onclick="submitOrder()">KIRIM BUKTI PEMBAYARAN</button>
         </div>
     </div>
 
     <div id="admin-login" class="page">
         <h2 class="section-title"><i class="fa-solid fa-lock"></i> SYSTEM LOGIN</h2>
-        <div style="background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <div class="glass-container">
             <div class="form-group">
                 <label>Username</label>
                 <input type="text" id="adm-user">
@@ -310,48 +387,50 @@
                 <label>Password</label>
                 <input type="password" id="adm-pass">
             </div>
-            <button class="btn btn-solid" onclick="loginAdmin()">MASUK PANEL</button>
+            <button class="btn" onclick="loginAdmin()">MASUK PANEL</button>
         </div>
     </div>
 
     <div id="admin-panel" class="page" style="max-width: 900px;">
-        <h2 class="section-title">ADMIN PANEL v5.0</h2>
+        <h2 class="section-title">ADMIN PANEL v6.0 (Neon Edition)</h2>
         
         <div style="display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px;">
             <button class="btn" style="width: auto;" onclick="switchAdminTab('tab-web')">Pengaturan Web</button>
             <button class="btn" style="width: auto;" onclick="switchAdminTab('tab-prod')">Kelola Produk</button>
             <button class="btn" style="width: auto;" onclick="switchAdminTab('tab-order')">Stats Order</button>
-            <button class="btn" style="width: auto; border-color: red; color: red;" onclick="showPage('home')">Logout</button>
+            <button class="btn" style="width: auto; border-color: red; color: red; box-shadow: 0 0 10px rgba(255,0,0,0.5);" onclick="showPage('home')">Logout</button>
         </div>
 
-        <div id="tab-web" class="admin-tab" style="background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <div id="tab-web" class="admin-tab glass-container">
             <h3>Update Identitas Website</h3><br>
             <div class="form-group"><label>Judul Web</label><input type="text" id="set-title"></div>
             <div class="form-group"><label>Deskripsi (Home)</label><textarea id="set-desc" rows="3"></textarea></div>
             <div class="form-group"><label>Pengumuman (News)</label><textarea id="set-news" rows="4"></textarea></div>
-            <button class="btn btn-solid" onclick="saveSettings()">Simpan Pengaturan</button>
+            <button class="btn" onclick="saveSettings()">Simpan Pengaturan</button>
         </div>
 
         <div id="tab-prod" class="admin-tab" style="display:none;">
-            <div style="background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+            <div class="glass-container" style="margin-bottom: 20px;">
                 <h3>Form Tambah / Edit Produk</h3><br>
                 <input type="hidden" id="p-id">
                 <div class="form-group"><label>Nama Produk</label><input type="text" id="p-name"></div>
                 <div class="form-group"><label>Spesifikasi (Gunakan Enter untuk list baru)</label><textarea id="p-specs" rows="4"></textarea></div>
-                <div class="form-group"><label>Harga (Angka saja)</label><input type="number" id="p-price"></div>
+                
+                <div class="form-group">
+                    <label>Harga Produk (Contoh: 100.000)</label>
+                    <input type="text" id="p-price" placeholder="Contoh: 100000 atau 100.000" oninput="formatPriceInput(this)">
+                </div>
+
                 <div class="form-group">
                     <label>Status</label>
                     <select id="p-status">
-                        <option value="Tersedia">Tersedia</option>
-                        <option value="Maintenance">Maintenance</option>
+                        <option value="Tersedia">Tersedia ✅</option>
+                        <option value="Maintenance">Maintenance ❌</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Gambar / Thumbnail (Opsional)</label>
-                    <input type="file" id="p-img" accept="image/*">
-                </div>
-                <button class="btn btn-solid" onclick="saveProduct()">SIMPAN PRODUK</button>
-                <button class="btn" onclick="clearProductForm()" style="margin-top: 10px;">Reset Form</button>
+                
+                <button class="btn" onclick="saveProduct()">SIMPAN PRODUK</button>
+                <button class="btn" onclick="clearProductForm()" style="margin-top: 10px; border-color: gray; color: gray; box-shadow: none;">Reset Form</button>
             </div>
 
             <h3>Daftar Produk Aktif</h3>
@@ -360,10 +439,10 @@
 
         <div id="tab-order" class="admin-tab" style="display:none;">
             <div class="stats-box">
-                <div class="stat"><h3>Total Order</h3><p id="tot-order">0</p></div>
-                <div class="stat"><h3>Pendapatan</h3><p id="tot-rev">Rp 0</p></div>
+                <div class="stat"><h3>Total Order</h3><p id="tot-order" style="color:var(--accent);">0</p></div>
+                <div class="stat"><h3>Pendapatan</h3><p id="tot-rev" style="color:var(--accent);">Rp 0</p></div>
             </div>
-            <div style="overflow-x: auto;">
+            <div style="overflow-x: auto;" class="glass-container">
                 <table>
                     <thead>
                         <tr>
@@ -382,8 +461,20 @@
     </div>
 
     <script>
-        // --- DATABASE LOCALSTORAGE (Simulasi) ---
-        let db = JSON.parse(localStorage.getItem('manjii_db_v2')) || {
+        // --- LOADING SCREEN ---
+        let loadProgress = 0;
+        let loadInterval = setInterval(() => {
+            loadProgress += 2;
+            document.getElementById('loading-text').innerText = loadProgress + '%';
+            if (loadProgress >= 100) {
+                clearInterval(loadInterval);
+                document.getElementById('loading-screen').style.display = 'none';
+            }
+        }, 30);
+
+        // --- DATABASE LOCALSTORAGE ---
+        // Mengubah nama db sedikit agar me-refresh struktur (hapus img produk lama jika ada error)
+        let db = JSON.parse(localStorage.getItem('manjii_db_v3')) || {
             title: "MANJII OFFICIAL",
             desc: "Pusat penjualan produk cheat/panel iPhone dengan keamanan super tinggi. Tersertifikasi aman 99%.",
             news: "Selamat datang di MANJII OFFICIAL. Saat ini semua layanan berjalan normal.",
@@ -392,19 +483,14 @@
         };
 
         function saveDB() {
-            try {
-                localStorage.setItem('manjii_db_v2', JSON.stringify(db));
-                renderAll();
-            } catch (e) {
-                alert("Gagal menyimpan data! Memori browser penuh (Gambar terlalu besar). Hapus cache atau gunakan gambar ukuran kecil.");
-            }
+            localStorage.setItem('manjii_db_v3', JSON.stringify(db));
+            renderAll();
         }
 
         // --- UI & NAVIGATION ---
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
         function toggleSettings() { document.getElementById('settingsMenu').classList.toggle('active'); }
         
-        // Tutup dropdown jika klik di luar
         window.onclick = function(event) {
             if (!event.target.closest('.header-actions') && !event.target.closest('.settings-dropdown')) {
                 document.getElementById('settingsMenu').classList.remove('active');
@@ -425,10 +511,12 @@
         // --- JHONALEY COLOR & THEME SYSTEM ---
         function setAccent(color, element) {
             document.documentElement.style.setProperty('--accent', color);
-            // Ganti hover glow color sedikit transparan
-            document.documentElement.style.setProperty('--accent-glow', color + '80'); 
             
-            // Update UI checkmarks
+            // Generate glowing rgba variants
+            let r = parseInt(color.slice(1, 3), 16), g = parseInt(color.slice(3, 5), 16), b = parseInt(color.slice(5, 7), 16);
+            document.documentElement.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.5)`);
+            document.documentElement.style.setProperty('--accent-glow-strong', `rgba(${r}, ${g}, ${b}, 0.9)`);
+            
             document.querySelectorAll('.color-pill').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
         }
@@ -437,11 +525,9 @@
             document.querySelectorAll('.theme-item').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
 
-            if(mode === 'light') {
-                document.body.classList.add('light-mode');
-            } else if (mode === 'dark') {
-                document.body.classList.remove('light-mode');
-            } else if (mode === 'system') {
+            if(mode === 'light') { document.body.classList.add('light-mode'); } 
+            else if (mode === 'dark') { document.body.classList.remove('light-mode'); } 
+            else if (mode === 'system') {
                 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
                     document.body.classList.add('light-mode');
                 } else {
@@ -450,51 +536,49 @@
             }
         }
 
-        // --- RENDER ENGINE ---
+        // --- FORMATTER & RENDER ---
         function formatRupiah(angka) { return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
 
+        // Fitur Fix Harga: Auto format saat ngetik (100000 jadi 100.000)
+        function formatPriceInput(input) {
+            let val = input.value.replace(/[^0-9]/g, ''); // Buang semua kecuali angka
+            if(val !== '') { input.value = val.replace(/\B(?=(\d{3})+(?!\d))/g, "."); } 
+            else { input.value = ''; }
+        }
+
         function renderAll() {
-            // Text Website
             document.getElementById('site-title').innerText = db.title;
             document.getElementById('site-desc').innerText = db.desc;
             
-            // News
             document.getElementById('news-list').innerHTML = db.news ? db.news.replace(/\n/g, '<br>') : '<i>Belum ada pemberitahuan.</i>';
             
-            // User Products
             const prodList = document.getElementById('product-list');
             prodList.innerHTML = '';
             
             db.products.forEach(p => {
                 let specList = p.specs.split('\n').filter(s=>s.trim()!=='').map(s => `<li>${s}</li>`).join('');
                 let isMaintenance = p.status === 'Maintenance';
-                let coverImg = p.img || 'https://via.placeholder.com/400x200.png?text=MANJII+PRODUK';
                 
                 let html = `
                     <div class="product-card">
                         ${isMaintenance ? `
                             <div class="maintenance-overlay">
                                 <div class="m-badge">MAINTENANCE UPDATE</div>
-                                <p style="color:#fff; font-size:12px; margin-top:10px;">Sedang Diperbarui</p>
                             </div>
                         ` : ''}
-                        <img src="${coverImg}" class="p-img">
-                        <div class="p-content">
-                            <div class="p-title">${p.name}</div>
-                            <ul class="p-specs">${specList}</ul>
-                            <div class="p-price-row">
-                                <span class="p-price">${formatRupiah(p.price)}</span>
-                            </div>
-                            <button class="btn btn-solid" onclick="goCheckout(${p.id})" ${isMaintenance ? 'disabled style="background:#555; color:#888;"' : ''}>
-                                ${isMaintenance ? 'TIDAK TERSEDIA' : 'BELI SEKARANG'}
-                            </button>
+                        <div class="p-title">${p.name}</div>
+                        <ul class="p-specs">${specList}</ul>
+                        <div class="p-price-row">
+                            <span class="p-price">${formatRupiah(p.price)}</span>
                         </div>
+                        <button class="btn" onclick="goCheckout(${p.id})" ${isMaintenance ? 'disabled style="border-color:#555; color:#888; box-shadow:none;"' : ''}>
+                            ${isMaintenance ? 'TIDAK TERSEDIA' : 'BELI SEKARANG'}
+                        </button>
                     </div>
                 `;
                 prodList.innerHTML += html;
             });
 
-            // Admin Settings Fill
             document.getElementById('set-title').value = db.title;
             document.getElementById('set-desc').value = db.desc;
             document.getElementById('set-news').value = db.news;
@@ -560,47 +644,32 @@
             alert("Pengaturan Disimpan!");
         }
 
-        // --- BUG FIX: LOGIKA SIMPAN PRODUK YANG LEBIH KUAT ---
+        // --- LOGIKA SIMPAN PRODUK (TANPA GAMBAR + FIX HARGA) ---
         function saveProduct() {
             let id = document.getElementById('p-id').value;
             let name = document.getElementById('p-name').value;
             let specs = document.getElementById('p-specs').value;
-            let price = parseInt(document.getElementById('p-price').value);
+            // Ambil string harga, buang semua titik, ubah jadi integer murni
+            let priceStr = document.getElementById('p-price').value.replace(/\./g, '');
+            let price = parseInt(priceStr);
             let status = document.getElementById('p-status').value;
-            let fileInput = document.getElementById('p-img').files[0];
 
             if(!name || !specs || isNaN(price)) { 
-                alert("Gagal: Nama, Spesifikasi, dan Harga wajib diisi!"); 
+                alert("Gagal: Nama, Spesifikasi, dan Harga wajib diisi (Gunakan angka/titik untuk harga)!"); 
                 return; 
             }
 
-            // Jika admin mengupload gambar baru
-            if(fileInput) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    processSaveProduct(id, name, specs, price, status, e.target.result);
-                };
-                reader.readAsDataURL(fileInput);
-            } else {
-                // Jika tidak ada gambar, tetap proses penyimpanan dengan gambar lama atau default
-                processSaveProduct(id, name, specs, price, status, null);
-            }
-        }
-
-        function processSaveProduct(id, name, specs, price, status, imgData) {
-            if(id) { // Update produk lama
+            if(id) { 
                 let idx = db.products.findIndex(x => x.id == id);
                 if(idx !== -1) {
                     db.products[idx].name = name;
                     db.products[idx].specs = specs;
                     db.products[idx].price = price;
                     db.products[idx].status = status;
-                    if(imgData) db.products[idx].img = imgData; // Timpa gambar jika ada yang baru
                 }
-            } else { // Tambah produk baru
+            } else { 
                 db.products.push({
-                    id: Date.now(), name, specs, price, status, 
-                    img: imgData || '' // Kosong jika tidak ada gambar (akan pakai placeholder)
+                    id: Date.now(), name, specs, price, status
                 });
             }
             saveDB();
@@ -614,7 +683,6 @@
             document.getElementById('p-specs').value = '';
             document.getElementById('p-price').value = '';
             document.getElementById('p-status').value = 'Tersedia';
-            document.getElementById('p-img').value = '';
         }
 
         function editProduct(id) {
@@ -622,7 +690,8 @@
             document.getElementById('p-id').value = p.id;
             document.getElementById('p-name').value = p.name;
             document.getElementById('p-specs').value = p.specs;
-            document.getElementById('p-price').value = p.price;
+            // Kembalikan harga dengan format titik ke form input
+            document.getElementById('p-price').value = p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             document.getElementById('p-status').value = p.status;
             alert("Edit produk siap. Scroll ke form atas.");
         }
@@ -639,14 +708,14 @@
             list.innerHTML = '';
             db.products.forEach((p, i) => {
                 list.innerHTML += `
-                    <div style="background:var(--bg-main); border:1px solid var(--border-color); padding:10px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="background:rgba(0,0,0,0.2); border:1px solid var(--border-color); padding:15px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
                         <div>
-                            <strong>${i+1}. ${p.name}</strong><br>
+                            <strong style="color:var(--accent);">${i+1}. ${p.name}</strong><br>
                             <small>${formatRupiah(p.price)} | Status: ${p.status}</small>
                         </div>
                         <div style="display:flex; gap:5px;">
-                            <button class="btn" style="padding:5px 10px; font-size:12px;" onclick="editProduct(${p.id})">Edit</button>
-                            <button class="btn" style="padding:5px 10px; font-size:12px; border-color:red; color:red;" onclick="deleteProduct(${p.id})">Del</button>
+                            <button class="btn" style="padding:8px 12px; font-size:12px;" onclick="editProduct(${p.id})">Edit</button>
+                            <button class="btn" style="padding:8px 12px; font-size:12px; border-color:red; color:red; box-shadow:0 0 10px rgba(255,0,0,0.5);" onclick="deleteProduct(${p.id})">Del</button>
                         </div>
                     </div>
                 `;
@@ -668,16 +737,16 @@
                 if(o.status === 'Setuju ✅') totalRevenue += o.price;
                 
                 let btnAction = o.status === 'Pending' ? `
-                    <button style="background:green; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;" onclick="updateOrderStatus(${o.id}, 'Setuju ✅')">✅</button>
-                    <button style="background:red; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;" onclick="updateOrderStatus(${o.id}, 'Tolak ❌')">❌</button>
+                    <button style="background:green; color:white; border:none; padding:8px; border-radius:8px; cursor:pointer; box-shadow:0 0 10px rgba(0,255,0,0.5);" onclick="updateOrderStatus(${o.id}, 'Setuju ✅')">✅</button>
+                    <button style="background:red; color:white; border:none; padding:8px; border-radius:8px; cursor:pointer; box-shadow:0 0 10px rgba(255,0,0,0.5);" onclick="updateOrderStatus(${o.id}, 'Tolak ❌')">❌</button>
                 ` : o.status;
 
                 tbody.innerHTML += `
                     <tr>
-                        <td><strong>${o.name}</strong><br><small>${o.platform}</small></td>
+                        <td><strong style="color:var(--accent);">${o.name}</strong><br><small>${o.platform}</small></td>
                         <td>${o.wa}</td>
                         <td>${o.productName}</td>
-                        <td><a href="${o.proof}" target="_blank" style="color:var(--accent);">Cek Bukti</a></td>
+                        <td><a href="${o.proof}" target="_blank" style="color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent);">Cek Bukti</a></td>
                         <td>${o.status}</td>
                         <td>${btnAction}</td>
                     </tr>
@@ -688,7 +757,6 @@
             document.getElementById('tot-rev').innerText = formatRupiah(totalRevenue);
         }
 
-        // INIT KETIKA HALAMAN DIBUKA
         renderAll();
     </script>
 </body>
