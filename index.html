@@ -3,253 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MANJII OFFICIAL</title>
+    <title>MANJII iOS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Default Warna Aksen (Rose/Red) */
+            /* Warna Aksen - Neon yang lebih redup (Medium) */
             --accent: #ff2a5f;
-            --accent-glow: rgba(255, 42, 95, 0.6);
-            --accent-glow-strong: rgba(255, 42, 95, 0.9);
+            --accent-glow: rgba(255, 42, 95, 0.3);
+            --accent-glow-strong: rgba(255, 42, 95, 0.5);
 
-            /* Default Theme (Dark) */
-            --bg-main: #070709;
-            --bg-card: rgba(20, 20, 25, 0.4); /* Lebih transparan untuk efek glass */
+            /* Default Theme (Dark Glass) */
+            --bg-main: rgba(0, 0, 0, 0.6);
+            --bg-card: rgba(15, 15, 20, 0.5); 
             --text-main: #ffffff;
-            --text-muted: #888888;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --text-muted: #aaaaaa;
+            --border-color: rgba(255, 255, 255, 0.15);
         }
 
-        /* Light Theme Overrides */
+        /* Light Theme Overrides (Opsional, lebih bagus tetap dark untuk efek neon) */
         body.light-mode {
-            --bg-main: #f0f0f5;
-            --bg-card: rgba(255, 255, 255, 0.5);
+            --bg-main: rgba(255, 255, 255, 0.6);
+            --bg-card: rgba(255, 255, 255, 0.6);
             --text-main: #111111;
-            --text-muted: #666666;
-            --border-color: rgba(0, 0, 0, 0.1);
+            --text-muted: #555555;
+            --border-color: rgba(0, 0, 0, 0.15);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         
         body { 
-            background-color: var(--bg-main); 
             color: var(--text-main); 
             transition: 0.3s; 
             overflow-x: hidden; 
+            min-height: 100vh;
         }
 
-        /* LOADING SCREEN (FIXED LOGO STATIS) */
+        /* BACKGROUND IMAGE DENGAN BLUR */
+        .bg-image {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url('latarbelakang.png') center/cover no-repeat;
+            filter: blur(10px); /* Latar belakang diblur sedikit */
+            z-index: -2;
+            transform: scale(1.05); /* Mencegah border putih saat diblur */
+        }
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-main); z-index: -1; transition: 0.3s;
+        }
+
+        /* LOADING SCREEN */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-main); z-index: 9999;
+            background: #0a0a0c; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        .loader-container {
-            position: relative; width: 130px; height: 130px;
-            display: flex; justify-content: center; align-items: center;
-        }
+        .loader-container { position: relative; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; }
         .loading-circle {
             position: absolute; width: 100%; height: 100%;
-            border: 4px dashed var(--accent);
-            border-radius: 50%;
-            animation: rotate 2s linear infinite;
-            box-shadow: 0 0 20px var(--accent-glow), inset 0 0 15px var(--accent-glow);
+            border: 2px dashed var(--accent); border-radius: 50%;
+            animation: rotate 3s linear infinite;
+            box-shadow: 0 0 10px var(--accent-glow);
         }
-        .loading-logo {
-            width: 80px; height: 80px; border-radius: 50%; object-fit: cover; z-index: 2;
-            box-shadow: 0 0 15px var(--accent-glow); border: 2px solid var(--accent);
-        }
+        .loading-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; z-index: 2; border: 1px solid var(--accent); }
         @keyframes rotate { 100% { transform: rotate(360deg); } }
-        #loading-text { 
-            margin-top: 25px; font-size: 26px; font-weight: 800; 
-            color: var(--accent); text-shadow: 0 0 15px var(--accent-glow-strong); 
-        }
+        #loading-text { margin-top: 25px; font-size: 20px; font-weight: 700; color: var(--accent); letter-spacing: 2px; }
 
         /* HEADER & NAVBAR */
         header {
             position: fixed; top: 0; width: 100%; height: 70px;
-            background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            background: rgba(10, 10, 15, 0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--border-color);
             display: flex; justify-content: space-between; align-items: center; padding: 0 20px;
-            z-index: 1000; box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+            z-index: 1000;
         }
-        .logo-text { font-size: 20px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; text-shadow: 0 0 10px rgba(255,255,255,0.2);}
-        .logo-text span { color: var(--accent); text-shadow: 0 0 15px var(--accent-glow); }
-        
+        .logo-text { font-size: 18px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; letter-spacing: 1px;}
+        .logo-text span { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
         .header-actions { display: flex; gap: 15px; align-items: center; }
-        .icon-btn { 
-            background: transparent; border: none; color: var(--text-main); 
-            font-size: 20px; cursor: pointer; transition: 0.2s; 
-        }
-        .icon-btn:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
+        .icon-btn { background: transparent; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; transition: 0.2s; }
+        .icon-btn:hover { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
 
-        /* JHONALEY STYLE SETTINGS DROPDOWN */
+        /* DROPDOWN & SIDEBAR */
         .settings-dropdown {
             position: absolute; top: 70px; right: 60px; width: 250px;
             background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             display: none; flex-direction: column; gap: 15px; z-index: 1001;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .settings-dropdown.active { display: flex; }
-        .dropdown-title { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;}
-        
+        .dropdown-title { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;}
         .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .color-pill {
             display: flex; align-items: center; gap: 8px; padding: 8px 12px;
             background: transparent; border: 1px solid var(--border-color);
-            border-radius: 20px; cursor: pointer; font-size: 13px; transition: 0.3s;
+            border-radius: 20px; cursor: pointer; font-size: 12px; transition: 0.3s; font-weight: 500;
         }
-        .color-pill:hover, .color-pill.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
-        .color-circle { width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 8px inherit;}
-        .check-icon { margin-left: auto; color: var(--accent); font-size: 12px; display: none; }
-        .color-pill.active .check-icon { display: block; text-shadow: 0 0 5px var(--accent-glow); }
+        .color-pill:hover, .color-pill.active { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+        .color-circle { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 5px inherit;}
+        .check-icon { margin-left: auto; color: var(--accent); font-size: 10px; display: none; }
+        .color-pill.active .check-icon { display: block; }
 
         .theme-list { display: flex; flex-direction: column; gap: 5px; }
         .theme-item {
             display: flex; align-items: center; gap: 12px; padding: 10px;
-            border-radius: 8px; cursor: pointer; font-size: 14px; transition: 0.2s;
+            border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: 0.2s;
         }
-        .theme-item:hover, .theme-item.active { background: rgba(255,255,255,0.05); color: var(--accent); text-shadow: 0 0 5px var(--accent-glow); }
-        .theme-indicator { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); display: none; }
-        .theme-item.active .theme-indicator { display: block; }
+        .theme-item:hover, .theme-item.active { background: rgba(255,255,255,0.05); color: var(--accent); }
+        .theme-indicator { margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: none; }
+        .theme-item.active .theme-indicator { display: block; box-shadow: 0 0 5px var(--accent-glow); }
 
-        /* SIDEBAR MENU (KSX STYLE) */
         .sidebar {
             position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
-            background: rgba(10, 10, 15, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-left: 1px solid var(--border-color);
             padding: 80px 20px 20px; transition: 0.4s ease-in-out; z-index: 999;
-            box-shadow: -5px 0 30px rgba(0,0,0,0.5);
         }
         .sidebar.active { right: 0; }
         .sidebar a {
             display: block; padding: 15px; margin-bottom: 10px; color: var(--text-main);
-            text-decoration: none; font-size: 16px; border-radius: 8px; transition: 0.3s;
-            border-left: 3px solid transparent;
+            text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 8px; transition: 0.3s;
+            border-left: 2px solid transparent;
         }
         .sidebar a:hover { 
-            background: rgba(255,255,255,0.05); border-left: 3px solid var(--accent); 
-            color: var(--accent); text-shadow: 0 0 8px var(--accent-glow);
-            box-shadow: inset 20px 0 20px -20px var(--accent-glow);
+            background: rgba(255,255,255,0.05); border-left: 2px solid var(--accent); 
+            color: var(--accent); box-shadow: inset 15px 0 15px -15px var(--accent-glow);
         }
 
         /* CONTAINERS & PAGES */
         .page { display: none; padding: 100px 20px 40px; max-width: 800px; margin: 0 auto; min-height: 100vh; animation: fadeIn 0.4s; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-container {
+            background: var(--bg-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); margin-bottom: 20px;
+        }
 
         /* HOME UI */
         .home-hero { text-align: center; margin-bottom: 30px; }
         .main-logo { 
-            width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; 
-            border: 2px solid var(--accent); box-shadow: 0 0 25px var(--accent-glow);
+            width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; 
+            border: 1px solid var(--accent); box-shadow: 0 0 15px var(--accent-glow);
         }
-        .title { font-size: 28px; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-        .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+        .title { font-size: 24px; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; }
+        .subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; font-weight: 400;}
         
         .stats-box {
             display: flex; justify-content: space-between; 
-            background: var(--bg-card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--accent); border-radius: 12px; padding: 20px; margin-bottom: 30px;
-            box-shadow: 0 0 15px var(--accent-glow), inset 0 0 10px rgba(255, 255, 255, 0.02);
+            background: var(--bg-card); backdrop-filter: blur(10px);
+            border: 1px solid var(--accent); border-radius: 12px; padding: 15px; margin-bottom: 30px;
+            box-shadow: 0 0 10px var(--accent-glow);
         }
         .stat { text-align: center; width: 33%; }
-        .stat h3 { font-size: 20px; color: var(--accent); margin-bottom: 5px; text-shadow: 0 0 10px var(--accent-glow); }
-        .stat p { font-size: 11px; color: var(--text-muted); text-transform: uppercase;}
+        .stat h3 { font-size: 18px; color: var(--accent); margin-bottom: 2px; text-shadow: 0 0 8px var(--accent-glow); font-weight: 700;}
+        .stat p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
 
-        /* NEON GLASSMORPHISM BUTTON (FIXED) */
+        /* NEON GLASSMORPHISM BUTTON - MEDIUM GLOW */
         .btn {
-            background: transparent; /* Latar belakang tembus pandang */
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); /* Efek kaca blur */
-            color: var(--accent); border: 1.5px solid var(--accent); /* Stroke Tepi */
-            border-radius: 12px; /* Tepi halus menyatu */
-            padding: 12px 20px; font-weight: 600; cursor: pointer;
-            width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px;
-            transition: 0.3s; text-decoration: none;
-            /* Efek Neon Menyala */
-            box-shadow: 0 0 12px var(--accent-glow), inset 0 0 8px var(--accent-glow);
-            text-shadow: 0 0 5px var(--accent-glow);
+            background: transparent; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            color: var(--accent); border: 1px solid var(--accent); 
+            border-radius: 10px; padding: 12px 20px; font-weight: 600; cursor: pointer; font-size: 13px;
+            width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
+            transition: 0.3s; text-decoration: none; letter-spacing: 0.5px;
+            box-shadow: 0 0 8px var(--accent-glow), inset 0 0 5px var(--accent-glow);
         }
         .btn:hover { 
-            background: var(--accent); color: #fff; text-shadow: none;
-            box-shadow: 0 0 25px var(--accent-glow-strong), inset 0 0 10px rgba(255,255,255,0.5); 
+            background: var(--accent); color: #fff;
+            box-shadow: 0 0 15px var(--accent-glow-strong); 
         }
 
-        /* PRODUCT CATALOG (NO THUMBNAIL) */
+        /* TYPOGRAPHY & SECTIONS */
         .section-title { 
-            font-size: 18px; color: var(--accent); border-bottom: 1px solid var(--accent); 
+            font-size: 16px; color: var(--accent); border-bottom: 1px solid var(--accent); 
             padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; 
-            text-shadow: 0 0 8px var(--accent-glow); box-shadow: 0 10px 10px -10px var(--accent-glow);
+            text-shadow: 0 0 5px var(--accent-glow); font-weight: 700; letter-spacing: 1px;
         }
-        
+
+        /* PRODUCT CATALOG */
         .product-grid { display: grid; gap: 20px; }
         .product-card {
-            background: var(--bg-card); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            background: var(--bg-card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--border-color); border-left: 3px solid var(--accent);
-            border-radius: 12px; overflow: hidden; transition: 0.3s; position: relative; padding: 20px;
+            border-radius: 12px; padding: 20px; position: relative; transition: 0.3s;
         }
-        .product-card:hover { 
-            border-color: var(--accent); transform: translateY(-5px); 
-            box-shadow: 0 10px 25px var(--accent-glow); 
-        }
-        .p-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; color: var(--text-main); text-shadow: 0 0 5px rgba(255,255,255,0.3);}
-        .p-specs { list-style: none; margin-bottom: 15px; font-size: 13px; color: var(--text-muted); }
-        .p-specs li { margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .product-card:hover { border-color: var(--accent); box-shadow: 0 5px 20px var(--accent-glow); }
+        .p-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+        .p-specs { list-style: none; margin-bottom: 15px; font-size: 12px; color: var(--text-muted); line-height: 1.8;}
+        .p-specs li { display: flex; align-items: center; gap: 8px; }
         .p-specs li::before { content: '✓'; color: var(--accent); font-weight: bold; text-shadow: 0 0 5px var(--accent-glow);}
-        .p-price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .p-price { font-size: 22px; font-weight: 800; color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
+        .p-price-row { margin-bottom: 15px; }
+        .p-price { font-size: 20px; font-weight: 800; color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
         
-        .maintenance-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
-            flex-direction: column; z-index: 10; backdrop-filter: blur(4px);
-        }
         .m-badge { 
-            border: 2px solid #ff2a2a; color: #ff2a2a; padding: 10px 20px; 
-            font-weight: 800; transform: rotate(-10deg); letter-spacing: 2px;
-            box-shadow: 0 0 15px rgba(255,0,0,0.5), inset 0 0 10px rgba(255,0,0,0.5);
-            text-shadow: 0 0 5px rgba(255,0,0,0.8); background: rgba(0,0,0,0.5); border-radius: 8px;
+            border: 1px solid #ff2a2a; color: #ff2a2a; padding: 8px 15px; font-size: 12px;
+            font-weight: 700; letter-spacing: 1px; background: rgba(0,0,0,0.5); border-radius: 6px;
+            box-shadow: 0 0 10px rgba(255,0,0,0.3); text-align: center; margin-bottom: 10px;
         }
 
-        /* FORMS & INPUTS */
-        .glass-container {
-            background: var(--bg-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
+        /* FORMS */
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+        .form-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;}
         input, select, textarea {
-            width: 100%; padding: 14px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color);
-            color: var(--text-main); border-radius: 8px; outline: none; transition: 0.3s;
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+            color: var(--text-main); border-radius: 8px; outline: none; transition: 0.3s; font-size: 13px;
         }
-        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
         
-        /* ADMIN TABLES */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
-        th, td { padding: 12px; border: 1px solid var(--border-color); text-align: left; }
-        th { background: rgba(0,0,0,0.3); color: var(--accent); text-shadow: 0 0 5px var(--accent-glow); }
+        /* ADMIN TABLES (RAPIH) */
+        .table-responsive { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); text-align: left; }
+        th { background: rgba(0,0,0,0.4); color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+
+        /* TAB MENU RAPIH */
+        .tab-menu { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-menu .btn { width: auto; white-space: nowrap; padding: 8px 15px; font-size: 11px; }
+        
+        /* NEWS CARD */
+        .news-card {
+            padding: 15px; border-left: 3px solid var(--accent);
+            background: rgba(0,0,0,0.2); margin-bottom: 10px; border-radius: 0 8px 8px 0;
+        }
+        .news-date { font-size: 10px; color: var(--text-muted); margin-bottom: 5px; }
+        .news-text { font-size: 13px; line-height: 1.6; }
 
     </style>
 </head>
 <body>
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
 
     <div id="loading-screen">
         <div class="loader-container">
             <div class="loading-circle"></div>
-            <img src="loadingscreen.png" class="loading-logo" onerror="this.src='https://via.placeholder.com/80x80.png?text=LOGO'">
+            <img src="loadingscreen.png" class="loading-logo" onerror="this.src='https://via.placeholder.com/70x70.png?text=LOGO'">
         </div>
         <div id="loading-text">0%</div>
     </div>
 
     <header>
         <div class="logo-text" onclick="showPage('home')" style="cursor:pointer;">
-            <i class="fa-solid fa-cube" style="color:var(--accent);"></i> MANJII <span>OFFICIAL</span>
+            <i class="fa-solid fa-cube" style="color:var(--accent);"></i> <span id="header-brand">MANJII iOS</span>
         </div>
         <div class="header-actions">
-            <button class="icon-btn" onclick="showPage('admin-login')"><i class="fa-solid fa-lock" style="font-size: 14px;"></i></button>
+            <button class="icon-btn" onclick="checkAuthAndGo('history')"><i class="fa-solid fa-clock-rotate-left"></i></button>
             <button class="icon-btn" onclick="toggleSettings()"><i class="fa-solid fa-palette"></i></button>
             <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars-staggered"></i></button>
         </div>
@@ -257,68 +259,77 @@
 
     <div class="settings-dropdown" id="settingsMenu">
         <div>
-            <div class="dropdown-title">Pilih Warna Aksen</div>
+            <div class="dropdown-title">Warna Aksen</div>
             <div class="color-grid">
-                <div class="color-pill active" onclick="setAccent('#ff2a5f', this)">
-                    <div class="color-circle" style="background:#ff2a5f; box-shadow: 0 0 8px #ff2a5f;"></div> Rose
-                    <i class="fa-solid fa-check check-icon"></i>
-                </div>
-                <div class="color-pill" onclick="setAccent('#00a8ff', this)">
-                    <div class="color-circle" style="background:#00a8ff; box-shadow: 0 0 8px #00a8ff;"></div> Ocean
-                    <i class="fa-solid fa-check check-icon"></i>
-                </div>
-                <div class="color-pill" onclick="setAccent('#00ff88', this)">
-                    <div class="color-circle" style="background:#00ff88; box-shadow: 0 0 8px #00ff88;"></div> Emerald
-                    <i class="fa-solid fa-check check-icon"></i>
-                </div>
-                <div class="color-pill" onclick="setAccent('#ff9f43', this)">
-                    <div class="color-circle" style="background:#ff9f43; box-shadow: 0 0 8px #ff9f43;"></div> Sun
-                    <i class="fa-solid fa-check check-icon"></i>
-                </div>
+                <div class="color-pill active" onclick="setAccent('#ff2a5f', this)"><div class="color-circle" style="background:#ff2a5f;"></div> Rose <i class="fa-solid fa-check check-icon"></i></div>
+                <div class="color-pill" onclick="setAccent('#00a8ff', this)"><div class="color-circle" style="background:#00a8ff;"></div> Ocean <i class="fa-solid fa-check check-icon"></i></div>
+                <div class="color-pill" onclick="setAccent('#00ff88', this)"><div class="color-circle" style="background:#00ff88;"></div> Emerald <i class="fa-solid fa-check check-icon"></i></div>
+                <div class="color-pill" onclick="setAccent('#ff9f43', this)"><div class="color-circle" style="background:#ff9f43;"></div> Sun <i class="fa-solid fa-check check-icon"></i></div>
             </div>
         </div>
         <div style="height: 1px; background: var(--border-color); margin: 5px 0;"></div>
         <div>
-            <div class="dropdown-title">Tema Tampilan</div>
+            <div class="dropdown-title">Tema Latar</div>
             <div class="theme-list">
-                <div class="theme-item" onclick="setTheme('light', this)">
-                    <i class="fa-regular fa-sun"></i> Light
-                    <div class="theme-indicator"></div>
-                </div>
-                <div class="theme-item active" onclick="setTheme('dark', this)">
-                    <i class="fa-regular fa-moon"></i> Dark
-                    <div class="theme-indicator"></div>
-                </div>
-                <div class="theme-item" onclick="setTheme('system', this)">
-                    <i class="fa-solid fa-display"></i> System
-                    <div class="theme-indicator"></div>
-                </div>
+                <div class="theme-item" onclick="setTheme('light', this)"><i class="fa-regular fa-sun"></i> Kaca Terang <div class="theme-indicator"></div></div>
+                <div class="theme-item active" onclick="setTheme('dark', this)"><i class="fa-regular fa-moon"></i> Kaca Gelap <div class="theme-indicator"></div></div>
             </div>
         </div>
     </div>
 
     <div class="sidebar" id="sidebarMenu">
+        <div id="user-profile-sidebar" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
+            <div style="font-size: 12px; color: var(--text-muted);">Status Akun:</div>
+            <div id="sidebar-username" style="font-size: 16px; font-weight: 700; color: var(--accent); margin-top: 5px;">Belum Login</div>
+        </div>
         <a href="#" onclick="showPage('home')"><i class="fa-solid fa-house"></i> Beranda</a>
-        <a href="#" onclick="showPage('products')"><i class="fa-solid fa-box"></i> Produk Kami</a>
-        <a href="#" onclick="showPage('news')"><i class="fa-solid fa-newspaper"></i> Pengumuman</a>
+        <a href="#" onclick="showPage('products')"><i class="fa-solid fa-box"></i> Katalog Produk</a>
+        <a href="#" onclick="showPage('news')"><i class="fa-solid fa-bullhorn"></i> Pengumuman</a>
+        <a href="#" onclick="checkAuthAndGo('history')"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</a>
         <a href="https://wa.me/6283845203074" target="_blank"><i class="fa-brands fa-whatsapp"></i> Customer Service</a>
         <a href="https://tiktok.com/@manjiixit" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+        
+        <div style="margin-top: 30px;">
+            <a href="#" id="auth-btn-sidebar" onclick="showPage('auth')" style="color: #00ff88; border-left-color: #00ff88;"><i class="fa-solid fa-right-to-bracket"></i> Login / Daftar</a>
+            <a href="#" id="logout-btn-sidebar" onclick="logoutUser()" style="display:none; color: #ff2a2a; border-left-color: #ff2a2a;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            <a href="#" onclick="showPage('admin-login')" style="color: var(--text-muted); font-size: 12px; margin-top:20px;"><i class="fa-solid fa-shield-halved"></i> Admin Akses</a>
+        </div>
+    </div>
+
+    <div id="auth" class="page">
+        <h2 class="section-title"><i class="fa-solid fa-user-shield"></i> PORTAL PENGGUNA</h2>
+        <div class="glass-container">
+            <div class="tab-menu" style="justify-content: center;">
+                <button class="btn" id="btn-tab-login" style="background:var(--accent); color:#fff;" onclick="switchAuthTab('login')">LOGIN</button>
+                <button class="btn" id="btn-tab-reg" onclick="switchAuthTab('register')">DAFTAR BARU</button>
+            </div>
+            
+            <div id="form-login">
+                <div class="form-group"><label>Username</label><input type="text" id="log-user" placeholder="Masukkan username..."></div>
+                <div class="form-group"><label>Password</label><input type="password" id="log-pass" placeholder="Masukkan password..."></div>
+                <button class="btn" onclick="loginUser()" style="margin-top: 10px;">MASUK SEKARANG</button>
+            </div>
+
+            <div id="form-register" style="display: none;">
+                <div class="form-group"><label>Username Baru</label><input type="text" id="reg-user" placeholder="Buat username (bebas)..."></div>
+                <div class="form-group"><label>Password Baru</label><input type="password" id="reg-pass" placeholder="Buat password (bebas)..."></div>
+                <button class="btn" onclick="registerUser()" style="margin-top: 10px; border-color: #00a8ff; color: #00a8ff;">DAFTARKAN AKUN</button>
+            </div>
+        </div>
     </div>
 
     <div id="home" class="page active">
         <div class="home-hero">
-            <img src="loadingscreen.png" alt="Logo" class="main-logo" onerror="this.src='https://via.placeholder.com/110x110.png?text=LOGO'">
-            <h1 class="title" id="site-title">MANJII OFFICIAL</h1>
-            <p class="subtitle" id="site-desc">Pusat penjualan produk cheat/panel iPhone dengan keamanan super tinggi. Tersertifikasi aman 99%.</p>
+            <img src="loadingscreen.png" alt="Logo" class="main-logo" onerror="this.src='https://via.placeholder.com/100x100.png?text=LOGO'">
+            <h1 class="title" id="site-title">MANJII iOS</h1>
+            <p class="subtitle" id="site-desc">Pusat penjualan produk cheat manjii ios dengan keamanan super tinggi. Tersertifikasi aman 99%.</p>
         </div>
-
         <div class="stats-box">
-            <div class="stat"><h3>5K+</h3><p>Pengguna</p></div>
-            <div class="stat"><h3>99%</h3><p>Aman</p></div>
-            <div class="stat"><h3>24/7</h3><p>Support</p></div>
+            <div class="stat"><h3>5K+</h3><p>User Aktif</p></div>
+            <div class="stat"><h3>99%</h3><p>Keamanan</p></div>
+            <div class="stat"><h3>24/7</h3><p>Layanan</p></div>
         </div>
-
-        <button class="btn" style="margin-bottom: 15px;" onclick="showPage('products')">LIHAT KATALOG PRODUK</button>
+        <button class="btn" style="margin-bottom: 15px; background: rgba(255,255,255,0.05);" onclick="showPage('products')">LIHAT KATALOG PRODUK</button>
         <div style="display: flex; gap: 10px;">
             <a href="https://wa.me/6283845203074" class="btn" target="_blank"><i class="fa-brands fa-whatsapp"></i> Chat Admin</a>
             <a href="https://tiktok.com/@manjiixit" class="btn" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
@@ -327,32 +338,31 @@
 
     <div id="products" class="page">
         <h2 class="section-title"><i class="fa-solid fa-fire"></i> KATALOG PRODUK</h2>
-        <div class="product-grid" id="product-list">
-            </div>
+        <div class="product-grid" id="product-list"></div>
     </div>
 
     <div id="news" class="page">
         <h2 class="section-title"><i class="fa-solid fa-bullhorn"></i> NEWS & UPDATES</h2>
-        <div class="glass-container" id="news-list" style="line-height: 1.6;">
+        <div class="glass-container" id="news-list-public">
             </div>
     </div>
 
-    <div id="checkout" class="page">
-        <h2 class="section-title"><i class="fa-solid fa-cart-shopping"></i> CHECKOUT</h2>
+    <div id="history" class="page">
+        <h2 class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> RIWAYAT TRANSAKSI KAMU</h2>
         <div class="glass-container">
-            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--accent); box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
-                <small style="color:var(--text-muted);">Produk yang dipilih:</small>
-                <h3 id="co-product-name" style="color:var(--accent); margin-top:5px; text-shadow: 0 0 5px var(--accent-glow);"></h3>
-            </div>
+            <div id="user-history-list"></div>
+        </div>
+    </div>
 
-            <div class="form-group">
-                <label>Nama / Username</label>
-                <input type="text" id="co-name" placeholder="Masukkan nama..." required>
+    <div id="checkout" class="page">
+        <h2 class="section-title"><i class="fa-solid fa-cart-shopping"></i> FORM CHECKOUT</h2>
+        <div class="glass-container">
+            <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 3px solid var(--accent);">
+                <small style="color:var(--text-muted);">Produk Pembelian:</small>
+                <h3 id="co-product-name" style="color:var(--accent); margin-top:5px; font-size: 15px;"></h3>
             </div>
-            <div class="form-group">
-                <label>No WhatsApp (Aktif)</label>
-                <input type="number" id="co-wa" placeholder="08..." required>
-            </div>
+            <div class="form-group"><label>Nama Akun (Otomatis)</label><input type="text" id="co-name" disabled style="color:var(--accent); font-weight:bold;"></div>
+            <div class="form-group"><label>No WhatsApp (Aktif)</label><input type="number" id="co-wa" placeholder="08..." required></div>
             <div class="form-group">
                 <label>Pilih Platform</label>
                 <select id="co-platform">
@@ -360,95 +370,88 @@
                     <option value="Android Device">🤖 Android Device</option>
                 </select>
             </div>
-
-            <div style="text-align: center; margin: 30px 0; padding: 20px; border: 1px dashed var(--accent); border-radius: 12px; background: rgba(0,0,0,0.2);">
-                <h3 style="margin-bottom: 10px; color: var(--accent); text-shadow: 0 0 8px var(--accent-glow);">QRIS ALLPAY</h3>
-                <img src="qris.png" alt="QRIS" style="width: 200px; border-radius: 12px; box-shadow: 0 0 15px var(--accent-glow); border: 2px solid var(--accent);" onerror="this.src='https://via.placeholder.com/200x200.png?text=UPLOAD+QRIS.PNG'">
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 15px;">Silahkan scan QRIS di atas sesuai nominal harga produk.</p>
+            <div style="text-align: center; margin: 25px 0; padding: 20px; border: 1px dashed var(--accent); border-radius: 12px; background: rgba(0,0,0,0.1);">
+                <h3 style="margin-bottom: 10px; color: var(--accent); font-size: 14px;">QRIS PAYMENT</h3>
+                <img src="qris.png" alt="QRIS" style="width: 180px; border-radius: 10px; border: 1px solid var(--accent); box-shadow: 0 0 10px var(--accent-glow);" onerror="this.src='https://via.placeholder.com/180x180.png?text=UPLOAD+QRIS'">
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px;">Scan QRIS sesuai nominal harga produk.</p>
             </div>
-
-            <div class="form-group">
-                <label>Upload Bukti Transfer</label>
-                <input type="file" id="co-proof" accept="image/*" required style="padding: 10px;">
-            </div>
-
+            <div class="form-group"><label>Upload Bukti Transfer</label><input type="file" id="co-proof" accept="image/*" required style="padding: 10px;"></div>
             <button class="btn" onclick="submitOrder()">KIRIM BUKTI PEMBAYARAN</button>
         </div>
     </div>
 
     <div id="admin-login" class="page">
-        <h2 class="section-title"><i class="fa-solid fa-lock"></i> SYSTEM LOGIN</h2>
+        <h2 class="section-title"><i class="fa-solid fa-lock"></i> SYSTEM LOGIN ADMIN</h2>
         <div class="glass-container">
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="adm-user">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="adm-pass">
-            </div>
+            <div class="form-group"><label>Username Admin</label><input type="text" id="adm-user"></div>
+            <div class="form-group"><label>Password Admin</label><input type="password" id="adm-pass"></div>
             <button class="btn" onclick="loginAdmin()">MASUK PANEL</button>
         </div>
     </div>
 
     <div id="admin-panel" class="page" style="max-width: 900px;">
-        <h2 class="section-title">ADMIN PANEL v6.0 (Neon Edition)</h2>
+        <h2 class="section-title">ADMIN PANEL (MANJII iOS)</h2>
         
-        <div style="display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px;">
-            <button class="btn" style="width: auto;" onclick="switchAdminTab('tab-web')">Pengaturan Web</button>
-            <button class="btn" style="width: auto;" onclick="switchAdminTab('tab-prod')">Kelola Produk</button>
-            <button class="btn" style="width: auto;" onclick="switchAdminTab('tab-order')">Stats Order</button>
-            <button class="btn" style="width: auto; border-color: red; color: red; box-shadow: 0 0 10px rgba(255,0,0,0.5);" onclick="showPage('home')">Logout</button>
+        <div class="tab-menu">
+            <button class="btn" onclick="switchAdminTab('tab-web')">Identitas Web</button>
+            <button class="btn" onclick="switchAdminTab('tab-news')">Kelola News</button>
+            <button class="btn" onclick="switchAdminTab('tab-prod')">Kelola Produk</button>
+            <button class="btn" onclick="switchAdminTab('tab-order')">Status Order</button>
+            <button class="btn" onclick="switchAdminTab('tab-users')">Data Akun User</button>
+            <button class="btn" style="border-color: red; color: red;" onclick="showPage('home')">Keluar</button>
         </div>
 
         <div id="tab-web" class="admin-tab glass-container">
             <h3>Update Identitas Website</h3><br>
-            <div class="form-group"><label>Judul Web</label><input type="text" id="set-title"></div>
-            <div class="form-group"><label>Deskripsi (Home)</label><textarea id="set-desc" rows="3"></textarea></div>
-            <div class="form-group"><label>Pengumuman (News)</label><textarea id="set-news" rows="4"></textarea></div>
+            <div class="form-group"><label>Judul Web (Contoh: MANJII iOS)</label><input type="text" id="set-title"></div>
+            <div class="form-group"><label>Deskripsi Web</label><textarea id="set-desc" rows="3"></textarea></div>
             <button class="btn" onclick="saveSettings()">Simpan Pengaturan</button>
         </div>
 
+        <div id="tab-news" class="admin-tab glass-container" style="display:none;">
+            <h3>Buat News / Pengumuman Baru</h3><br>
+            <div class="form-group">
+                <label>Status News (Contoh: WARNING !!!)</label>
+                <textarea id="new-news-text" rows="3" placeholder="Ketik pengumuman di sini..."></textarea>
+            </div>
+            <button class="btn" onclick="addNews()">PUBLISH NEWS</button>
+            <h3 style="margin-top: 25px; margin-bottom: 15px;">Daftar News Aktif</h3>
+            <div id="admin-news-list"></div>
+        </div>
+
         <div id="tab-prod" class="admin-tab" style="display:none;">
-            <div class="glass-container" style="margin-bottom: 20px;">
-                <h3>Form Tambah / Edit Produk</h3><br>
+            <div class="glass-container">
+                <h3>Tambah / Edit Produk</h3><br>
                 <input type="hidden" id="p-id">
                 <div class="form-group"><label>Nama Produk</label><input type="text" id="p-name"></div>
-                <div class="form-group"><label>Spesifikasi (Gunakan Enter untuk list baru)</label><textarea id="p-specs" rows="4"></textarea></div>
-                
+                <div class="form-group"><label>Spesifikasi (Enter untuk baris baru)</label><textarea id="p-specs" rows="3"></textarea></div>
                 <div class="form-group">
-                    <label>Harga Produk (Contoh: 100.000)</label>
-                    <input type="text" id="p-price" placeholder="Contoh: 100000 atau 100.000" oninput="formatPriceInput(this)">
+                    <label>Harga Produk</label>
+                    <input type="text" id="p-price" placeholder="Contoh: 100.000" oninput="formatPriceInput(this)">
                 </div>
-
                 <div class="form-group">
                     <label>Status</label>
-                    <select id="p-status">
-                        <option value="Tersedia">Tersedia ✅</option>
-                        <option value="Maintenance">Maintenance ❌</option>
-                    </select>
+                    <select id="p-status"><option value="Tersedia">Tersedia ✅</option><option value="Maintenance">Maintenance ❌</option></select>
                 </div>
-                
                 <button class="btn" onclick="saveProduct()">SIMPAN PRODUK</button>
-                <button class="btn" onclick="clearProductForm()" style="margin-top: 10px; border-color: gray; color: gray; box-shadow: none;">Reset Form</button>
+                <button class="btn" onclick="clearProductForm()" style="margin-top: 10px; border-color: gray; color: gray;">Reset Form</button>
             </div>
-
             <h3>Daftar Produk Aktif</h3>
             <div id="admin-product-list" style="margin-top: 15px;"></div>
         </div>
 
         <div id="tab-order" class="admin-tab" style="display:none;">
             <div class="stats-box">
-                <div class="stat"><h3>Total Order</h3><p id="tot-order" style="color:var(--accent);">0</p></div>
+                <div class="stat"><h3>Total</h3><p id="tot-order">0 Order</p></div>
                 <div class="stat"><h3>Pendapatan</h3><p id="tot-rev" style="color:var(--accent);">Rp 0</p></div>
             </div>
-            <div style="overflow-x: auto;" class="glass-container">
+            <div class="glass-container table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th>Pelanggan</th>
-                            <th>No WA</th>
-                            <th>Produk</th>
+                            <th>User (Akun)</th>
+                            <th>No WA / Platform</th>
+                            <th>Produk & Harga</th>
                             <th>Bukti</th>
                             <th>Status</th>
                             <th>Aksi</th>
@@ -458,13 +461,30 @@
                 </table>
             </div>
         </div>
+
+        <div id="tab-users" class="admin-tab" style="display:none;">
+            <div class="glass-container table-responsive">
+                <h3 style="margin-bottom: 15px;">Daftar Akun Terdaftar</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-user-list"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
         // --- LOADING SCREEN ---
         let loadProgress = 0;
         let loadInterval = setInterval(() => {
-            loadProgress += 2;
+            loadProgress += 3;
             document.getElementById('loading-text').innerText = loadProgress + '%';
             if (loadProgress >= 100) {
                 clearInterval(loadInterval);
@@ -472,51 +492,104 @@
             }
         }, 30);
 
-        // --- DATABASE LOCALSTORAGE ---
-        // Mengubah nama db sedikit agar me-refresh struktur (hapus img produk lama jika ada error)
-        let db = JSON.parse(localStorage.getItem('manjii_db_v3')) || {
-            title: "MANJII OFFICIAL",
-            desc: "Pusat penjualan produk cheat/panel iPhone dengan keamanan super tinggi. Tersertifikasi aman 99%.",
-            news: "Selamat datang di MANJII OFFICIAL. Saat ini semua layanan berjalan normal.",
+        // --- DATABASE LOCALSTORAGE (Versi 5 - Lengkap dengan Users & News Array) ---
+        let db = JSON.parse(localStorage.getItem('manjii_db_v5')) || {
+            title: "MANJII iOS",
+            desc: "Pusat penjualan produk cheat manjii ios dengan keamanan super tinggi. Tersertifikasi aman 99%.",
+            newsList: [
+                { id: 1, text: "Selamat datang di MANJII iOS. Layanan normal.", date: new Date().toLocaleDateString() }
+            ],
             products: [],
-            orders: []
+            orders: [],
+            users: []
         };
 
         function saveDB() {
-            localStorage.setItem('manjii_db_v3', JSON.stringify(db));
+            localStorage.setItem('manjii_db_v5', JSON.stringify(db));
             renderAll();
+        }
+
+        // --- AUTH (LOGIN/REGISTER) SYSTEM ---
+        let currentUser = localStorage.getItem('manjii_logged_user') || null;
+
+        function switchAuthTab(tab) {
+            document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+            document.getElementById('btn-tab-login').style.background = tab === 'login' ? 'var(--accent)' : 'transparent';
+            document.getElementById('btn-tab-login').style.color = tab === 'login' ? '#fff' : 'var(--accent)';
+            document.getElementById('btn-tab-reg').style.background = tab === 'register' ? 'var(--accent)' : 'transparent';
+            document.getElementById('btn-tab-reg').style.color = tab === 'register' ? '#fff' : 'var(--accent)';
+        }
+
+        function registerUser() {
+            let u = document.getElementById('reg-user').value.trim();
+            let p = document.getElementById('reg-pass').value.trim();
+            if(!u || !p) return alert("Username dan Password wajib diisi!");
+            if(db.users.find(x => x.username.toLowerCase() === u.toLowerCase())) return alert("Username sudah terdaftar! Coba yang lain.");
+            
+            db.users.push({ id: Date.now(), username: u, password: p });
+            saveDB();
+            
+            // Auto Login setelah daftar
+            currentUser = u;
+            localStorage.setItem('manjii_logged_user', u);
+            alert("Pendaftaran Berhasil! Anda otomatis login.");
+            showPage('home');
+        }
+
+        function loginUser() {
+            let u = document.getElementById('log-user').value.trim();
+            let p = document.getElementById('log-pass').value.trim();
+            if(!u || !p) return alert("Isi Username dan Password!");
+            
+            let found = db.users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
+            if(found) {
+                currentUser = found.username;
+                localStorage.setItem('manjii_logged_user', found.username);
+                alert("Login Berhasil!");
+                showPage('home');
+            } else {
+                alert("Username atau Password salah! (Belum daftar? Silahkan daftar dulu)");
+            }
+        }
+
+        function logoutUser() {
+            currentUser = null;
+            localStorage.removeItem('manjii_logged_user');
+            alert("Anda telah logout.");
+            renderAll();
+            showPage('home');
+        }
+
+        function checkAuthAndGo(targetPage) {
+            if(!currentUser) {
+                alert("Kamu harus Login terlebih dahulu untuk mengakses menu ini!");
+                showPage('auth');
+            } else {
+                showPage(targetPage);
+            }
         }
 
         // --- UI & NAVIGATION ---
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
         function toggleSettings() { document.getElementById('settingsMenu').classList.toggle('active'); }
-        
         window.onclick = function(event) {
-            if (!event.target.closest('.header-actions') && !event.target.closest('.settings-dropdown')) {
-                document.getElementById('settingsMenu').classList.remove('active');
-            }
-            if (!event.target.closest('.header-actions') && !event.target.closest('.sidebar')) {
-                document.getElementById('sidebarMenu').classList.remove('active');
-            }
+            if (!event.target.closest('.header-actions') && !event.target.closest('.settings-dropdown')) document.getElementById('settingsMenu').classList.remove('active');
+            if (!event.target.closest('.header-actions') && !event.target.closest('.sidebar')) document.getElementById('sidebarMenu').classList.remove('active');
         }
-
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             document.getElementById('sidebarMenu').classList.remove('active');
             window.scrollTo(0,0);
-            if(pageId === 'home') renderAll();
+            if(pageId === 'home' || pageId === 'history') renderAll();
         }
 
-        // --- JHONALEY COLOR & THEME SYSTEM ---
         function setAccent(color, element) {
             document.documentElement.style.setProperty('--accent', color);
-            
-            // Generate glowing rgba variants
             let r = parseInt(color.slice(1, 3), 16), g = parseInt(color.slice(3, 5), 16), b = parseInt(color.slice(5, 7), 16);
-            document.documentElement.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.5)`);
-            document.documentElement.style.setProperty('--accent-glow-strong', `rgba(${r}, ${g}, ${b}, 0.9)`);
-            
+            document.documentElement.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.3)`); // Redup
+            document.documentElement.style.setProperty('--accent-glow-strong', `rgba(${r}, ${g}, ${b}, 0.5)`); // Sedang
             document.querySelectorAll('.color-pill').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
         }
@@ -524,239 +597,282 @@
         function setTheme(mode, element) {
             document.querySelectorAll('.theme-item').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
-
-            if(mode === 'light') { document.body.classList.add('light-mode'); } 
-            else if (mode === 'dark') { document.body.classList.remove('light-mode'); } 
-            else if (mode === 'system') {
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                    document.body.classList.add('light-mode');
-                } else {
-                    document.body.classList.remove('light-mode');
-                }
-            }
+            if(mode === 'light') document.body.classList.add('light-mode'); else document.body.classList.remove('light-mode');
         }
 
-        // --- FORMATTER & RENDER ---
         function formatRupiah(angka) { return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
-
-        // Fitur Fix Harga: Auto format saat ngetik (100000 jadi 100.000)
         function formatPriceInput(input) {
-            let val = input.value.replace(/[^0-9]/g, ''); // Buang semua kecuali angka
-            if(val !== '') { input.value = val.replace(/\B(?=(\d{3})+(?!\d))/g, "."); } 
-            else { input.value = ''; }
+            let val = input.value.replace(/[^0-9]/g, '');
+            if(val !== '') input.value = val.replace(/\B(?=(\d{3})+(?!\d))/g, "."); else input.value = '';
         }
 
+        // --- RENDER ENGINE UTAMA ---
         function renderAll() {
+            // Update Branding (Mengganti JUDUL otomatis ke MANJII iOS)
+            document.title = db.title;
+            document.getElementById('header-brand').innerText = db.title;
             document.getElementById('site-title').innerText = db.title;
             document.getElementById('site-desc').innerText = db.desc;
             
-            document.getElementById('news-list').innerHTML = db.news ? db.news.replace(/\n/g, '<br>') : '<i>Belum ada pemberitahuan.</i>';
-            
+            // Sidebar Auth Status
+            if(currentUser) {
+                document.getElementById('sidebar-username').innerText = currentUser;
+                document.getElementById('auth-btn-sidebar').style.display = 'none';
+                document.getElementById('logout-btn-sidebar').style.display = 'block';
+                if(document.getElementById('co-name')) document.getElementById('co-name').value = currentUser;
+            } else {
+                document.getElementById('sidebar-username').innerText = "Belum Login";
+                document.getElementById('auth-btn-sidebar').style.display = 'block';
+                document.getElementById('logout-btn-sidebar').style.display = 'none';
+            }
+
+            // Render Public News
+            let newsHtml = '';
+            db.newsList.forEach(n => {
+                newsHtml += `<div class="news-card"><div class="news-date">${n.date}</div><div class="news-text">${n.text}</div></div>`;
+            });
+            document.getElementById('news-list-public').innerHTML = newsHtml || '<i>Belum ada pengumuman.</i>';
+
+            // Render Products
             const prodList = document.getElementById('product-list');
             prodList.innerHTML = '';
-            
             db.products.forEach(p => {
                 let specList = p.specs.split('\n').filter(s=>s.trim()!=='').map(s => `<li>${s}</li>`).join('');
                 let isMaintenance = p.status === 'Maintenance';
-                
-                let html = `
+                prodList.innerHTML += `
                     <div class="product-card">
-                        ${isMaintenance ? `
-                            <div class="maintenance-overlay">
-                                <div class="m-badge">MAINTENANCE UPDATE</div>
-                            </div>
-                        ` : ''}
+                        ${isMaintenance ? `<div class="m-badge">MAINTENANCE / OFF</div>` : ''}
                         <div class="p-title">${p.name}</div>
                         <ul class="p-specs">${specList}</ul>
-                        <div class="p-price-row">
-                            <span class="p-price">${formatRupiah(p.price)}</span>
-                        </div>
-                        <button class="btn" onclick="goCheckout(${p.id})" ${isMaintenance ? 'disabled style="border-color:#555; color:#888; box-shadow:none;"' : ''}>
+                        <div class="p-price-row"><span class="p-price">${formatRupiah(p.price)}</span></div>
+                        <button class="btn" onclick="checkCheckoutAuth(${p.id})" ${isMaintenance ? 'disabled style="border-color:#555; color:#555; box-shadow:none;"' : ''}>
                             ${isMaintenance ? 'TIDAK TERSEDIA' : 'BELI SEKARANG'}
                         </button>
                     </div>
                 `;
-                prodList.innerHTML += html;
             });
 
+            // Render User History
+            if(currentUser) {
+                let uHist = db.orders.filter(o => o.username === currentUser);
+                let histHtml = '';
+                uHist.forEach(o => {
+                    let c = o.status.includes('Setuju') ? '#00ff88' : (o.status.includes('Tolak') ? '#ff2a2a' : '#ff9f43');
+                    histHtml += `
+                        <div style="border-left:3px solid ${c}; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; margin-bottom:10px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                                <strong style="font-size:13px;">${o.productName}</strong>
+                                <span style="font-size:11px; font-weight:bold; color:${c}; padding:3px 8px; background:rgba(0,0,0,0.5); border-radius:4px;">${o.status}</span>
+                            </div>
+                            <div style="font-size:11px; color:var(--text-muted);">Tanggal: ${o.date} | Harga: ${formatRupiah(o.price)}</div>
+                        </div>
+                    `;
+                });
+                document.getElementById('user-history-list').innerHTML = histHtml || '<div style="text-align:center; padding:20px; font-size:12px;">Belum ada riwayat transaksi.</div>';
+            }
+
+            // Fill Admin Inputs
             document.getElementById('set-title').value = db.title;
             document.getElementById('set-desc').value = db.desc;
-            document.getElementById('set-news').value = db.news;
             
-            renderAdminProducts();
-            renderAdminOrders();
+            renderAdminPanel();
         }
 
         // --- CHECKOUT LOGIC ---
         let selectedProductId = null;
-        function goCheckout(id) {
+        function checkCheckoutAuth(id) {
+            if(!currentUser) {
+                alert("Silahkan Login atau Daftar terlebih dahulu untuk membeli!");
+                showPage('auth');
+                return;
+            }
             let p = db.products.find(x => x.id === id);
-            if(!p) return;
             selectedProductId = id;
             document.getElementById('co-product-name').innerText = p.name + " (" + formatRupiah(p.price) + ")";
             showPage('checkout');
         }
 
         function submitOrder() {
-            let name = document.getElementById('co-name').value;
             let wa = document.getElementById('co-wa').value;
             let platform = document.getElementById('co-platform').value;
             let fileInput = document.getElementById('co-proof');
 
-            if(!name || !wa || !fileInput.files[0]) { alert("Isi semua data dan upload bukti transfer!"); return; }
+            if(!wa || !fileInput.files[0]) return alert("Upload bukti transfer dan masukkan nomor WA!");
 
             let reader = new FileReader();
             reader.onload = function(e) {
                 let p = db.products.find(x => x.id === selectedProductId);
-                db.orders.push({
+                db.orders.unshift({ // push ke atas
                     id: Date.now(), date: new Date().toLocaleString(),
-                    name, wa, platform, productName: p.name, price: p.price,
-                    proof: e.target.result, status: 'Pending'
+                    username: currentUser, wa, platform, 
+                    productName: p.name, price: p.price,
+                    proof: e.target.result, status: 'Menunggu Review ⏳'
                 });
                 saveDB();
-                alert("Pesanan berhasil dikirim! Menunggu konfirmasi admin.");
-                showPage('home');
+                alert("Pesanan berhasil dikirim! Silahkan cek di menu Riwayat Transaksi.");
+                showPage('history');
             };
             reader.readAsDataURL(fileInput.files[0]);
         }
 
         // --- ADMIN PANEL LOGIC ---
-        function switchAdminTab(id) {
-            document.querySelectorAll('.admin-tab').forEach(el => el.style.display = 'none');
-            document.getElementById(id).style.display = 'block';
-        }
-
         function loginAdmin() {
             let u = document.getElementById('adm-user').value;
             let p = document.getElementById('adm-pass').value;
-            if (u === 'MANJII-OFFICIAL' && p === 'MANJII-OFFICIAL-777') {
+            // Admin bebas, misal MANJII-ESCOBAR
+            if (u === 'MANJII-ESCOBAR' || u === 'admin') {
                 showPage('admin-panel');
                 document.getElementById('adm-user').value = '';
                 document.getElementById('adm-pass').value = '';
             } else { alert("Akses Ditolak!"); }
         }
 
+        function switchAdminTab(id) {
+            document.querySelectorAll('.admin-tab').forEach(el => el.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+
         function saveSettings() {
             db.title = document.getElementById('set-title').value;
             db.desc = document.getElementById('set-desc').value;
-            db.news = document.getElementById('set-news').value;
             saveDB();
-            alert("Pengaturan Disimpan!");
+            alert("Identitas Web Disimpan! Judul sekarang: " + db.title);
         }
 
-        // --- LOGIKA SIMPAN PRODUK (TANPA GAMBAR + FIX HARGA) ---
-        function saveProduct() {
-            let id = document.getElementById('p-id').value;
-            let name = document.getElementById('p-name').value;
-            let specs = document.getElementById('p-specs').value;
-            // Ambil string harga, buang semua titik, ubah jadi integer murni
-            let priceStr = document.getElementById('p-price').value.replace(/\./g, '');
-            let price = parseInt(priceStr);
-            let status = document.getElementById('p-status').value;
-
-            if(!name || !specs || isNaN(price)) { 
-                alert("Gagal: Nama, Spesifikasi, dan Harga wajib diisi (Gunakan angka/titik untuk harga)!"); 
-                return; 
-            }
-
-            if(id) { 
-                let idx = db.products.findIndex(x => x.id == id);
-                if(idx !== -1) {
-                    db.products[idx].name = name;
-                    db.products[idx].specs = specs;
-                    db.products[idx].price = price;
-                    db.products[idx].status = status;
-                }
-            } else { 
-                db.products.push({
-                    id: Date.now(), name, specs, price, status
-                });
-            }
+        // NEWS ADMIN
+        function addNews() {
+            let text = document.getElementById('new-news-text').value;
+            if(!text) return alert("Isi teks news!");
+            db.newsList.unshift({ id: Date.now(), text, date: new Date().toLocaleDateString() });
             saveDB();
-            clearProductForm();
-            alert("Produk berhasil disimpan!");
+            document.getElementById('new-news-text').value = '';
+            alert("News diterbitkan!");
         }
-
-        function clearProductForm() {
-            document.getElementById('p-id').value = '';
-            document.getElementById('p-name').value = '';
-            document.getElementById('p-specs').value = '';
-            document.getElementById('p-price').value = '';
-            document.getElementById('p-status').value = 'Tersedia';
-        }
-
-        function editProduct(id) {
-            let p = db.products.find(x => x.id === id);
-            document.getElementById('p-id').value = p.id;
-            document.getElementById('p-name').value = p.name;
-            document.getElementById('p-specs').value = p.specs;
-            // Kembalikan harga dengan format titik ke form input
-            document.getElementById('p-price').value = p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            document.getElementById('p-status').value = p.status;
-            alert("Edit produk siap. Scroll ke form atas.");
-        }
-
-        function deleteProduct(id) {
-            if(confirm("Hapus produk ini secara permanen?")) {
-                db.products = db.products.filter(x => x.id !== id);
+        function deleteNews(id) {
+            if(confirm("Hapus news ini?")) {
+                db.newsList = db.newsList.filter(x => x.id !== id);
                 saveDB();
             }
         }
 
-        function renderAdminProducts() {
-            let list = document.getElementById('admin-product-list');
-            list.innerHTML = '';
-            db.products.forEach((p, i) => {
-                list.innerHTML += `
-                    <div style="background:rgba(0,0,0,0.2); border:1px solid var(--border-color); padding:15px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <strong style="color:var(--accent);">${i+1}. ${p.name}</strong><br>
-                            <small>${formatRupiah(p.price)} | Status: ${p.status}</small>
-                        </div>
-                        <div style="display:flex; gap:5px;">
-                            <button class="btn" style="padding:8px 12px; font-size:12px;" onclick="editProduct(${p.id})">Edit</button>
-                            <button class="btn" style="padding:8px 12px; font-size:12px; border-color:red; color:red; box-shadow:0 0 10px rgba(255,0,0,0.5);" onclick="deleteProduct(${p.id})">Del</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+        // PRODUCT ADMIN (FIX HARGA)
+        function saveProduct() {
+            let id = document.getElementById('p-id').value;
+            let name = document.getElementById('p-name').value;
+            let specs = document.getElementById('p-specs').value;
+            let priceStr = document.getElementById('p-price').value.replace(/\./g, '');
+            let price = parseInt(priceStr);
+            let status = document.getElementById('p-status').value;
 
+            if(!name || !specs || isNaN(price)) return alert("Isi form dengan benar!");
+
+            if(id) { 
+                let idx = db.products.findIndex(x => x.id == id);
+                if(idx !== -1) { db.products[idx].name = name; db.products[idx].specs = specs; db.products[idx].price = price; db.products[idx].status = status; }
+            } else { 
+                db.products.push({ id: Date.now(), name, specs, price, status });
+            }
+            saveDB(); clearProductForm(); alert("Produk disimpan!");
+        }
+        function clearProductForm() {
+            document.getElementById('p-id').value = ''; document.getElementById('p-name').value = '';
+            document.getElementById('p-specs').value = ''; document.getElementById('p-price').value = ''; document.getElementById('p-status').value = 'Tersedia';
+        }
+        function editProduct(id) {
+            let p = db.products.find(x => x.id === id);
+            document.getElementById('p-id').value = p.id; document.getElementById('p-name').value = p.name;
+            document.getElementById('p-specs').value = p.specs;
+            document.getElementById('p-price').value = p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            document.getElementById('p-status').value = p.status;
+            alert("Silahkan edit di form atas.");
+        }
+        function deleteProduct(id) { if(confirm("Hapus permanen?")) { db.products = db.products.filter(x => x.id !== id); saveDB(); } }
+
+        // UPDATE STATUS ORDER ADMIN
         function updateOrderStatus(id, status) {
             let idx = db.orders.findIndex(x => x.id === id);
             db.orders[idx].status = status;
             saveDB();
         }
 
-        function renderAdminOrders() {
-            let tbody = document.getElementById('order-table-body');
-            tbody.innerHTML = '';
-            let totalRevenue = 0;
-            
-            db.orders.forEach(o => {
-                if(o.status === 'Setuju ✅') totalRevenue += o.price;
-                
-                let btnAction = o.status === 'Pending' ? `
-                    <button style="background:green; color:white; border:none; padding:8px; border-radius:8px; cursor:pointer; box-shadow:0 0 10px rgba(0,255,0,0.5);" onclick="updateOrderStatus(${o.id}, 'Setuju ✅')">✅</button>
-                    <button style="background:red; color:white; border:none; padding:8px; border-radius:8px; cursor:pointer; box-shadow:0 0 10px rgba(255,0,0,0.5);" onclick="updateOrderStatus(${o.id}, 'Tolak ❌')">❌</button>
-                ` : o.status;
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong style="color:var(--accent);">${o.name}</strong><br><small>${o.platform}</small></td>
-                        <td>${o.wa}</td>
-                        <td>${o.productName}</td>
-                        <td><a href="${o.proof}" target="_blank" style="color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent);">Cek Bukti</a></td>
-                        <td>${o.status}</td>
-                        <td>${btnAction}</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('tot-order').innerText = db.orders.length;
-            document.getElementById('tot-rev').innerText = formatRupiah(totalRevenue);
+        // MANAGE USERS ADMIN
+        function editUser(id) {
+            let u = db.users.find(x => x.id === id);
+            let newU = prompt("Ubah Username:", u.username);
+            let newP = prompt("Ubah Password:", u.password);
+            if(newU && newP) {
+                u.username = newU; u.password = newP; saveDB(); alert("User diupdate!");
+            }
+        }
+        function deleteUser(id) {
+            if(confirm("Hapus user ini permanen?")) { db.users = db.users.filter(x => x.id !== id); saveDB(); }
         }
 
+        // RENDER ADMIN PANEL KHUSUS
+        function renderAdminPanel() {
+            // Render News List Admin
+            let nList = document.getElementById('admin-news-list'); nList.innerHTML = '';
+            db.newsList.forEach((n) => {
+                nList.innerHTML += `
+                    <div style="background:rgba(0,0,0,0.3); padding:10px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="font-size:12px;"><strong>${n.date}</strong><br>${n.text}</div>
+                        <button class="btn" style="width:auto; padding:5px 10px; font-size:10px; border-color:red; color:red;" onclick="deleteNews(${n.id})">Hapus</button>
+                    </div>`;
+            });
+
+            // Render Product List Admin
+            let pList = document.getElementById('admin-product-list'); pList.innerHTML = '';
+            db.products.forEach((p, i) => {
+                pList.innerHTML += `
+                    <div style="background:rgba(0,0,0,0.3); padding:15px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                        <div><strong style="color:var(--accent); font-size:13px;">${p.name}</strong><br><small>${formatRupiah(p.price)} | ${p.status}</small></div>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn" style="width:auto; padding:5px 10px; font-size:11px;" onclick="editProduct(${p.id})">Edit</button>
+                            <button class="btn" style="width:auto; padding:5px 10px; font-size:11px; border-color:red; color:red;" onclick="deleteProduct(${p.id})">Del</button>
+                        </div>
+                    </div>`;
+            });
+
+            // Render Orders Admin (Table Rapi)
+            let oBody = document.getElementById('order-table-body'); oBody.innerHTML = '';
+            let tRev = 0;
+            db.orders.forEach(o => {
+                if(o.status.includes('Setuju')) tRev += o.price;
+                let btnAction = o.status.includes('Menunggu') ? `
+                    <button style="background:#00ff88; color:#000; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:bold; margin-right:5px;" onclick="updateOrderStatus(${o.id}, 'Setuju ✅')">Setuju</button>
+                    <button style="background:#ff2a2a; color:#fff; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:11px; font-weight:bold;" onclick="updateOrderStatus(${o.id}, 'Tolak ❌')">Tolak</button>
+                ` : `<span style="font-size:11px;">Selesai</span>`;
+
+                oBody.innerHTML += `
+                    <tr>
+                        <td><strong style="color:var(--accent);">${o.username}</strong></td>
+                        <td>${o.wa}<br><small style="color:var(--text-muted);">${o.platform}</small></td>
+                        <td>${o.productName}<br><strong style="color:#00ff88;">${formatRupiah(o.price)}</strong></td>
+                        <td><a href="${o.proof}" target="_blank" style="color:var(--accent); text-decoration:none;">Lihat Gambar</a></td>
+                        <td><span style="font-size:11px; font-weight:bold;">${o.status}</span></td>
+                        <td>${btnAction}</td>
+                    </tr>`;
+            });
+            document.getElementById('tot-order').innerText = db.orders.length + " Order";
+            document.getElementById('tot-rev').innerText = formatRupiah(tRev);
+
+            // Render Users Admin (Table Rapi)
+            let uBody = document.getElementById('admin-user-list'); uBody.innerHTML = '';
+            db.users.forEach((u, i) => {
+                uBody.innerHTML += `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td style="color:var(--accent); font-weight:bold;">${u.username}</td>
+                        <td>${u.password}</td>
+                        <td>
+                            <button class="btn" style="width:auto; display:inline-block; padding:4px 8px; font-size:10px;" onclick="editUser(${u.id})">Edit</button>
+                            <button class="btn" style="width:auto; display:inline-block; padding:4px 8px; font-size:10px; border-color:red; color:red;" onclick="deleteUser(${u.id})">Del</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        // INIT
         renderAll();
     </script>
 </body>
