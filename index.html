@@ -129,18 +129,20 @@
         }
 
         /* HOME UI */
-        .home-hero { text-align: center; margin-bottom: 30px; }
+        .home-hero { text-align: center; margin-bottom: 20px; }
         .main-logo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 1px solid var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
         .title { font-size: 24px; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; }
         .subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; font-weight: 400;}
         
         .stats-box {
             display: flex; justify-content: space-between; background: var(--bg-card); backdrop-filter: blur(10px);
-            border: 1px solid var(--accent); border-radius: 12px; padding: 15px; margin-bottom: 30px; box-shadow: 0 0 10px var(--accent-glow);
+            border: 1px solid var(--accent); border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 0 10px var(--accent-glow);
         }
         .stat { text-align: center; width: 33%; }
         .stat h3 { font-size: 18px; color: var(--accent); margin-bottom: 2px; text-shadow: 0 0 8px var(--accent-glow); font-weight: 700;}
         .stat p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
+        
+        .home-socials { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
 
         /* TOMBOL & BADGE */
         .btn {
@@ -201,11 +203,15 @@
         
         /* CHAT UI */
         .chat-box { height: 350px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-        .chat-bubble { max-width: 80%; padding: 12px 15px; border-radius: 12px; font-size: 13px; line-height: 1.5; position: relative; }
+        .chat-row { display: flex; align-items: flex-end; gap: 10px; margin-bottom: 10px; }
+        .chat-row.mine-row { flex-direction: row-reverse; }
+        .chat-avatar { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--accent); object-fit: cover; box-shadow: 0 0 5px var(--accent-glow); }
+        .chat-bubble { max-width: 75%; padding: 12px 15px; border-radius: 12px; font-size: 13px; line-height: 1.5; position: relative; }
+        .chat-bubble .sender-name { font-size: 10px; font-weight: 800; margin-bottom: 4px; display: block; opacity: 0.9; }
         .chat-bubble .time { font-size: 9px; opacity: 0.7; margin-top: 5px; display: block; text-align: right; }
-        .chat-bubble.mine { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 2px; box-shadow: 0 0 10px var(--accent-glow); }
-        .chat-bubble.other { align-self: flex-start; background: rgba(255,255,255,0.1); border-bottom-left-radius: 2px; border: 1px solid var(--border-color); }
-        .chat-bubble.sys { align-self: center; background: transparent; border: 1px dashed var(--accent); color: var(--accent); text-align: center; font-size: 11px; width: 90%; }
+        .chat-bubble.mine { background: var(--accent); color: #fff; border-bottom-right-radius: 2px; box-shadow: 0 0 10px var(--accent-glow); }
+        .chat-bubble.other { background: rgba(255,255,255,0.1); border-bottom-left-radius: 2px; border: 1px solid var(--border-color); }
+        .chat-bubble.sys { background: rgba(0,0,0,0.4); border: 1px dashed #00ff88; color: #00ff88; border-radius: 8px; text-align: left; font-size: 12px; width: 100%; max-width: 90%; align-self: center; box-shadow: 0 0 10px rgba(0,255,136,0.2); margin: 5px auto; }
         
         .chat-input-area { display: flex; gap: 10px; }
         .chat-input-area input { flex: 1; }
@@ -284,7 +290,9 @@
         <a href="#" onclick="showPage('products')"><i class="fa-solid fa-box"></i> <span data-i18n="nav_catalog">Katalog Produk</span></a>
         <a href="#" onclick="checkAuthAndGo('chat-user')"><i class="fa-solid fa-comments"></i> <span data-i18n="nav_chat">Chat Admin</span></a>
         <a href="#" onclick="checkAuthAndGo('history')"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="nav_history">Riwayat Transaksi</span></a>
+        
         <a href="https://wa.me/6283845203074" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp Dev</a>
+        <a href="https://tiktok.com/@manjiixit" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
         
         <div style="margin-top: 30px;">
             <a href="#" id="auth-btn-sidebar" onclick="showPage('auth')" style="color: #00ff88; border-left-color: #00ff88;"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="nav_login">Login / Daftar</span></a>
@@ -319,6 +327,13 @@
             <h1 class="title" id="site-title">MANJII iOS</h1>
             <p class="subtitle" id="site-desc">Pusat penjualan produk cheat manjii ios dengan keamanan super tinggi. Tersertifikasi aman 99%.</p>
         </div>
+        
+        <div class="home-socials">
+            <a href="#" onclick="checkAuthAndGo('chat-user')" class="btn" style="width: auto; padding: 10px 15px; font-size: 11px; flex: 1; min-width: 100px;"><i class="fa-solid fa-headset"></i> CS Live Chat</a>
+            <a href="https://wa.me/6283845203074" target="_blank" class="btn" style="width: auto; padding: 10px 15px; font-size: 11px; flex: 1; min-width: 100px; border-color: #25D366; color: #25D366;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://tiktok.com/@manjiixit" target="_blank" class="btn" style="width: auto; padding: 10px 15px; font-size: 11px; flex: 1; min-width: 100px; border-color: #00f2fe; color: #00f2fe;"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+        </div>
+
         <div class="stats-box">
             <div class="stat"><h3>5K+</h3><p data-i18n="stat_users">User Aktif</p></div>
             <div class="stat"><h3>99%</h3><p data-i18n="stat_security">Keamanan</p></div>
@@ -361,8 +376,10 @@
 
             <div id="payment-display" style="text-align: center; margin: 15px 0 25px; padding: 20px; border: 1px dashed var(--accent); border-radius: 12px; background: rgba(0,0,0,0.1);">
                 <h3 id="pay-name-display" style="margin-bottom: 10px; color: var(--accent); font-size: 14px;">QRIS PAYMENT</h3>
-                <div id="pay-info-display" style="font-size: 12px; margin-bottom: 10px; white-space: pre-line;"></div>
-                <img id="pay-img-display" src="qris.png" style="width: 180px; border-radius: 10px; border: 1px solid var(--accent); display: none; margin: 0 auto;">
+                <div id="pay-info-display" style="font-size: 12px; margin-bottom: 15px; white-space: pre-line;"></div>
+                
+                <img id="pay-img-display" src="qris.png" style="width: 180px; border-radius: 10px; border: 1px solid var(--accent); display: none; margin: 0 auto; box-shadow: 0 0 15px var(--accent-glow);">
+                
                 <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px;" data-i18n="co_transfer_desc">Konfirmasi pembayaran hanya melalui menu Live Chat Admin di aplikasi ini.</p>
             </div>
 
@@ -585,24 +602,13 @@
         }
         function getT(key) { return i18n[currentLang][key] || key; }
 
-        // --- DATABASE INIT & AUTO CLEANUP ---
+        // --- DATABASE INIT ---
         let db = JSON.parse(localStorage.getItem('manjii_db_ultimate')) || {
             title: "MANJII iOS",
             desc: "Pusat penjualan produk cheat manjii ios dengan keamanan super tinggi. Tersertifikasi aman 99%.",
             products: [], orders: [], users: [], chats: [],
             payments: [{ id: 1, name: "QRIS Default", info: "Silahkan scan QRIS ini" }]
         };
-
-        // AUTO CLEANUP: Hapus data base-64 image dari riwayat lama supaya storage lega permanen.
-        let storageCleaned = false;
-        if(db.orders) {
-            db.orders.forEach(o => { if(o.proof) { delete o.proof; storageCleaned = true; } });
-        }
-        if(db.payments) {
-            db.payments.forEach(p => { if(p.img) { delete p.img; storageCleaned = true; } });
-        }
-        if(!db.chats) db.chats = [];
-        if(storageCleaned) localStorage.setItem('manjii_db_ultimate', JSON.stringify(db));
 
         function saveDB() {
             try {
@@ -805,18 +811,27 @@
             renderAdminPanel();
         }
 
-        // --- HISTORY MODAL ---
+        // --- HISTORY MODAL (WITH TRANSLATION) ---
         function openHistoryDetail(orderId) {
             let o = db.orders.find(x => x.id === orderId);
             if(!o) return;
             let c = o.status.includes('Setuju') ? '#00ff88' : (o.status.includes('Tolak') ? '#ff2a2a' : '#ff9f43');
+            
+            // Translations for Labels
+            let t_prod = currentLang === 'en' ? 'Product:' : 'Produk:';
+            let t_price = currentLang === 'en' ? 'Final Price:' : 'Harga Akhir:';
+            let t_plat = currentLang === 'en' ? 'Platform:' : 'Platform:';
+            let t_wa = currentLang === 'en' ? 'WhatsApp No:' : 'No WA:';
+            let t_date = currentLang === 'en' ? 'Order Date:' : 'Tgl Order:';
+            let t_stat = currentLang === 'en' ? 'Status:' : 'Status:';
+
             let content = `
-                <div style="margin-bottom: 10px;"><strong>Produk:</strong> <span style="color:var(--accent);">${o.productName}</span></div>
-                <div style="margin-bottom: 10px;"><strong>Harga Akhir:</strong> ${formatRupiah(o.finalPrice)}</div>
-                <div style="margin-bottom: 10px;"><strong>Platform:</strong> ${o.platform}</div>
-                <div style="margin-bottom: 10px;"><strong>No WA:</strong> ${o.wa}</div>
-                <div style="margin-bottom: 10px;"><strong>Tgl Order:</strong> ${o.date}</div>
-                <div style="margin-bottom: 15px;"><strong>Status:</strong> <span style="color:${c}; font-weight:bold;">${o.status}</span></div>
+                <div style="margin-bottom: 10px;"><strong>${t_prod}</strong> <span style="color:var(--accent);">${o.productName}</span></div>
+                <div style="margin-bottom: 10px;"><strong>${t_price}</strong> ${formatRupiah(o.finalPrice)}</div>
+                <div style="margin-bottom: 10px;"><strong>${t_plat}</strong> ${o.platform}</div>
+                <div style="margin-bottom: 10px;"><strong>${t_wa}</strong> ${o.wa}</div>
+                <div style="margin-bottom: 10px;"><strong>${t_date}</strong> ${o.date}</div>
+                <div style="margin-bottom: 15px;"><strong>${t_stat}</strong> <span style="color:${c}; font-weight:bold;">${o.status}</span></div>
             `;
             document.getElementById('modal-content-data').innerHTML = content;
             document.getElementById('history-modal').style.display = 'flex';
@@ -846,6 +861,15 @@
             if(pay) {
                 document.getElementById('pay-name-display').innerText = pay.name.toUpperCase();
                 document.getElementById('pay-info-display').innerText = pay.info;
+                
+                // Tampilkan gambar QRIS jika nama payment mengandung kata "QRIS"
+                let imgDisplay = document.getElementById('pay-img-display');
+                if(pay.name.toLowerCase().includes('qris')) {
+                    imgDisplay.style.display = 'block';
+                    imgDisplay.src = 'qris.png';
+                } else {
+                    imgDisplay.style.display = 'none';
+                }
             }
         }
 
@@ -860,7 +884,7 @@
                 let finalPrice = p.price;
                 if(p.discount && p.discount > 0) finalPrice = p.price - (p.price * (p.discount / 100));
 
-                // 1. Simpan Data Order Tanpa Bukti Gambar
+                // Simpan Data Order
                 db.orders.unshift({ 
                     id: Date.now(), date: new Date().toLocaleString(),
                     username: currentUser, wa, platform, 
@@ -868,21 +892,22 @@
                     status: 'Menunggu Review ⏳'
                 });
 
-                // 2. Buat Pesan Sistem Otomatis di Chat
+                // Buat Pesan Sistem Otomatis yang Detail
+                let sysMsg = `[SYSTEM INFO] CHECKOUT BERHASIL!\n\n🔹 Produk: ${p.name}\n🔹 Platform: ${platform}\n🔹 No WA: ${wa}\n🔹 Total Harga: ${formatRupiah(finalPrice)}\n\n⚠️ Silahkan lampirkan bukti pembayaran / konfirmasi di sini.`;
+                
                 db.chats.push({
                     id: Date.now(), sender: currentUser, receiver: 'admin', isSystem: true,
-                    text: `[SYSTEM] Saya telah melakukan checkout produk "${p.name}". Mohon segera diproses.`,
-                    time: new Date().toLocaleString()
+                    text: sysMsg, time: new Date().toLocaleString()
                 });
 
                 saveDB();
                 alert("Checkout Berhasil! Silahkan konfirmasi di Live Chat.");
                 document.getElementById('co-wa').value = '';
-                showPage('chat-user'); // Langsung lempar ke chat admin
+                showPage('chat-user'); 
             });
         }
 
-        // --- LIVE CHAT SYSTEM ---
+        // --- LIVE CHAT SYSTEM (USER & ADMIN PROFILES) ---
         function renderUserChat() {
             if(!currentUser) return;
             let box = document.getElementById('user-chat-box');
@@ -891,11 +916,27 @@
             box.innerHTML = '';
             myChats.forEach(c => {
                 if(c.isSystem) {
-                    box.innerHTML += `<div class="chat-bubble sys">${c.text}</div>`;
+                    box.innerHTML += `<div class="chat-bubble sys">${c.text.replace(/\n/g, '<br>')}</div>`;
                 } else if(c.sender === currentUser) {
-                    box.innerHTML += `<div class="chat-bubble mine">${c.text}<span class="time">${c.time}</span></div>`;
+                    // Chat dari User Sendiri (Milik Saya)
+                    box.innerHTML += `
+                        <div class="chat-row mine-row">
+                            <img src="https://ui-avatars.com/api/?name=${currentUser}&background=random&color=fff" class="chat-avatar">
+                            <div class="chat-bubble mine">
+                                <span class="sender-name">👤 USER - ${currentUser.toUpperCase()}</span>
+                                ${c.text}<span class="time">${c.time}</span>
+                            </div>
+                        </div>`;
                 } else {
-                    box.innerHTML += `<div class="chat-bubble other"><strong>ADMIN</strong><br>${c.text}<span class="time">${c.time}</span></div>`;
+                    // Chat dari Admin
+                    box.innerHTML += `
+                        <div class="chat-row">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=ff2a5f&color=fff" class="chat-avatar">
+                            <div class="chat-bubble other">
+                                <span class="sender-name" style="color:var(--accent);">👑 ADMIN</span>
+                                ${c.text}<span class="time">${c.time}</span>
+                            </div>
+                        </div>`;
                 }
             });
             box.scrollTop = box.scrollHeight;
@@ -921,11 +962,27 @@
             let userChats = db.chats.filter(c => (c.sender === userSel && c.receiver === 'admin') || (c.sender === 'admin' && c.receiver === userSel));
             userChats.forEach(c => {
                 if(c.isSystem) {
-                    box.innerHTML += `<div class="chat-bubble sys">${c.text}</div>`;
+                    box.innerHTML += `<div class="chat-bubble sys">${c.text.replace(/\n/g, '<br>')}</div>`;
                 } else if(c.sender === 'admin') {
-                    box.innerHTML += `<div class="chat-bubble mine">Anda<br>${c.text}<span class="time">${c.time}</span></div>`;
+                    // Chat Admin Sendiri
+                    box.innerHTML += `
+                        <div class="chat-row mine-row">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=ff2a5f&color=fff" class="chat-avatar">
+                            <div class="chat-bubble mine">
+                                <span class="sender-name">👑 ADMIN</span>
+                                ${c.text}<span class="time">${c.time}</span>
+                            </div>
+                        </div>`;
                 } else {
-                    box.innerHTML += `<div class="chat-bubble other"><strong>${c.sender}</strong><br>${c.text}<span class="time">${c.time}</span></div>`;
+                    // Chat User
+                    box.innerHTML += `
+                        <div class="chat-row">
+                            <img src="https://ui-avatars.com/api/?name=${c.sender}&background=random&color=fff" class="chat-avatar">
+                            <div class="chat-bubble other">
+                                <span class="sender-name">👤 USER - ${c.sender.toUpperCase()}</span>
+                                ${c.text}<span class="time">${c.time}</span>
+                            </div>
+                        </div>`;
                 }
             });
             box.scrollTop = box.scrollHeight;
